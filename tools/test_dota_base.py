@@ -24,7 +24,7 @@ from libs.utils.rotate_polygon_nms import rotate_gpu_nms
 
 
 def parse_args():
-    parser = argparse.ArgumentParser('evaluate the result.')
+    parser = argparse.ArgumentParser('Start testing.')
 
     parser.add_argument('--test_dir', dest='test_dir',
                         help='evaluate imgs dir ',
@@ -102,8 +102,8 @@ class TestDOTA(object):
 
             for img_path in images:
 
-                # if 'P0016' not in img_path:
-                #     continue
+                if 'P0006' not in img_path:
+                    continue
 
                 img = cv2.imread(img_path)
 

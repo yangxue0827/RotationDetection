@@ -82,7 +82,7 @@ FINAL_CONV_BIAS_INITIALIZER = tf.constant_initializer(value=-math.log((1.0 - PRO
 WEIGHT_DECAY = 1e-4
 USE_GN = False
 FPN_CHANNEL = 256
-HEAD_NUM = 4
+NUM_SUBNET_CONV = 4
 
 # --------------------------------------------- Anchor
 LEVEL = ['P3', 'P4', 'P5', 'P6', 'P7']

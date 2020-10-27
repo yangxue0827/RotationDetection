@@ -16,6 +16,7 @@ class DetectionNetwork(DetectionNetworkBase):
     def __init__(self, cfgs, is_training):
         super(DetectionNetwork, self).__init__(cfgs, is_training)
         self.anchor_sampler_retinenet = AnchorSamplerRetinaNet(cfgs)
+        self.losses = Loss(self.cfgs)
 
     def build_whole_detection_network(self, input_img_batch, gtboxes_batch_h=None, gtboxes_batch_r=None, gpu_id=0):
 
@@ -48,23 +49,22 @@ class DetectionNetwork(DetectionNetworkBase):
                                                                                Tout=[tf.float32, tf.float32, tf.float32,
                                                                                      tf.float32])
 
-                losses = Loss(self.cfgs)
-
                 if self.method == 'H':
                     self.add_anchor_img_smry(input_img_batch, anchors, anchor_states, 0)
                 else:
                     self.add_anchor_img_smry(input_img_batch, anchors, anchor_states, 1)
 
-                cls_loss = losses.focal_loss(labels, rpn_cls_score, anchor_states)
+                cls_loss = self.losses.focal_loss(labels, rpn_cls_score, anchor_states)
 
                 if self.cfgs.REG_LOSS_MODE == 0:
-                    reg_loss = losses.iou_smooth_l1_loss_log(target_delta, rpn_box_pred, anchor_states, target_boxes,
-                                                             anchors)
+                    reg_loss = self.losses.iou_smooth_l1_loss_log(target_delta, rpn_box_pred, anchor_states,
+                                                                  target_boxes, anchors)
                 elif self.cfgs.REG_LOSS_MODE == 1:
-                    reg_loss = losses.iou_smooth_l1_loss_exp(target_delta, rpn_box_pred, anchor_states, target_boxes,
-                                                             anchors, alpha=self.cfgs.ALPHA, beta=self.cfgs.BETA)
+                    reg_loss = self.losses.iou_smooth_l1_loss_exp(target_delta, rpn_box_pred, anchor_states,
+                                                                  target_boxes, anchors, alpha=self.cfgs.ALPHA,
+                                                                  beta=self.cfgs.BETA)
                 else:
-                    reg_loss = losses.smooth_l1_loss(target_delta, rpn_box_pred, anchor_states)
+                    reg_loss = self.losses.smooth_l1_loss(target_delta, rpn_box_pred, anchor_states)
 
                 self.losses_dict['cls_loss'] = cls_loss * self.cfgs.CLS_WEIGHT
                 self.losses_dict['reg_loss'] = reg_loss * self.cfgs.REG_WEIGHT

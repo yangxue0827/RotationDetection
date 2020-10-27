@@ -4,12 +4,14 @@
 This is a tensorflow-based rotation detection benchmark, also called UranusDet. 
 UranusDet is completed by [YangXue](https://yangxue0827.github.io/).
 
-Techniques:     
+![3](demo.gif)
+
+Techniques:
+- [x] Dataset support: DOTA, HRSC2016, ICDAR2015, ICDAR2017 MLT, UCAS-AOD, FDDB, OHD-SJTU, SSDD++
 - [x] [ResNet](https://arxiv.org/abs/1512.03385), [MobileNetV2](https://arxiv.org/abs/1801.04381), [EfficientNet](https://arxiv.org/abs/1905.11946)
 - [x] [RetinaNet-H, RetinaNet-R](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation)
-- [ ] [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow), [Pytorch code](https://github.com/SJTU-Thinklab-Det/r3det-on-mmdetection)
+- [x] [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow), [Pytorch code](https://github.com/SJTU-Thinklab-Det/r3det-on-mmdetection)
 - [ ] [Circular Smooth Label (CSL)](https://arxiv.org/abs/2003.05597): [TF code](https://github.com/Thinklab-SJTU/CSL_RetinaNet_Tensorflow)
-- [ ] Dataset support: DOTA, HRSC2016, ICDAR2015, ICDAR2017 MLT, UCAS-AOD, FDDB, OHD-SJTU, SSDD++
 
 
 ## Projects
@@ -21,7 +23,8 @@ Techniques:
 |:------------:|:------------:|:------------:|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:---------:|:---------:|:---------:|    
 | [RetinaNet-H](https://arxiv.org/abs/1908.05612) | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 64.17 | [Baidu Drive (j5l0)](https://pan.baidu.com/s/1Qh_LE6QeGsOBYqMzjAESsA) | H | Reg. | smooth L1 | **180** | × | [cfgs_res50_dota_v15.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v15.py) |
 | [RetinaNet-H](https://arxiv.org/abs/1908.05612) | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 65.73 | [Baidu Drive (jum2)](https://pan.baidu.com/s/19-hEtCGxLfYuluTATQJpdg) | H | Reg. | smooth L1 | **90** | × | [cfgs_res50_dota_v4.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v4.py) |
-
+| [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 70.40 | - | H + R | Reg. | smooth L1 | 90 | × | [cfgs_res50_dota_r3det_v1.py](./libs/configs/DOTA/r3det/cfgs_res50_dota_r3det_v1.py) |
+| [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | ResNet152_v1d 600->MS (+Flip) | DOTA1.0 trainval/test | 76.23 (+0.24) | [model](https://drive.google.com/file/d/1GkpiSPN-cAnvDISk5d4kjrV3Tqti_mbj/view?usp=sharing) | H + R | Reg. | iou-smooth L1 | 90 | √ | [cfgs_res152_dota_r3det_v3.py](./libs/configs/DOTA/r3det/cfgs_res152_dota_r3det_v3.py) |     
 
 ## My Development Environment
 **docker images: docker pull yangxue2docker/yx-tf-det:tensorflow1.13.1-cuda10-gpu-py3**      
@@ -33,10 +36,13 @@ Techniques:
 
 ## Download Model
 ### Pretrain weights
-1. Please download [resnet50_v1](http://download.tensorflow.org/models/resnet_v1_50_2016_08_28.tar.gz), [resnet101_v1](http://download.tensorflow.org/models/resnet_v1_101_2016_08_28.tar.gz), [resnet152_v1](http://download.tensorflow.org/models/resnet_v1_152_2016_08_28.tar.gz), [efficientnet](https://github.com/tensorflow/tpu/tree/master/models/official/efficientnet), [mobilenet_v2](https://storage.googleapis.com/mobilenet_v2/checkpoints/mobilenet_v2_1.0_224.tgz) pre-trained models on Imagenet, put it to data/pretrained_weights.       
-2. **(Recommend in this repo)** Or you can choose to use a better backbone (resnet_v1d), refer to [gluon2TF](https://github.com/yangJirui/gluon2TF).    
+1. Please download [resnet50_v1](http://download.tensorflow.org/models/resnet_v1_50_2016_08_28.tar.gz), [resnet101_v1](http://download.tensorflow.org/models/resnet_v1_101_2016_08_28.tar.gz), [resnet152_v1](http://download.tensorflow.org/models/resnet_v1_152_2016_08_28.tar.gz), [efficientnet](https://github.com/tensorflow/tpu/tree/master/models/official/efficientnet), [mobilenet_v2](https://storage.googleapis.com/mobilenet_v2/checkpoints/mobilenet_v2_1.0_224.tgz) pre-trained models on Imagenet, put them to $PATH_ROOT/dataloader/pretrained_weights.       
+2. **(Recommend in this repo)** Or you can choose to use better backbones (resnet_v1d), refer to [gluon2TF](https://github.com/yangJirui/gluon2TF).    
 * [Baidu Drive](https://pan.baidu.com/s/1GpqKg0dOaaWmwshvv1qWGg), password: 5ht9.          
 * [Google Drive](https://drive.google.com/drive/folders/1BM8ffn1WnsRRb5RcuAcyJAHX8NS2M1Gz?usp=sharing)      
+
+### Trained weights
+1. Please download trained models by this project, then put them to $PATH_ROOT/output/pretained_weights.
 
 ## Compile
     ```  
@@ -49,7 +55,7 @@ Techniques:
 
 ## Train 
 
-1. If you want to train your own data, please note:  
+1. If you want to train your own dataset, please note:  
     ```
     (1) Select the detector and dataset you want to use, and mark them as #DETECTOR and #DATASET (such as #DETECTOR=retinanet and #DATASET=DOTA)
     (2) Modify parameters (such as CLASS_NUM, DATASET_NAME, VERSION, etc.) in $PATH_ROOT/libs/configs/#DATASET/#DETECTOR/cfgs_xxx.py
@@ -76,13 +82,13 @@ Techniques:
     ```      
     
 
-3. Train
+3. Start training
     ```  
     cd $PATH_ROOT/tools/#DETECTOR
     python train.py
     ```
 
-## Eval
+## Test
 1. For large-scale image, take DOTA dataset as a example (the output file or visualization is in $PATH_ROOT/tools/#DETECTOR/test_dota/VERSION): 
     ```  
     cd $PATH_ROOT/tools/#DETECTOR
