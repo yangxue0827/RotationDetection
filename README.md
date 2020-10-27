@@ -4,8 +4,6 @@
 This is a tensorflow-based rotation detection benchmark, also called UranusDet. 
 UranusDet is completed by [YangXue](https://yangxue0827.github.io/).
 
-![3](demo.gif)
-
 Techniques:
 - [x] Dataset support: DOTA, HRSC2016, ICDAR2015, ICDAR2017 MLT, UCAS-AOD, FDDB, OHD-SJTU, SSDD++
 - [x] [ResNet](https://arxiv.org/abs/1512.03385), [MobileNetV2](https://arxiv.org/abs/1801.04381), [EfficientNet](https://arxiv.org/abs/1905.11946)
@@ -13,6 +11,7 @@ Techniques:
 - [x] [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow), [Pytorch code](https://github.com/SJTU-Thinklab-Det/r3det-on-mmdetection)
 - [ ] [Circular Smooth Label (CSL)](https://arxiv.org/abs/2003.05597): [TF code](https://github.com/Thinklab-SJTU/CSL_RetinaNet_Tensorflow)
 
+![3](demo.gif)
 
 ## Projects
 ![0](projects.png)
