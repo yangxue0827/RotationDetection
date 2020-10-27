@@ -1,0 +1,166 @@
+# UranusDet
+
+## Abstract
+This is a tensorflow-based rotation detection benchmark, also called UranusDet. 
+UranusDet is completed by [YangXue](https://yangxue0827.github.io/).
+
+Techniques:     
+- [x] [ResNet](https://arxiv.org/abs/1512.03385), [MobileNetV2](https://arxiv.org/abs/1801.04381), [EfficientNet](https://arxiv.org/abs/1905.11946)
+- [x] [RetinaNet-H, RetinaNet-R](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation)
+- [ ] [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow), [Pytorch code](https://github.com/SJTU-Thinklab-Det/r3det-on-mmdetection)
+- [ ] [Circular Smooth Label (CSL)](https://arxiv.org/abs/2003.05597): [TF code](https://github.com/Thinklab-SJTU/CSL_RetinaNet_Tensorflow)
+- [ ] Dataset support: DOTA, HRSC2016, ICDAR2015, ICDAR2017 MLT, UCAS-AOD, FDDB, OHD-SJTU, SSDD++
+
+
+## Projects
+![0](projects.png)
+
+## Latest Performance
+### DOTA1.0 (Task1)
+| Model |    Backbone    |    Training/test dataset    |    mAP   | Model Link | Anchor | Angle Pred. | Reg. Loss| Angle Range | Data Augmentation | Configs |      
+|:------------:|:------------:|:------------:|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:---------:|:---------:|:---------:|    
+| [RetinaNet-H](https://arxiv.org/abs/1908.05612) | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 64.17 | [Baidu Drive (j5l0)](https://pan.baidu.com/s/1Qh_LE6QeGsOBYqMzjAESsA) | H | Reg. | smooth L1 | **180** | × | [cfgs_res50_dota_v15.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v15.py) |
+| [RetinaNet-H](https://arxiv.org/abs/1908.05612) | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 65.73 | [Baidu Drive (jum2)](https://pan.baidu.com/s/19-hEtCGxLfYuluTATQJpdg) | H | Reg. | smooth L1 | **90** | × | [cfgs_res50_dota_v4.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v4.py) |
+
+
+## My Development Environment
+**docker images: docker pull yangxue2docker/yx-tf-det:tensorflow1.13.1-cuda10-gpu-py3**      
+1. python3.5 (anaconda recommend)               
+2. cuda 10.0                     
+3. [opencv(cv2)](https://pypi.org/project/opencv-python/)       
+4. [tfplot 0.2.0](https://github.com/wookayin/tensorflow-plot) (optional)            
+5. tensorflow-gpu 1.13                              
+
+## Download Model
+### Pretrain weights
+1. Please download [resnet50_v1](http://download.tensorflow.org/models/resnet_v1_50_2016_08_28.tar.gz), [resnet101_v1](http://download.tensorflow.org/models/resnet_v1_101_2016_08_28.tar.gz), [resnet152_v1](http://download.tensorflow.org/models/resnet_v1_152_2016_08_28.tar.gz), [efficientnet](https://github.com/tensorflow/tpu/tree/master/models/official/efficientnet), [mobilenet_v2](https://storage.googleapis.com/mobilenet_v2/checkpoints/mobilenet_v2_1.0_224.tgz) pre-trained models on Imagenet, put it to data/pretrained_weights.       
+2. **(Recommend in this repo)** Or you can choose to use a better backbone (resnet_v1d), refer to [gluon2TF](https://github.com/yangJirui/gluon2TF).    
+* [Baidu Drive](https://pan.baidu.com/s/1GpqKg0dOaaWmwshvv1qWGg), password: 5ht9.          
+* [Google Drive](https://drive.google.com/drive/folders/1BM8ffn1WnsRRb5RcuAcyJAHX8NS2M1Gz?usp=sharing)      
+
+## Compile
+    ```  
+    cd $PATH_ROOT/libs/utils/cython_utils
+    python setup.py build_ext --inplace (or make)
+    
+    cd $PATH_ROOT/libs/utils/
+    python setup.py build_ext --inplace
+    ```
+
+## Train 
+
+1. If you want to train your own data, please note:  
+    ```
+    (1) Select the detector and dataset you want to use, and mark them as #DETECTOR and #DATASET (such as #DETECTOR=retinanet and #DATASET=DOTA)
+    (2) Modify parameters (such as CLASS_NUM, DATASET_NAME, VERSION, etc.) in $PATH_ROOT/libs/configs/#DATASET/#DETECTOR/cfgs_xxx.py
+    (3) Copy $PATH_ROOT/libs/configs/#DATASET/#DETECTOR/cfgs_xxx.py to $PATH_ROOT/libs/configs/cfgs.py
+    (4) Add category information in $PATH_ROOT/libs/label_name_dict/label_dict.py     
+    (5) Add data_name to $PATH_ROOT/data/io/read_tfrecord.py  
+    ```     
+
+2. Make tfrecord       
+    If image is very large (such as DOTA dataset), the image needs to be cropped. Take DOTA dataset as a example:      
+    ```  
+    cd $PATH_ROOT/dataloader/datsset/DOTA
+    python data_crop.py
+    ```  
+    If image does not need to be cropped, just convert the annotation file into xml format, refer to [example.xml](./example.xml).
+    ```  
+    cd $PATH_ROOT/dataloader/dataset/  
+    python convert_data_to_tfrecord.py --VOC_dir='/PATH/TO/DOTA/' 
+                                       --xml_dir='labeltxt'
+                                       --image_dir='images'
+                                       --save_name='train' 
+                                       --img_format='.png' 
+                                       --dataset='DOTA'
+    ```      
+    
+
+3. Train
+    ```  
+    cd $PATH_ROOT/tools/#DETECTOR
+    python train.py
+    ```
+
+## Eval
+1. For large-scale image, take DOTA dataset as a example (the output file or visualization is in $PATH_ROOT/tools/#DETECTOR/test_dota/VERSION): 
+    ```  
+    cd $PATH_ROOT/tools/#DETECTOR
+    python test_dota_ms.py --test_dir='/PATH/TO/IMAGES/'  
+                           --gpus=0,1,2,3,4,5,6,7  
+                           -ms (multi-scale testing, optional)
+                           -s (visualization, optional)
+    ``` 
+
+2. For small-scale image, take HRSC2016 dataset as a example: 
+    ```  
+    cd $PATH_ROOT/tools/#DETECTOR
+    python test_hrsc2016_ms.py --test_dir='/PATH/TO/IMAGES/'  
+                               --gpu=0
+                               --image_ext='bmp'
+                               --test_annotation_path='/PATH/TO/ANNOTATIONS'
+                               -s (visualization, optional)
+    ``` 
+
+## Tensorboard
+```  
+cd $PATH_ROOT/output/summary
+tensorboard --logdir=.
+``` 
+
+![1](images.png)
+
+![2](scalars.png)
+
+## Citation
+
+If this is useful for your research, please consider cite.
+
+```
+@article{yang2020arbitrary,
+    title={Arbitrary-Oriented Object Detection with Circular Smooth Label},
+    author={Yang, Xue and Yan, Junchi},
+    journal={European Conference on Computer Vision (ECCV)},
+    year={2020}
+    organization={Springer}
+}
+
+@article{yang2019r3det,
+    title={R3Det: Refined Single-Stage Detector with Feature Refinement for Rotating Object},
+    author={Yang, Xue and Liu, Qingqing and Yan, Junchi and Li, Ang and Zhang, Zhiqiang and Yu, Gang},
+    journal={arXiv preprint arXiv:1908.05612},
+    year={2019}
+}
+
+@article{yang2020scrdet++,
+    title={SCRDet++: Detecting Small, Cluttered and Rotated Objects via Instance-Level Feature Denoising and Rotation Loss Smoothing},
+    author={Yang, Xue and Yan, Junchi and Yang, Xiaokang and Tang, Jin and Liao, Wenglong and He, Tao},
+    journal={arXiv preprint arXiv:2004.13316},
+    year={2020}
+}
+
+@inproceedings{yang2019scrdet,
+    title={SCRDet: Towards more robust detection for small, cluttered and rotated objects},
+    author={Yang, Xue and Yang, Jirui and Yan, Junchi and Zhang, Yue and Zhang, Tengfei and Guo, Zhi and Sun, Xian and Fu, Kun},
+    booktitle={Proceedings of the IEEE International Conference on Computer Vision (ICCV)},
+    pages={8232--8241},
+    year={2019}
+}
+
+@inproceedings{xia2018dota,
+    title={DOTA: A large-scale dataset for object detection in aerial images},
+    author={Xia, Gui-Song and Bai, Xiang and Ding, Jian and Zhu, Zhen and Belongie, Serge and Luo, Jiebo and Datcu, Mihai and Pelillo, Marcello and Zhang, Liangpei},
+    booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+    pages={3974--3983},
+    year={2018}
+}
+
+```
+
+## Reference
+1、https://github.com/endernewton/tf-faster-rcnn   
+2、https://github.com/zengarden/light_head_rcnn   
+3、https://github.com/tensorflow/models/tree/master/research/object_detection    
+4、https://github.com/fizyr/keras-retinanet     
+
+
