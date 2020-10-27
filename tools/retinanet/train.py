@@ -26,7 +26,7 @@ class TrainRetinaNet(Train):
                gtboxes_and_label_r[:int(num_objects), :].astype(np.float32)
 
     def main(self):
-        with tf.Graph().as_default(), tf.device('/cpu:0'):
+        with tf.Graph().as_default() as graph, tf.device('/cpu:0'):
 
             num_gpu = len(cfgs.GPU_GROUP.strip().split(','))
             global_step = slim.get_or_create_global_step()
@@ -163,7 +163,7 @@ class TrainRetinaNet(Train):
                             if cfgs.GRADIENT_CLIPPING_BY_NORM is not None:
                                 grads = slim.learning.clip_gradient_norms(grads, cfgs.GRADIENT_CLIPPING_BY_NORM)
                             tower_grads.append(grads)
-            self.log_printer(retinanet, optimizer, global_step, tower_grads, total_loss_dict, num_gpu)
+            self.log_printer(retinanet, optimizer, global_step, tower_grads, total_loss_dict, num_gpu, graph)
 
 if __name__ == '__main__':
 

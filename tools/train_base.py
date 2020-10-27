@@ -22,6 +22,11 @@ class Train(object):
         self.reader = ReadTFRecord(cfgs)
         self.drawer = DrawBoxTensor(cfgs)
 
+    def stats_graph(self, graph):
+        flops = tf.profiler.profile(graph, options=tf.profiler.ProfileOptionBuilder.float_operation())
+        params = tf.profiler.profile(graph, options=tf.profiler.ProfileOptionBuilder.trainable_variables_parameter())
+        print('FLOPs: {};    Trainable params: {}'.format(flops.total_float_ops, params.total_parameters))
+
     def average_gradients(self, tower_grads):
         """Calculate the average gradient for each shared variable across all towers.
         Note that this function provides a synchronization point across all towers.
@@ -110,7 +115,7 @@ class Train(object):
                        true_fn=lambda: warmup(init_lr, global_step, warmup_step),
                        false_fn=lambda: decay(init_lr, global_step, num_gpu))
 
-    def log_printer(self, deter, optimizer, global_step, tower_grads, total_loss_dict, num_gpu):
+    def log_printer(self, deter, optimizer, global_step, tower_grads, total_loss_dict, num_gpu, graph):
 
         for k in total_loss_dict.keys():
             tf.summary.scalar('{}/{}'.format(k.split('_')[0], k), total_loss_dict[k])
@@ -169,6 +174,8 @@ class Train(object):
             if not restorer is None:
                 restorer.restore(sess, restore_ckpt)
                 print('restore model')
+
+            self.stats_graph(graph)
 
             for step in range(self.cfgs.MAX_ITERATION // num_gpu):
                 training_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))

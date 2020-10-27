@@ -13,8 +13,10 @@ sys.path.append("../../")
 
 from tools.train_base import Train
 from libs.configs import cfgs
-from libs.models.detectors.r3det import build_whole_network
+from libs.models.detectors.csl import build_whole_network
 from libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
+from utils.smooth_label import angle_smooth_label
+from libs.utils.coordinate_convert import coordinate_present_convert
 
 os.environ["CUDA_VISIBLE_DEVICES"] = cfgs.GPU_GROUP
 
@@ -34,8 +36,8 @@ class TrainRetinaNet(Train):
             tf.summary.scalar('lr', lr)
 
             optimizer = tf.train.MomentumOptimizer(lr, momentum=cfgs.MOMENTUM)
-            r3det = build_whole_network.DetectionNetwork(cfgs=self.cfgs,
-                                                         is_training=True)
+            csl = build_whole_network.DetectionNetwork(cfgs=self.cfgs,
+                                                       is_training=True)
 
             with tf.name_scope('get_batch'):
                 if cfgs.IMAGE_PYRAMID:
@@ -81,8 +83,7 @@ class TrainRetinaNet(Train):
             total_loss_dict = {
                 'cls_loss': tf.constant(0., tf.float32),
                 'reg_loss': tf.constant(0., tf.float32),
-                'refine_cls_loss': tf.constant(0., tf.float32),
-                'refine_reg_loss': tf.constant(0., tf.float32),
+                'angle_cls_loss': tf.constant(0., tf.float32),
                 'total_losses': tf.constant(0., tf.float32),
             }
 
@@ -108,6 +109,22 @@ class TrainRetinaNet(Train):
                                     gtboxes_and_label_h = tf.reshape(gtboxes_and_label_h, [-1, 5])
                                     gtboxes_and_label_r = tf.reshape(gtboxes_and_label_r, [-1, 6])
 
+                                    if cfgs.ANGLE_RANGE == 180:
+                                        gtboxes_and_label_r_ = tf.py_func(coordinate_present_convert,
+                                                                          inp=[gtboxes_and_label_r, -1],
+                                                                          Tout=tf.float32)
+                                        gtboxes_and_label_r_ = tf.reshape(gtboxes_and_label_r_, [-1, 6])
+
+                                        gt_smooth_label = tf.py_func(angle_smooth_label,
+                                                                     inp=[gtboxes_and_label_r_[:, -2], cfgs.ANGLE_RANGE,
+                                                                          cfgs.LABEL_TYPE, cfgs.RADUIUS, cfgs.OMEGA],
+                                                                     Tout=tf.float32)
+                                    else:
+                                        gt_smooth_label = tf.py_func(angle_smooth_label,
+                                                                     inp=[gtboxes_and_label_r[:, -2], cfgs.ANGLE_RANGE,
+                                                                          cfgs.LABEL_TYPE, cfgs.RADUIUS, cfgs.OMEGA],
+                                                                     Tout=tf.float32)
+
                                     img = inputs_list[i][0]
                                     img_shape = inputs_list[i][-2:]
                                     img = tf.image.crop_to_bounding_box(image=img,
@@ -116,10 +133,11 @@ class TrainRetinaNet(Train):
                                                                         target_height=tf.cast(img_shape[0], tf.int32),
                                                                         target_width=tf.cast(img_shape[1], tf.int32))
 
-                                    outputs = r3det.build_whole_detection_network(input_img_batch=img,
-                                                                                  gtboxes_batch_h=gtboxes_and_label_h,
-                                                                                  gtboxes_batch_r=gtboxes_and_label_r,
-                                                                                  gpu_id=i)
+                                    outputs = csl.build_whole_detection_network(input_img_batch=img,
+                                                                                gtboxes_batch_h=gtboxes_and_label_h,
+                                                                                gtboxes_batch_r=gtboxes_and_label_r,
+                                                                                gt_smooth_label=gt_smooth_label,
+                                                                                gpu_id=i)
                                     gtboxes_in_img_h = self.drawer.draw_boxes_with_categories(img_batch=img,
                                                                                               boxes=gtboxes_and_label_h[
                                                                                                     :, :-1],
@@ -144,6 +162,15 @@ class TrainRetinaNet(Train):
                                             method=1)
                                         tf.summary.image('Compare/final_detection_gpu:%d' % i, detections_in_img)
 
+                                        detections_angle_in_img = self.drawer.draw_boxes_with_categories_and_scores(
+                                            img_batch=img,
+                                            boxes=outputs[3],
+                                            scores=outputs[1],
+                                            labels=outputs[2],
+                                            method=1)
+                                        tf.summary.image('Compare/final_detection_angle_gpu:%d' % i,
+                                                         detections_angle_in_img)
+
                                     loss_dict = outputs[-1]
 
                                     total_losses = 0.0
@@ -165,7 +192,7 @@ class TrainRetinaNet(Train):
                             if cfgs.GRADIENT_CLIPPING_BY_NORM is not None:
                                 grads = slim.learning.clip_gradient_norms(grads, cfgs.GRADIENT_CLIPPING_BY_NORM)
                             tower_grads.append(grads)
-            self.log_printer(r3det, optimizer, global_step, tower_grads, total_loss_dict, num_gpu, graph)
+            self.log_printer(csl, optimizer, global_step, tower_grads, total_loss_dict, num_gpu, graph)
 
 if __name__ == '__main__':
 

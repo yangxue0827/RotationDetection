@@ -348,7 +348,7 @@ class DetectionNetwork(DetectionNetworkBase):
         anchor_list = self.make_anchors(feature_pyramid)
         anchors = tf.concat(anchor_list, axis=0)
 
-        # 5. build loss
+        # 4. build loss
         if self.is_training:
             with tf.variable_scope('build_loss'):
                 labels, target_delta, anchor_states, target_boxes = tf.py_func(func=self.anchor_sampler_retinenet.anchor_target_layer,
@@ -398,6 +398,7 @@ class DetectionNetwork(DetectionNetworkBase):
             else:
                 all_box_pred_list, all_cls_prob_list, all_proposal_list = box_pred_list, cls_prob_list, proposal_list
 
+        # 5. postprocess
         with tf.variable_scope('postprocess_detctions'):
             box_pred = tf.concat(all_box_pred_list, axis=0)
             cls_prob = tf.concat(all_cls_prob_list, axis=0)
@@ -405,8 +406,7 @@ class DetectionNetwork(DetectionNetworkBase):
 
             boxes, scores, category = self.postprocess_detctions(refine_bbox_pred=box_pred,
                                                                  refine_cls_prob=cls_prob,
-                                                                 anchors=proposal,
-                                                                 is_training=self.is_training)
+                                                                 anchors=proposal)
             boxes = tf.stop_gradient(boxes)
             scores = tf.stop_gradient(scores)
             category = tf.stop_gradient(category)
@@ -416,16 +416,16 @@ class DetectionNetwork(DetectionNetworkBase):
         else:
             return boxes, scores, category
 
-    def postprocess_detctions(self, refine_bbox_pred, refine_cls_prob, anchors, is_training):
+    def postprocess_detctions(self, refine_bbox_pred, refine_cls_prob, anchors):
 
-        def filter_detections(boxes, scores, is_training):
+        def filter_detections(boxes, scores):
             """
             :param boxes: [-1, 4]
             :param scores: [-1, ]
             :param labels: [-1, ]
             :return:
             """
-            if is_training:
+            if self.is_training:
                 indices = tf.reshape(tf.where(tf.greater(scores, self.cfgs.VIS_SCORE)), [-1, ])
             else:
                 indices = tf.reshape(tf.where(tf.greater(scores, self.cfgs.FILTERED_SCORE)), [-1, ])
@@ -439,7 +439,7 @@ class DetectionNetwork(DetectionNetworkBase):
                 nms_indices = nms_rotate.nms_rotate(decode_boxes=filtered_boxes,
                                                     scores=filtered_scores,
                                                     iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
-                                                    max_output_size=100 if is_training else 1000,
+                                                    max_output_size=100 if self.is_training else 1000,
                                                     use_gpu=False)
 
                 # filter indices based on NMS
@@ -455,7 +455,7 @@ class DetectionNetwork(DetectionNetworkBase):
         return_scores = []
         return_labels = []
         for j in range(0, self.cfgs.CLASS_NUM):
-            indices = filter_detections(boxes_pred, refine_cls_prob[:, j], is_training)
+            indices = filter_detections(boxes_pred, refine_cls_prob[:, j])
             tmp_boxes_pred = tf.reshape(tf.gather(boxes_pred, indices), [-1, 5])
             tmp_scores = tf.reshape(tf.gather(refine_cls_prob[:, j], indices), [-1, ])
 

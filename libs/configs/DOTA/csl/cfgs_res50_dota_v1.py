@@ -5,54 +5,54 @@ import tensorflow as tf
 import math
 
 """
-RetinaNet-H
+gaussian label, omega=1, r=6
+
 This is your result for task 1:
 
-    mAP: 0.6572506703256068
+    mAP: 0.6569045253137319
     ap of each class:
-    plane:0.8831119481871824,
-    baseball-diamond:0.7554052281871614,
-    bridge:0.4217303911789575,
-    ground-track-field:0.6707230071220774,
-    small-vehicle:0.6592650965532021,
-    large-vehicle:0.5111005162900164,
-    ship:0.7261407293679227,
-    tennis-court:0.9071013790480128,
-    basketball-court:0.7822207883168055,
-    storage-tank:0.7883844023962553,
-    soccer-ball-field:0.544082059014562,
-    roundabout:0.6200017658693254,
-    harbor:0.5324027345069116,
-    swimming-pool:0.6718903394664805,
-    helicopter:0.3851996693792289
+    plane:0.8867964561407189,
+    baseball-diamond:0.7621447630919623,
+    bridge:0.4055336223125793,
+    ground-track-field:0.6106504178923284,
+    small-vehicle:0.6676809751876145,
+    large-vehicle:0.5149858260302362,
+    ship:0.7359685211242706,
+    tennis-court:0.9083268053106571,
+    basketball-court:0.7900280506333788,
+    storage-tank:0.7926176857759603,
+    soccer-ball-field:0.5518343006559859,
+    roundabout:0.5743420301956235,
+    harbor:0.537573063205451,
+    swimming-pool:0.6545719624624141,
+    helicopter:0.4605133996867981
 
 The submitted information is :
 
-Description: RetinaNet_DOTA_2x_20190530_108w
-Username: DetectionTeamCSU
-Institute: CSU
-Emailadress: yangxue@csu.edu.cn
-TeamMembers: YangXue
-
+Description: RetinaNet_DOTA_CSL_2x_20200912_70.2w
+Username: liuqingiqng
+Institute: Central South University
+Emailadress: liuqingqing@csu.edu.cn
+TeamMembers: liuqingqing
 
 """
 
 # ------------------------------------------------
-VERSION = 'RetinaNet_DOTA_2x_20190530'
+VERSION = 'RetinaNet_DOTA_CSL_2x_20200912'
 NET_NAME = 'resnet50_v1d'  # 'MobilenetV2'
 
 # ---------------------------------------- System
 ROOT_PATH = os.path.abspath('../../')
 print(20*"++--")
 print(ROOT_PATH)
-GPU_GROUP = "0,1,3"
+GPU_GROUP = "0,1,2"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
 SHOW_TRAIN_INFO_INTE = 20
 SMRY_ITER = 200
 SAVE_WEIGHTS_INTE = 27000 * 2
 
 SUMMARY_PATH = ROOT_PATH + '/output/summary'
-TEST_SAVE_PATH = ROOT_PATH + '/utils/test_result'
+TEST_SAVE_PATH = ROOT_PATH + '/tools/test_result'
 
 if NET_NAME.startswith("resnet"):
     weights_name = NET_NAME
@@ -65,7 +65,7 @@ PRETRAINED_CKPT = ROOT_PATH + '/dataloader/pretrained_weights/' + weights_name +
 TRAINED_CKPT = os.path.join(ROOT_PATH, 'output/trained_weights')
 EVALUATE_DIR = ROOT_PATH + '/output/evaluate_result_pickle/'
 
-# ------------------------------------------ Train and Test
+# ------------------------------------------ Train and test
 RESTORE_FROM_RPN = False
 FIXED_BLOCKS = 1  # allow 0~3
 FREEZE_BLOCKS = [True, False, False, False, False]  # for gluoncv backbone
@@ -76,10 +76,9 @@ MUTILPY_BIAS_GRADIENT = 2.0  # if None, will not multipy
 GRADIENT_CLIPPING_BY_NORM = 10.0  # if None, will not clip
 
 CLS_WEIGHT = 1.0
-REG_WEIGHT = 1.0 / 5.0
+REG_WEIGHT = 1.0
+ANGLE_WEIGHT = 0.5
 REG_LOSS_MODE = None
-ALPHA = 1.0
-BETA = 1.0
 
 BATCH_SIZE = 1
 EPSILON = 1e-5
@@ -97,6 +96,9 @@ PIXEL_STD = [0.229, 0.224, 0.225]  # R, G, B. In tf, channel is RGB. In openCV, 
 IMG_SHORT_SIDE_LEN = 800
 IMG_MAX_LENGTH = 800
 CLASS_NUM = 15
+LABEL_TYPE = 0
+RADUIUS = 6
+OMEGA = 1
 
 IMG_ROTATE = False
 RGB2GRAY = False
@@ -125,7 +127,7 @@ ANCHOR_SCALE_FACTORS = None
 USE_CENTER_OFFSET = True
 METHOD = 'H'
 USE_ANGLE_COND = False
-ANGLE_RANGE = 90  # or 180
+ANGLE_RANGE = 180  # 90 or 180
 
 # -------------------------------------------- Head
 SHARE_NET = True

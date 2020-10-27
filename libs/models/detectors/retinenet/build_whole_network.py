@@ -40,7 +40,7 @@ class DetectionNetwork(DetectionNetworkBase):
         anchor_list = self.make_anchors(feature_pyramid)
         anchors = tf.concat(anchor_list, axis=0)
 
-        # 5. build loss
+        # 4. build loss
         if self.is_training:
             with tf.variable_scope('build_loss'):
                 labels, target_delta, anchor_states, target_boxes = tf.py_func(func=self.anchor_sampler_retinenet.anchor_target_layer,
@@ -69,6 +69,7 @@ class DetectionNetwork(DetectionNetworkBase):
                 self.losses_dict['cls_loss'] = cls_loss * self.cfgs.CLS_WEIGHT
                 self.losses_dict['reg_loss'] = reg_loss * self.cfgs.REG_WEIGHT
 
+        # 5. postprocess
         with tf.variable_scope('postprocess_detctions'):
             boxes, scores, category = self.postprocess_detctions(rpn_bbox_pred=rpn_box_pred,
                                                                  rpn_cls_prob=rpn_cls_prob,

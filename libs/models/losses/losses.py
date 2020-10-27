@@ -179,3 +179,36 @@ class Loss(object):
         # normalizer = tf.maximum(tf.reduce_sum(normalizer), 1)
 
         return tf.reduce_sum(regression_loss * iou_factor) / normalizer
+
+    def angle_focal_loss(self, labels, pred, anchor_state, alpha=0.25, gamma=2.0):
+
+        indices = tf.reshape(tf.where(tf.equal(anchor_state, 1)), [-1, ])
+        labels = tf.gather(labels, indices)
+        pred = tf.gather(pred, indices)
+
+        # compute the focal loss
+        per_entry_cross_ent = - labels * tf.log(tf.sigmoid(pred) + self.cfgs.EPSILON) \
+                              - (1 - labels) * tf.log(1 - tf.sigmoid(pred) + self.cfgs.EPSILON)
+
+        prediction_probabilities = tf.sigmoid(pred)
+        p_t = ((labels * prediction_probabilities) +
+               ((1 - labels) * (1 - prediction_probabilities)))
+        modulating_factor = 1.0
+        if gamma:
+            modulating_factor = tf.pow(1.0 - p_t, gamma)
+        alpha_weight_factor = 1.0
+        if alpha is not None:
+            alpha_weight_factor = (labels * alpha +
+                                   (1 - labels) * (1 - alpha))
+        focal_cross_entropy_loss = (modulating_factor * alpha_weight_factor *
+                                    per_entry_cross_ent)
+
+        # compute the normalizer: the number of positive anchors
+        normalizer = tf.stop_gradient(tf.where(tf.equal(anchor_state, 1)))
+        normalizer = tf.cast(tf.shape(normalizer)[0], tf.float32)
+        normalizer = tf.maximum(1.0, normalizer)
+
+        # normalizer = tf.stop_gradient(tf.cast(tf.equal(anchor_state, 1), tf.float32))
+        # normalizer = tf.maximum(tf.reduce_sum(normalizer), 1)
+
+        return tf.reduce_sum(focal_cross_entropy_loss) / normalizer
