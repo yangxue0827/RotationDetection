@@ -19,7 +19,7 @@ from libs.utils.coordinate_convert import coordinate_present_convert
 
 class AnchorSamplerCSL(AnchorSampler):
 
-    def anchor_target_layer(self, gt_boxes_h, gt_boxes_r, gt_smooth_label, anchors, gpu_id=0):
+    def anchor_target_layer(self, gt_boxes_h, gt_boxes_r, gt_encode_label, anchors, gpu_id=0):
 
         anchor_states = np.zeros((anchors.shape[0],))
         labels = np.zeros((anchors.shape[0], self.cfgs.CLASS_NUM))
@@ -41,7 +41,7 @@ class AnchorSamplerCSL(AnchorSampler):
 
             # compute box regression targets
             target_boxes = gt_boxes_r[argmax_overlaps_inds]
-            target_smooth_label = gt_smooth_label[argmax_overlaps_inds]
+            target_encode_label = gt_encode_label[argmax_overlaps_inds]
 
             positive_indices = max_overlaps >= self.cfgs.IOU_POSITIVE_THRESHOLD
             ignore_indices = (max_overlaps > self.cfgs.IOU_NEGATIVE_THRESHOLD) & ~positive_indices
@@ -54,7 +54,7 @@ class AnchorSamplerCSL(AnchorSampler):
         else:
             # no annotations? then everything is background
             target_boxes = np.zeros((anchors.shape[0], gt_boxes_r.shape[1]))
-            target_smooth_label = np.zeros((anchors.shape[0], gt_smooth_label.shape[1]))
+            target_encode_label = np.zeros((anchors.shape[0], gt_encode_label.shape[1]))
 
         if self.cfgs.METHOD == 'H':
             x_c = (anchors[:, 2] + anchors[:, 0]) / 2
@@ -71,7 +71,7 @@ class AnchorSamplerCSL(AnchorSampler):
 
         return np.array(labels, np.float32), np.array(target_delta, np.float32), \
                np.array(anchor_states, np.float32), np.array(target_boxes, np.float32), \
-               np.array(target_smooth_label, np.float32)
+               np.array(target_encode_label, np.float32)
 
 
 

@@ -21,7 +21,7 @@ from libs.utils.coordinate_convert import coordinate_present_convert
 os.environ["CUDA_VISIBLE_DEVICES"] = cfgs.GPU_GROUP
 
 
-class TrainRetinaNet(Train):
+class TrainCSL(Train):
 
     def get_gtboxes_and_label(self, gtboxes_and_label_h, gtboxes_and_label_r, num_objects):
         return gtboxes_and_label_h[:int(num_objects), :].astype(np.float32), \
@@ -196,5 +196,5 @@ class TrainRetinaNet(Train):
 
 if __name__ == '__main__':
 
-    trainer = TrainRetinaNet(cfgs)
+    trainer = TrainCSL(cfgs)
     trainer.main()

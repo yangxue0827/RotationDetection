@@ -18,7 +18,7 @@ class DetectionNetwork(DetectionNetworkBase):
         super(DetectionNetwork, self).__init__(cfgs, is_training)
         self.anchor_sampler_csl = AnchorSamplerCSL(cfgs)
         self.losses = Loss(self.cfgs)
-        self.angle_range = cfgs.ANGLE_RANGE // cfgs.OMEGA
+        self.coding_len = cfgs.ANGLE_RANGE // cfgs.OMEGA
 
     def rpn_reg_net(self, inputs, scope_list, reuse_flag, level):
         rpn_conv2d_3x3 = inputs
@@ -44,7 +44,7 @@ class DetectionNetwork(DetectionNetworkBase):
                                       reuse=reuse_flag)
 
         rpn_angle_cls = slim.conv2d(rpn_conv2d_3x3,
-                                    num_outputs=self.angle_range * self.num_anchors_per_location,
+                                    num_outputs=self.coding_len * self.num_anchors_per_location,
                                     kernel_size=[3, 3],
                                     stride=1,
                                     weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
@@ -55,7 +55,7 @@ class DetectionNetwork(DetectionNetworkBase):
 
         rpn_delta_boxes = tf.reshape(rpn_delta_boxes, [-1, 5],
                                      name='rpn_{}_regression_reshape'.format(level))
-        rpn_angle_cls = tf.reshape(rpn_angle_cls, [-1, self.angle_range],
+        rpn_angle_cls = tf.reshape(rpn_angle_cls, [-1, self.coding_len],
                                    name='rpn_{}_angle_cls_reshape'.format(level))
         return rpn_delta_boxes, rpn_angle_cls
 
@@ -99,7 +99,7 @@ class DetectionNetwork(DetectionNetworkBase):
             gtboxes_batch_r = tf.reshape(gtboxes_batch_r, [-1, 6])
             gtboxes_batch_r = tf.cast(gtboxes_batch_r, tf.float32)
 
-            gt_smooth_label = tf.reshape(gt_smooth_label, [-1, self.angle_range])
+            gt_smooth_label = tf.reshape(gt_smooth_label, [-1, self.coding_len])
             gt_smooth_label = tf.cast(gt_smooth_label, tf.float32)
 
         # 1. build backbone

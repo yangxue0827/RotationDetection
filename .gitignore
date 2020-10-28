@@ -122,6 +122,8 @@ __pycache__/
 *tmp*
 *.mp4*
 *.MP4*
+*dcl*
+*r3det_dcl*
 
 demo
 tools/demo.py

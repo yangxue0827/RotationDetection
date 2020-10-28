@@ -5,39 +5,13 @@ import tensorflow as tf
 import math
 
 """
-This is your result for task 1:
 
-    mAP: 0.7040175568277504
-    ap of each class:
-    plane:0.890153676787004,
-    baseball-diamond:0.7546823004821948,
-    bridge:0.43856818970048655,
-    ground-track-field:0.6584323172228589,
-    small-vehicle:0.758265556666476,
-    large-vehicle:0.7343692077868644,
-    ship:0.8603390134740575,
-    tennis-court:0.9056898929544596,
-    basketball-court:0.8111416145602515,
-    storage-tank:0.8284442512925325,
-    soccer-ball-field:0.5557191091213718,
-    roundabout:0.5910437513923295,
-    harbor:0.5657488814247862,
-    swimming-pool:0.7031169348003156,
-    helicopter:0.5045486547502677
-
-The submitted information is :
-
-Description: RetinaNet_DOTA_R3Det_2x_20191108_75.6w
-Username: SJTU-Det
-Institute: SJTU
-Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
-TeamMembers: yangxue
 
 
 """
 
 # ------------------------------------------------
-VERSION = 'RetinaNet_DOTA_R3Det_2x_20191108'
+VERSION = 'RetinaNet_DOTA_RefineRetinaNet_2x_20201028'
 NET_NAME = 'resnet50_v1d'  # 'MobilenetV2'
 
 # ---------------------------------------- System
