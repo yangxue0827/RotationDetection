@@ -6,7 +6,6 @@ from __future__ import print_function
 
 import numpy as np
 import cv2
-from libs.configs import cfgs
 import tensorflow as tf
 from libs.utils.rotate_polygon_nms import rotate_gpu_nms
 
@@ -78,7 +77,7 @@ def nms_rotate_cpu(boxes, scores, iou_threshold, max_output_size):
 
                         int_area = cv2.contourArea(order_pts)
 
-                        inter = int_area * 1.0 / (area_r1 + area_r2 - int_area + cfgs.EPSILON)
+                        inter = int_area * 1.0 / (area_r1 + area_r2 - int_area + 1e-4)
 
                 except:
                     """

@@ -19,7 +19,7 @@ from libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaR
 os.environ["CUDA_VISIBLE_DEVICES"] = cfgs.GPU_GROUP
 
 
-class TrainRetinaNet(Train):
+class TrainRefineRetinaNet(Train):
 
     def get_gtboxes_and_label(self, gtboxes_and_label_h, gtboxes_and_label_r, num_objects):
         return gtboxes_and_label_h[:int(num_objects), :].astype(np.float32), \
@@ -169,5 +169,5 @@ class TrainRetinaNet(Train):
 
 if __name__ == '__main__':
 
-    trainer = TrainRetinaNet(cfgs)
+    trainer = TrainRefineRetinaNet(cfgs)
     trainer.main()

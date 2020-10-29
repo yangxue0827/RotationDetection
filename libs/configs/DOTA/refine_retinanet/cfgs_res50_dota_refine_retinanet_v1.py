@@ -5,7 +5,7 @@ import tensorflow as tf
 import math
 
 """
-
+FLOPs: 1065231174;    Trainable params: 38691656
 
 
 """

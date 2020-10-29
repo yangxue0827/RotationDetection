@@ -29,7 +29,7 @@ This is your result for task 1:
 
 The submitted information is :
 
-Description: RetinaNet_DOTA_R3Det_2x_20200628_137.7w
+Description: RetinaNet_DOTA_R3Det_3x_20200628_137.7w
 Username: SJTU-Det
 Institute: SJTU
 Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
@@ -38,7 +38,7 @@ TeamMembers: yangxue
 """
 
 # ------------------------------------------------
-VERSION = 'RetinaNet_DOTA_R3Det_2x_20200628'
+VERSION = 'RetinaNet_DOTA_R3Det_3x_20200628'
 NET_NAME = 'resnet101_v1d'  # 'MobilenetV2'
 
 # ---------------------------------------- System

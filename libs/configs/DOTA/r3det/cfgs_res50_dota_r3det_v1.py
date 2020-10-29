@@ -7,27 +7,27 @@ import math
 """
 This is your result for task 1:
 
-    mAP: 0.7040175568277504
+    mAP: 0.7066194189913816
     ap of each class:
-    plane:0.890153676787004,
-    baseball-diamond:0.7546823004821948,
-    bridge:0.43856818970048655,
-    ground-track-field:0.6584323172228589,
-    small-vehicle:0.758265556666476,
-    large-vehicle:0.7343692077868644,
-    ship:0.8603390134740575,
-    tennis-court:0.9056898929544596,
-    basketball-court:0.8111416145602515,
-    storage-tank:0.8284442512925325,
-    soccer-ball-field:0.5557191091213718,
-    roundabout:0.5910437513923295,
-    harbor:0.5657488814247862,
-    swimming-pool:0.7031169348003156,
-    helicopter:0.5045486547502677
+    plane:0.8905480010393588,
+    baseball-diamond:0.7845764249543027,
+    bridge:0.4415489914209597,
+    ground-track-field:0.6515721505439082,
+    small-vehicle:0.7509226622459368,
+    large-vehicle:0.7288453788151275,
+    ship:0.8604046905135039,
+    tennis-court:0.9082569687774237,
+    basketball-court:0.8141347275878138,
+    storage-tank:0.8253027715641935,
+    soccer-ball-field:0.5623560181901192,
+    roundabout:0.6100656068973895,
+    harbor:0.5648618127447264,
+    swimming-pool:0.6767393616949172,
+    helicopter:0.5291557178810407
 
 The submitted information is :
 
-Description: RetinaNet_DOTA_R3Det_2x_20191108_75.6w
+Description: RetinaNet_DOTA_R3Det_2x_20191108_70.2w
 Username: SJTU-Det
 Institute: SJTU
 Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
