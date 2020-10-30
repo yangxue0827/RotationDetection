@@ -12,10 +12,10 @@ from libs.models.samplers.retinanet.anchor_sampler_retinenet import AnchorSample
 from libs.models.samplers.r3det.refine_anchor_sampler_r3det import RefineAnchorSamplerR3Det
 
 
-class DetectionNetwork(DetectionNetworkBase):
+class DetectionNetworkRefineRetinaNet(DetectionNetworkBase):
 
     def __init__(self, cfgs, is_training):
-        super(DetectionNetwork, self).__init__(cfgs, is_training)
+        super(DetectionNetworkRefineRetinaNet, self).__init__(cfgs, is_training)
         self.anchor_sampler_retinenet = AnchorSamplerRetinaNet(cfgs)
         self.refine_anchor_sampler_r3det = RefineAnchorSamplerR3Det(cfgs)
         self.losses = Loss(self.cfgs)

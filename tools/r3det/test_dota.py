@@ -13,14 +13,14 @@ from tools.test_dota_base import TestDOTA
 from libs.configs import cfgs
 
 
-class TestDOTARetinaNet(TestDOTA):
+class TestDOTAR3Det(TestDOTA):
 
     def eval(self):
         txt_name = '{}.txt'.format(self.cfgs.VERSION)
         real_test_img_list = self.get_test_image()
 
-        r3det = build_whole_network.DetectionNetwork(cfgs=self.cfgs,
-                                                     is_training=False)
+        r3det = build_whole_network.DetectionNetworkR3Det(cfgs=self.cfgs,
+                                                          is_training=False)
         self.test_dota(det_net=r3det, real_test_img_list=real_test_img_list, txt_name=txt_name)
 
         if not self.args.show_box:
@@ -28,7 +28,7 @@ class TestDOTARetinaNet(TestDOTA):
 
 if __name__ == '__main__':
 
-    tester = TestDOTARetinaNet(cfgs)
+    tester = TestDOTAR3Det(cfgs)
     tester.eval()
 
 

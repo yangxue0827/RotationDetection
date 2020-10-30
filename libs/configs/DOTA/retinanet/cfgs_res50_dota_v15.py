@@ -112,6 +112,7 @@ WEIGHT_DECAY = 1e-4
 USE_GN = False
 FPN_CHANNEL = 256
 NUM_SUBNET_CONV = 4
+FPN_MODE = 'fpn'
 
 # --------------------------------------------- Anchor
 LEVEL = ['P3', 'P4', 'P5', 'P6', 'P7']

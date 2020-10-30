@@ -115,6 +115,7 @@ NUM_SUBNET_CONV = 4
 NUM_REFINE_STAGE = 2
 USE_RELU = False
 FPN_CHANNEL = 256
+FPN_MODE = 'fpn'
 
 # --------------------------------------------- Anchor
 LEVEL = ['P3', 'P4', 'P5', 'P6', 'P7']

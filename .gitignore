@@ -124,12 +124,13 @@ __pycache__/
 *.MP4*
 *dcl*
 *r3det_dcl*
+*ablation_study*
 
 demo
-tools/demo.py
-tools/demos/*
-tools/test_dota/*
-tools/test_icdar2015/*
-tools/test_ohd_sjtu/*
+tools/*/demo.py
+tools/*/demos/*
+tools/*/test_dota/*
+tools/*/test_icdar2015/*
+tools/*/test_ohd_sjtu/*
 output/summary/*
-data/tfrecord/*
+dataloader/tfrecord/*

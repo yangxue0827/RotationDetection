@@ -19,8 +19,8 @@ class TestDOTARetinaNet(TestDOTA):
         txt_name = '{}.txt'.format(self.cfgs.VERSION)
         real_test_img_list = self.get_test_image()
 
-        retinanet = build_whole_network.DetectionNetwork(cfgs=self.cfgs,
-                                                         is_training=False)
+        retinanet = build_whole_network.DetectionNetworkRetinaNet(cfgs=self.cfgs,
+                                                                  is_training=False)
         self.test_dota(det_net=retinanet, real_test_img_list=real_test_img_list, txt_name=txt_name)
 
         if not self.args.show_box:

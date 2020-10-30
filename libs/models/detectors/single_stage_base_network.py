@@ -6,11 +6,9 @@ import os
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 
-from libs.models.backbones import resnet, resnet_gluoncv, mobilenet_v2
-from libs.models.backbones.efficientnet import efficientnet_builder, efficientnet_lite_builder
 from libs.models.anchor_heads.generate_anchors import GenerateAnchors
 from libs.utils.show_box_in_tensor import DrawBoxTensor
-from libs.models.necks import fpn_retinanet
+from libs.models.backbones.build_backbone import BuildBackbone
 
 
 class DetectionNetworkBase(object):
@@ -27,48 +25,10 @@ class DetectionNetworkBase(object):
         self.method = cfgs.METHOD
         self.losses_dict = {}
         self.drawer = DrawBoxTensor(cfgs)
+        self.backbone = BuildBackbone(cfgs, is_training)
 
     def build_backbone(self, input_img_batch):
-
-        if self.base_network_name.startswith('resnet_v1'):
-
-            feature_dict = resnet.ResNetBackbone(self.cfgs).resnet_base(input_img_batch,
-                                                                        scope_name=self.base_network_name,
-                                                                        is_training=self.is_training)
-            return fpn_retinanet.NeckRetinaNet(self.cfgs).fpn_retinanet(feature_dict)
-
-        elif self.base_network_name in ['resnet152_v1d', 'resnet101_v1d', 'resnet50_v1d']:
-
-            feature_dict = resnet_gluoncv.ResNetGluonCVBackbone(self.cfgs).resnet_base(input_img_batch,
-                                                                                       scope_name=self.base_network_name,
-                                                                                       is_training=self.is_training)
-
-            return fpn_retinanet.NeckRetinaNet(self.cfgs).fpn_retinanet(feature_dict)
-
-        elif self.base_network_name.startswith('MobilenetV2'):
-
-            feature_dict = mobilenet_v2.MobileNetV2Backbone(self.cfgs).mobilenetv2_base(input_img_batch,
-                                                                                        is_training=self.is_training)
-
-            return fpn_retinanet.NeckRetinaNet(self.cfgs).fpn_retinanet(feature_dict)
-
-        elif 'efficientnet-lite' in self.base_network_name:
-            feature_dict = efficientnet_lite_builder.EfficientNetLiteBackbone(self.cfgs).build_model_fpn_base(
-                input_img_batch,
-                model_name=self.base_network_name,
-                training=True)
-
-            return fpn_retinanet.NeckRetinaNet(self.cfgs).fpn_retinanet(feature_dict)
-
-        elif 'efficientnet' in self.base_network_name:
-            feature_dict = efficientnet_builder.EfficientNetBackbone(self.cfgs).build_model_fpn_base(
-                input_img_batch,
-                model_name=self.base_network_name,
-                training=True)
-            return fpn_retinanet.NeckRetinaNet(self.cfgs).fpn_retinanet(feature_dict)
-
-        else:
-            raise ValueError('Sorry, we only support resnet, mobilenet_v2 and efficient.')
+        return self.backbone.build_backbone(input_img_batch)
 
     def rpn_cls_net(self, inputs, scope_list, reuse_flag, level):
         rpn_conv2d_3x3 = inputs
@@ -181,7 +141,6 @@ class DetectionNetworkBase(object):
 
     def get_restorer(self):
         checkpoint_path = tf.train.latest_checkpoint(os.path.join(self.cfgs.TRAINED_CKPT, self.cfgs.VERSION))
-        print('***'*20)
         if checkpoint_path is not None:
             if self.cfgs.RESTORE_FROM_RPN:
                 print('___restore from rpn___')

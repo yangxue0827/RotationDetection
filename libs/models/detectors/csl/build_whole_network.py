@@ -12,10 +12,10 @@ from libs.utils.coordinate_convert import coordinate_present_convert
 from libs.models.samplers.csl.anchor_sampler_csl import AnchorSamplerCSL
 
 
-class DetectionNetwork(DetectionNetworkBase):
+class DetectionNetworkCSL(DetectionNetworkBase):
 
     def __init__(self, cfgs, is_training):
-        super(DetectionNetwork, self).__init__(cfgs, is_training)
+        super(DetectionNetworkCSL, self).__init__(cfgs, is_training)
         self.anchor_sampler_csl = AnchorSamplerCSL(cfgs)
         self.losses = Loss(self.cfgs)
         self.coding_len = cfgs.ANGLE_RANGE // cfgs.OMEGA
@@ -119,7 +119,7 @@ class DetectionNetwork(DetectionNetworkBase):
         # 4. build loss
         if self.is_training:
             with tf.variable_scope('build_loss'):
-                labels, target_delta, anchor_states, target_boxes, target_smooth_label = tf.py_func(
+                labels, target_delta, anchor_states, target_boxes, target_encode_label = tf.py_func(
                     func=self.anchor_sampler_csl.anchor_target_layer,
                     inp=[gtboxes_batch_h, gtboxes_batch_r,
                          gt_smooth_label, anchors, gpu_id],
@@ -143,7 +143,7 @@ class DetectionNetwork(DetectionNetworkBase):
                 else:
                     reg_loss = self.losses.smooth_l1_loss(target_delta, rpn_box_pred, anchor_states)
 
-                angle_cls_loss = self.losses.angle_focal_loss(target_smooth_label, rpn_angle_cls, anchor_states)
+                angle_cls_loss = self.losses.angle_focal_loss(target_encode_label, rpn_angle_cls, anchor_states)
 
                 self.losses_dict['cls_loss'] = cls_loss * self.cfgs.CLS_WEIGHT
                 self.losses_dict['reg_loss'] = reg_loss * self.cfgs.REG_WEIGHT

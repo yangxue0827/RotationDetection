@@ -11,10 +11,10 @@ from libs.utils.coordinate_convert import coordinate_present_convert
 from libs.models.samplers.retinanet.anchor_sampler_retinenet import AnchorSamplerRetinaNet
 
 
-class DetectionNetwork(DetectionNetworkBase):
+class DetectionNetworkRetinaNet(DetectionNetworkBase):
 
     def __init__(self, cfgs, is_training):
-        super(DetectionNetwork, self).__init__(cfgs, is_training)
+        super(DetectionNetworkRetinaNet, self).__init__(cfgs, is_training)
         self.anchor_sampler_retinenet = AnchorSamplerRetinaNet(cfgs)
         self.losses = Loss(self.cfgs)
 

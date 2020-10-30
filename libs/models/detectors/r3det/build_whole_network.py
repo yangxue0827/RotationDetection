@@ -12,10 +12,10 @@ from libs.models.samplers.retinanet.anchor_sampler_retinenet import AnchorSample
 from libs.models.samplers.r3det.refine_anchor_sampler_r3det import RefineAnchorSamplerR3Det
 
 
-class DetectionNetwork(DetectionNetworkBase):
+class DetectionNetworkR3Det(DetectionNetworkBase):
 
     def __init__(self, cfgs, is_training):
-        super(DetectionNetwork, self).__init__(cfgs, is_training)
+        super(DetectionNetworkR3Det, self).__init__(cfgs, is_training)
         self.anchor_sampler_retinenet = AnchorSamplerRetinaNet(cfgs)
         self.refine_anchor_sampler_r3det = RefineAnchorSamplerR3Det(cfgs)
         self.losses = Loss(self.cfgs)
@@ -342,7 +342,7 @@ class DetectionNetwork(DetectionNetworkBase):
         rpn_box_pred_list, rpn_cls_score_list, rpn_cls_prob_list = self.rpn_net(feature_pyramid, 'rpn_net')
         rpn_box_pred = tf.concat(rpn_box_pred_list, axis=0)
         rpn_cls_score = tf.concat(rpn_cls_score_list, axis=0)
-        rpn_cls_prob = tf.concat(rpn_cls_prob_list, axis=0)
+        # rpn_cls_prob = tf.concat(rpn_cls_prob_list, axis=0)
 
         # 3. generate anchors
         anchor_list = self.make_anchors(feature_pyramid)

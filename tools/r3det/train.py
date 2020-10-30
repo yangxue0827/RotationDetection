@@ -34,8 +34,8 @@ class TrainR3Det(Train):
             tf.summary.scalar('lr', lr)
 
             optimizer = tf.train.MomentumOptimizer(lr, momentum=cfgs.MOMENTUM)
-            r3det = build_whole_network.DetectionNetwork(cfgs=self.cfgs,
-                                                         is_training=True)
+            r3det = build_whole_network.DetectionNetworkR3Det(cfgs=self.cfgs,
+                                                              is_training=True)
 
             with tf.name_scope('get_batch'):
                 if cfgs.IMAGE_PYRAMID:

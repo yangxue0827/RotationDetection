@@ -5,7 +5,7 @@ import tensorflow.contrib.slim as slim
 import tensorflow as tf
 
 
-class NeckRetinaNet(object):
+class NeckFPNRetinaNet(object):
     def __init__(self, cfgs):
         self.cfgs = cfgs
 
@@ -38,7 +38,7 @@ class NeckRetinaNet(object):
             #                   scope='fusion_'+level_name)
             return add_f
 
-    def fpn_retinanet(self, feature_dict):
+    def fpn_retinanet(self, feature_dict, is_training):
 
         pyramid_dict = {}
         with tf.variable_scope('build_pyramid'):
