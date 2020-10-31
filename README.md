@@ -11,7 +11,7 @@ Techniques:
 - [x] Baackbone: [ResNet](https://arxiv.org/abs/1512.03385), [MobileNetV2](https://arxiv.org/abs/1801.04381), [EfficientNet](https://arxiv.org/abs/1905.11946)
 - [x] Neck: [FPN](https://arxiv.org/abs/1708.02002), [BiFPN](https://arxiv.org/abs/1911.09070)
 - [x] Detectors: 
-  - [ ] [R<sup>2</sup>CNN](https://arxiv.org/abs/1706.09579): [TF code](https://github.com/DetectionTeamUCAS/R2CNN_Faster-RCNN_Tensorflow)
+  - [x] [R<sup>2</sup>CNN](https://arxiv.org/abs/1706.09579): [TF code](https://github.com/DetectionTeamUCAS/R2CNN_Faster-RCNN_Tensorflow)
   - [ ] [RRPN](https://arxiv.org/pdf/1703.01086): [TF code](https://github.com/DetectionTeamUCAS/RRPN_Faster-RCNN_Tensorflow)
   - [x] [RetinaNet-H, RetinaNet-R](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation)
   - [x] [RefineRetinaNet (CascadeRetinaNet)](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow)
@@ -40,7 +40,8 @@ More results and trained models are available in the [MODEL_ZOO.md](MODEL_ZOO.md
 | [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 70.66 | [Baidu Drive (30lt)](https://pan.baidu.com/s/143sGeLNjXzcpxi9GV7FVyA) | H + R | Reg. | smooth L1 | 90 | × | [cfgs_res50_dota_r3det_v1.py](./libs/configs/DOTA/r3det/cfgs_res50_dota_r3det_v1.py) |
 | [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | ResNet152_v1d 600->MS (+Flip) | DOTA1.0 trainval/test | 76.23 (+0.24) | [model](https://drive.google.com/file/d/1GkpiSPN-cAnvDISk5d4kjrV3Tqti_mbj/view?usp=sharing) | H + R | Reg. | iou-smooth L1 | 90 | √ | [cfgs_res152_dota_r3det_v3.py](./libs/configs/DOTA/r3det/cfgs_res152_dota_r3det_v3.py) |     
 <!-- | [DCL]() | ResNet50_v1 600->800 | DOTA1.0 trainval/test | 67.39 | [Baidu Drive (p9tu)](https://pan.baidu.com/s/1TZ9V0lTTQnMhiepxK1mdqg) | H | **Cls.: BCL (w=180/256)** | smooth L1 | 180 | × | [cfgs_res50_dota_dcl_v5.py](./libs/configs/DOTA/dcl/cfgs_res50_dota_dcl_v5.py) | -->
-<!-- | **[R<sup>3</sup>Det-DCL]()** | ResNet50_v1 600->800 | DOTA1.0 trainval/test | 71.21| [Baidu Drive (jueq)](https://pan.baidu.com/s/1XR31i3T-C5R16giBxQUNWw) | H->R | **Cls.: BCL (w=180/256)** | iou-smooth L1 | 90->180 | × | [cfgs_res50_dota_r3det_dcl_v1.py](./libs/configs/DOTA/r3det_dcl/cfgs_res50_dota_r3det_dcl_v1.py) | -->
+<!-- | **[R<sup>3</sup>Det-DCL]()** | ResNet50_v1 600->800 | DOTA1.0 trainval/test | 71.21 | [Baidu Drive (jueq)](https://pan.baidu.com/s/1XR31i3T-C5R16giBxQUNWw) | H->R | **Cls.: BCL (w=180/256)** | iou-smooth L1 | 90->180 | × | [cfgs_res50_dota_r3det_dcl_v1.py](./libs/configs/DOTA/r3det_dcl/cfgs_res50_dota_r3det_dcl_v1.py) | -->
+<!-- | **[R<sup>3</sup>Det-DCL]()** | ResNet152_v1 600->MS | DOTA1.0 trainval/test | 76.70 | [Baidu Drive (2iov)](https://pan.baidu.com/s/1UVcCrhcUwTFvWpJaoIToCA) | H->R | **Cls.: BCL (w=180/256)** | iou-smooth L1 | 90->180 | √| [cfgs_res152_dota_r3det_dcl_v1.py](./libs/configs/DOTA/r3det_dcl/cfgs_res152_dota_r3det_dcl_v1.py) | -->
 
 ## My Development Environment
 **docker images: docker pull yangxue2docker/yx-tf-det:tensorflow1.13.1-cuda10-gpu-py3**      

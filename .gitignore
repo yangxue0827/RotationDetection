@@ -125,6 +125,7 @@ __pycache__/
 *dcl*
 *r3det_dcl*
 *ablation_study*
+*icme*
 
 demo
 tools/*/demo.py

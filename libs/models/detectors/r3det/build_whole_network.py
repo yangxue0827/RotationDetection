@@ -50,19 +50,19 @@ class DetectionNetworkR3Det(DetectionNetworkBase):
         return rpn_box_scores, rpn_box_probs
 
     def refine_reg_net(self, inputs, scope_list, reuse_flag, level):
-        rpn_delta_boxes = inputs
+        rpn_conv2d_3x3 = inputs
         for i in range(self.cfgs.NUM_SUBNET_CONV):
-            rpn_delta_boxes = slim.conv2d(inputs=rpn_delta_boxes,
-                                          num_outputs=self.cfgs.FPN_CHANNEL,
-                                          kernel_size=[3, 3],
-                                          weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
-                                          biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
-                                          stride=1,
-                                          activation_fn=tf.nn.relu,
-                                          scope='{}_{}'.format(scope_list[1], i),
-                                          reuse=reuse_flag)
+            rpn_conv2d_3x3 = slim.conv2d(inputs=rpn_conv2d_3x3,
+                                         num_outputs=self.cfgs.FPN_CHANNEL,
+                                         kernel_size=[3, 3],
+                                         weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
+                                         biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
+                                         stride=1,
+                                         activation_fn=tf.nn.relu,
+                                         scope='{}_{}'.format(scope_list[1], i),
+                                         reuse=reuse_flag)
 
-        rpn_delta_boxes = slim.conv2d(rpn_delta_boxes,
+        rpn_delta_boxes = slim.conv2d(rpn_conv2d_3x3,
                                       num_outputs=5,
                                       kernel_size=[3, 3],
                                       stride=1,

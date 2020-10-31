@@ -50,19 +50,19 @@ class DetectionNetworkRefineRetinaNet(DetectionNetworkBase):
         return rpn_box_scores, rpn_box_probs
 
     def refine_reg_net(self, inputs, scope_list, reuse_flag, level):
-        rpn_delta_boxes = inputs
+        rpn_conv2d_3x3 = inputs
         for i in range(self.cfgs.NUM_SUBNET_CONV):
-            rpn_delta_boxes = slim.conv2d(inputs=rpn_delta_boxes,
-                                          num_outputs=self.cfgs.FPN_CHANNEL,
-                                          kernel_size=[3, 3],
-                                          weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
-                                          biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
-                                          stride=1,
-                                          activation_fn=tf.nn.relu,
-                                          scope='{}_{}'.format(scope_list[1], i),
-                                          reuse=reuse_flag)
+            rpn_conv2d_3x3 = slim.conv2d(inputs=rpn_conv2d_3x3,
+                                         num_outputs=self.cfgs.FPN_CHANNEL,
+                                         kernel_size=[3, 3],
+                                         weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
+                                         biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
+                                         stride=1,
+                                         activation_fn=tf.nn.relu,
+                                         scope='{}_{}'.format(scope_list[1], i),
+                                         reuse=reuse_flag)
 
-        rpn_delta_boxes = slim.conv2d(rpn_delta_boxes,
+        rpn_delta_boxes = slim.conv2d(rpn_conv2d_3x3,
                                       num_outputs=5 * self.num_anchors_per_location,
                                       kernel_size=[3, 3],
                                       stride=1,
@@ -105,7 +105,7 @@ class DetectionNetworkRefineRetinaNet(DetectionNetworkBase):
             return refine_delta_boxes_list, refine_scores_list, refine_probs_list
 
     def refine_stage(self, input_img_batch, gtboxes_batch_r, box_pred_list, cls_prob_list, proposal_list,
-                     feature_pyramid, gpu_id, pos_threshold, neg_threshold, stage, proposal_filter=False):
+                     feature_pyramid, gpu_id, pos_threshold, neg_threshold, stage):
         with tf.variable_scope('refine_feature_pyramid{}'.format(stage)):
             refine_boxes_list = []
 
@@ -120,24 +120,6 @@ class DetectionNetworkRefineRetinaNet(DetectionNetworkBase):
                     w = proposal[:, 3] - proposal[:, 1] + 1
                     theta = -90 * tf.ones_like(x_c)
                     proposal = tf.transpose(tf.stack([x_c, y_c, w, h, theta]))
-
-                if proposal_filter:
-                    self.num_anchors_per_location = 1.
-                    box_pred = tf.reshape(box_pred, [-1, self.num_anchors_per_location, 5])
-                    proposal = tf.reshape(proposal, [-1, self.num_anchors_per_location, 5 if self.method == 'R' else 4])
-                    cls_prob = tf.reshape(cls_prob, [-1, self.num_anchors_per_location, self.cfgs.CLASS_NUM])
-
-                    cls_max_prob = tf.reduce_max(cls_prob, axis=-1)
-                    box_pred_argmax = tf.cast(tf.reshape(tf.argmax(cls_max_prob, axis=-1), [-1, 1]), tf.int32)
-                    indices = tf.cast(tf.cumsum(tf.ones_like(box_pred_argmax), axis=0), tf.int32) - tf.constant(1, tf.int32)
-                    indices = tf.concat([indices, box_pred_argmax], axis=-1)
-
-                    box_pred = tf.reshape(tf.gather_nd(box_pred, indices), [-1, 5])
-                    proposal = tf.reshape(tf.gather_nd(proposal, indices), [-1, 5 if self.method == 'R' else 4])
-
-                else:
-                    box_pred = tf.reshape(box_pred, [-1, 5])
-                    proposal = tf.reshape(proposal, [-1, 5])
 
                 bboxes = bbox_transform.rbbox_transform_inv(boxes=proposal, deltas=box_pred)
                 refine_boxes_list.append(bboxes)
