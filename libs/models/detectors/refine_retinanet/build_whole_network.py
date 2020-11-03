@@ -30,6 +30,7 @@ class DetectionNetworkRefineRetinaNet(DetectionNetworkBase):
                                          activation_fn=tf.nn.relu,
                                          weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
                                          biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
+                                         trainable=self.is_training,
                                          scope='{}_{}'.format(scope_list[0], i),
                                          reuse=reuse_flag)
 
@@ -39,6 +40,7 @@ class DetectionNetworkRefineRetinaNet(DetectionNetworkBase):
                                      stride=1,
                                      weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
                                      biases_initializer=self.cfgs.FINAL_CONV_BIAS_INITIALIZER,
+                                     trainable=self.is_training,
                                      scope=scope_list[2],
                                      activation_fn=None,
                                      reuse=reuse_flag)
@@ -59,6 +61,7 @@ class DetectionNetworkRefineRetinaNet(DetectionNetworkBase):
                                          biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                          stride=1,
                                          activation_fn=tf.nn.relu,
+                                         trainable=self.is_training,
                                          scope='{}_{}'.format(scope_list[1], i),
                                          reuse=reuse_flag)
 
@@ -68,6 +71,7 @@ class DetectionNetworkRefineRetinaNet(DetectionNetworkBase):
                                       stride=1,
                                       weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
                                       biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
+                                      trainable=self.is_training,
                                       scope=scope_list[3],
                                       activation_fn=None,
                                       reuse=reuse_flag)

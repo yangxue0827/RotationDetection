@@ -5,46 +5,19 @@ import tensorflow as tf
 import math
 
 """
-R2CNN
-FLOPs: 1024153266;    Trainable params: 41772682
-This is your result for task 1:
+SCRDet
 
-    mAP: 0.7227414456963894
-    ap of each class:
-    plane:0.8954291131230108,
-    baseball-diamond:0.7615013248230833,
-    bridge:0.47589589239010427,
-    ground-track-field:0.6484503831218632,
-    small-vehicle:0.7616171143029637,
-    large-vehicle:0.7395101403930869,
-    ship:0.8587426481796258,
-    tennis-court:0.9022025499507798,
-    basketball-court:0.8327346869026073,
-    storage-tank:0.8431585743608815,
-    soccer-ball-field:0.5106006620292729,
-    roundabout:0.6561468034665185,
-    harbor:0.6530002955426998,
-    swimming-pool:0.6823392612570894,
-    helicopter:0.6197922356022552
-
-The submitted information is :
-
-Description: FPN_Res50D_DOTA_1x_20201031_37.8w
-Username: SJTU-Det
-Institute: SJTU
-Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
-TeamMembers: yangxue
 """
 
 # ------------------------------------------------
-VERSION = 'FPN_Res50D_DOTA_1x_20201031'
+VERSION = 'FPN_Res50D_DOTA_1x_20201103'
 NET_NAME = 'resnet50_v1d'
 
 # ---------------------------------------- System
 ROOT_PATH = os.path.abspath('../../')
 print(20*"++--")
 print(ROOT_PATH)
-GPU_GROUP = "0,1,2"
+GPU_GROUP = "3"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
 SHOW_TRAIN_INFO_INTE = 50
 SMRY_ITER = 200
@@ -67,7 +40,7 @@ EVALUATE_DIR = ROOT_PATH + '/output/evaluate_result_pickle/'
 # ------------------------------------------ Train an test
 RESTORE_FROM_RPN = False
 IS_FILTER_OUTSIDE_BOXES = False
-FREEZE_BLOCKS = [True, True, False, False, False]  # for gluoncv backbone
+FREEZE_BLOCKS = [True, True, False, False, True]  # for gluoncv backbone
 FIXED_BLOCKS = 0  # allow 0~3
 USE_07_METRIC = True
 CUDA8 = False
@@ -116,18 +89,18 @@ FPN_CHANNEL = 512
 
 # --------------------------------------------- Anchor
 USE_CENTER_OFFSET = False
-LEVEL = ['P2', 'P3', 'P4', 'P5', 'P6']
-BASE_ANCHOR_SIZE_LIST = [32, 64, 128, 256, 512]  # addjust the base anchor size for voc.
-ANCHOR_STRIDE = [4, 8, 16, 32, 64]
-ANCHOR_SCALES = [1.0]
+BASE_ANCHOR_SIZE_LIST = 256
+ANCHOR_STRIDE = 8
+ANCHOR_SCALES = [0.0625, 0.125, 0.25, 0.5, 1., 2.0]
 ANCHOR_RATIOS = [0.5, 1., 2.0, 1/4.0, 4.0, 1/6.0, 6.0]
-ROI_SCALE_FACTORS = [10., 10., 5.0, 5.0, 2.0]
+ROI_SCALE_FACTORS = [10., 10., 5.0, 5.0, 10.0]
 ANCHOR_SCALE_FACTORS = None
 ANCHOR_MODE = 'H'
 ANGLE_RANGE = 90
 
+
 # -------------------------------------------- RPN
-FPN_MODE = 'fpn'
+FPN_MODE = 'scrdet'
 KERNEL_SIZE = 3
 RPN_IOU_POSITIVE_THRESHOLD = 0.7
 RPN_IOU_NEGATIVE_THRESHOLD = 0.3
@@ -151,7 +124,8 @@ VIS_SCORE = 0.6  # only show in tensorboard
 FILTERED_SCORE = 0.05
 
 SOFT_NMS = False
-FAST_RCNN_NMS_IOU_THRESHOLD = 0.3
+FAST_RCNN_H_NMS_IOU_THRESHOLD = 0.3
+FAST_RCNN_R_NMS_IOU_THRESHOLD = 0.2
 FAST_RCNN_NMS_MAX_BOXES_PER_CLASS = 200
 FAST_RCNN_IOU_POSITIVE_THRESHOLD = 0.5
 FAST_RCNN_IOU_NEGATIVE_THRESHOLD = 0.0   # 0.1 < IOU < 0.5 is negative

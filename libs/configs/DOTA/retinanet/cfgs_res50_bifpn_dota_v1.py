@@ -6,13 +6,13 @@ import math
 
 """
 RetinaNet-H + BiFPN
-FLOPs: 815143401;    Trainable params: 32420765
+FLOPs: 814945128;    Trainable params: 32417053
 
 
 """
 
 # ------------------------------------------------
-VERSION = 'RetinaNet_DOTA_2x_20201030'
+VERSION = 'RetinaNet_DOTA_2x_20201031'
 NET_NAME = 'resnet50_v1d'  # 'MobilenetV2'
 
 # ---------------------------------------- System

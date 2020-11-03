@@ -27,7 +27,7 @@ class BuildBackbone(object):
         elif fpn_mode == 'fpn':
             fpn_func = fpn_p3top7.NeckFPNRetinaNet(self.cfgs)
         else:
-            raise Exception('only support [fpn, bifpn, FPN]')
+            raise Exception('only support [fpn, bifpn]')
         return fpn_func
 
     def build_backbone(self, input_img_batch):

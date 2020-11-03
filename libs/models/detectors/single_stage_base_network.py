@@ -41,6 +41,7 @@ class DetectionNetworkBase(object):
                                          weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
                                          biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                          scope='{}_{}'.format(scope_list[0], i),
+                                         trainable=self.is_training,
                                          reuse=reuse_flag)
 
         rpn_box_scores = slim.conv2d(rpn_conv2d_3x3,
@@ -51,6 +52,7 @@ class DetectionNetworkBase(object):
                                      biases_initializer=self.cfgs.FINAL_CONV_BIAS_INITIALIZER,
                                      scope=scope_list[2],
                                      activation_fn=None,
+                                     trainable=self.is_training,
                                      reuse=reuse_flag)
 
         rpn_box_scores = tf.reshape(rpn_box_scores, [-1, self.cfgs.CLASS_NUM],
@@ -70,6 +72,7 @@ class DetectionNetworkBase(object):
                                          stride=1,
                                          activation_fn=tf.nn.relu,
                                          scope='{}_{}'.format(scope_list[1], i),
+                                         trainable=self.is_training,
                                          reuse=reuse_flag)
 
         rpn_delta_boxes = slim.conv2d(rpn_conv2d_3x3,
@@ -80,6 +83,7 @@ class DetectionNetworkBase(object):
                                       biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                       scope=scope_list[3],
                                       activation_fn=None,
+                                      trainable=self.is_training,
                                       reuse=reuse_flag)
 
         rpn_delta_boxes = tf.reshape(rpn_delta_boxes, [-1, 5],

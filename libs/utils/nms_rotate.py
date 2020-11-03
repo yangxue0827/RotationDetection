@@ -34,7 +34,7 @@ def nms_rotate(decode_boxes, scores, iou_threshold, max_output_size, use_gpu=Tru
         keep = tf.py_func(nms_rotate_cpu,
                           inp=[decode_boxes, scores, iou_threshold, max_output_size],
                           Tout=tf.int64)
-    return keep
+    return tf.cast(keep, tf.int64)
 
 
 def nms_rotate_cpu(boxes, scores, iou_threshold, max_output_size):

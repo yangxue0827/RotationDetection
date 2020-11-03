@@ -6,8 +6,34 @@ import math
 
 """
 R2CNN
+FLOPs: 1024153266;    Trainable params: 41772682
+This is your result for task 1:
 
+    mAP: 0.7227414456963894
+    ap of each class:
+    plane:0.8954291131230108,
+    baseball-diamond:0.7615013248230833,
+    bridge:0.47589589239010427,
+    ground-track-field:0.6484503831218632,
+    small-vehicle:0.7616171143029637,
+    large-vehicle:0.7395101403930869,
+    ship:0.8587426481796258,
+    tennis-court:0.9022025499507798,
+    basketball-court:0.8327346869026073,
+    storage-tank:0.8431585743608815,
+    soccer-ball-field:0.5106006620292729,
+    roundabout:0.6561468034665185,
+    harbor:0.6530002955426998,
+    swimming-pool:0.6823392612570894,
+    helicopter:0.6197922356022552
 
+The submitted information is :
+
+Description: FPN_Res50D_DOTA_1x_20201031_37.8w
+Username: SJTU-Det
+Institute: SJTU
+Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
+TeamMembers: yangxue
 """
 
 # ------------------------------------------------
@@ -18,10 +44,10 @@ NET_NAME = 'resnet50_v1d'
 ROOT_PATH = os.path.abspath('../../')
 print(20*"++--")
 print(ROOT_PATH)
-GPU_GROUP = "3"
+GPU_GROUP = "0,1,2"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
 SHOW_TRAIN_INFO_INTE = 50
-SMRY_ITER = 2000
+SMRY_ITER = 200
 SAVE_WEIGHTS_INTE = 27000
 
 SUMMARY_PATH = ROOT_PATH + '/output/summary'
@@ -98,6 +124,7 @@ ANCHOR_RATIOS = [0.5, 1., 2.0, 1/4.0, 4.0, 1/6.0, 6.0]
 ROI_SCALE_FACTORS = [10., 10., 5.0, 5.0, 2.0]
 ANCHOR_SCALE_FACTORS = None
 ANCHOR_MODE = 'H'
+ANGLE_RANGE = 90
 
 # -------------------------------------------- RPN
 FPN_MODE = 'fpn'
@@ -120,7 +147,8 @@ ROI_SIZE = 14
 ROI_POOL_KERNEL_SIZE = 2
 USE_DROPOUT = False
 KEEP_PROB = 1.0
-SHOW_SCORE_THRSHOLD = 0.6  # only show in tensorboard
+VIS_SCORE = 0.6  # only show in tensorboard
+FILTERED_SCORE = 0.05
 
 SOFT_NMS = False
 FAST_RCNN_NMS_IOU_THRESHOLD = 0.3

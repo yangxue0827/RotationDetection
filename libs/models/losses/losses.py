@@ -403,6 +403,39 @@ class Loss(object):
 
         return bbox_loss
 
+    def smooth_l1_loss_rcnn_h(self, bbox_pred, bbox_targets, label, num_classes, sigma=1.0):
+        '''
+        :param bbox_pred: [-1, (cfgs.CLS_NUM +1) * 4]
+        :param bbox_targets:[-1, (cfgs.CLS_NUM +1) * 4]
+        :param label:[-1]
+        :param num_classes:
+        :param sigma:
+        :return:
+        '''
+
+        outside_mask = tf.stop_gradient(tf.to_float(tf.greater(label, 0)))
+
+        bbox_pred = tf.reshape(bbox_pred, [-1, num_classes, 4])
+        bbox_targets = tf.reshape(bbox_targets, [-1, num_classes, 4])
+
+        value = self._smooth_l1_loss_base(bbox_pred,
+                                          bbox_targets,
+                                          sigma=sigma)
+        value = tf.reduce_sum(value, 2)
+        value = tf.reshape(value, [-1, num_classes])
+
+        inside_mask = tf.one_hot(tf.reshape(label, [-1, 1]),
+                                 depth=num_classes, axis=1)
+
+        inside_mask = tf.stop_gradient(
+            tf.to_float(tf.reshape(inside_mask, [-1, num_classes])))
+
+        normalizer = tf.to_float(tf.shape(bbox_pred)[0])
+        bbox_loss = tf.reduce_sum(
+            tf.reduce_sum(value * inside_mask, 1) * outside_mask) / normalizer
+
+        return bbox_loss
+
     def smooth_l1_loss_rcnn_r(self, bbox_pred, bbox_targets, label, num_classes, sigma=1.0):
         '''
         :param bbox_pred: [-1, (cfgs.CLS_NUM +1) * 5]
@@ -433,3 +466,19 @@ class Loss(object):
             tf.reduce_sum(value * inside_mask, 1) * outside_mask) / normalizer
 
         return bbox_loss
+
+    def build_attention_loss(self, mask, featuremap):
+        # shape = mask.get_shape().as_list()
+        shape = tf.shape(mask)
+        featuremap = tf.image.resize_bilinear(featuremap, [shape[0], shape[1]])
+        # shape = tf.shape(featuremap)
+        # mask = tf.expand_dims(mask, axis=0)
+        # mask = tf.image.resize_bilinear(mask, [shape[1], shape[2]])
+        # mask = tf.squeeze(mask, axis=0)
+
+        mask = tf.cast(mask, tf.int32)
+        mask = tf.reshape(mask, [-1, ])
+        featuremap = tf.reshape(featuremap, [-1, 2])
+        attention_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=mask, logits=featuremap)
+        attention_loss = tf.reduce_mean(attention_loss)
+        return attention_loss

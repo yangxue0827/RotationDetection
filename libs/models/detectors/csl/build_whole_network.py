@@ -30,6 +30,7 @@ class DetectionNetworkCSL(DetectionNetworkBase):
                                          biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                          stride=1,
                                          activation_fn=tf.nn.relu,
+                                         trainable=self.is_training,
                                          scope='{}_{}'.format(scope_list[1], i),
                                          reuse=reuse_flag)
 
@@ -41,6 +42,7 @@ class DetectionNetworkCSL(DetectionNetworkBase):
                                       biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                       scope=scope_list[3],
                                       activation_fn=None,
+                                      trainable=self.is_training,
                                       reuse=reuse_flag)
 
         rpn_angle_cls = slim.conv2d(rpn_conv2d_3x3,
@@ -50,6 +52,7 @@ class DetectionNetworkCSL(DetectionNetworkBase):
                                     weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
                                     biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                     scope=scope_list[4],
+                                    trainable=self.is_training,
                                     activation_fn=None,
                                     reuse=reuse_flag)
 

@@ -113,10 +113,10 @@ class DetectionNetworkR2CNN(DetectionNetworkBase):
             with tf.control_dependencies([fpn_labels]):
 
                 with tf.variable_scope('sample_RCNN_minibatch'):
-                    rois, labels, bbox_targets = \
+                    rois, labels, _, bbox_targets, _, _ = \
                         tf.py_func(self.proposal_sampler_r2cnn.proposal_target_layer,
                                    [rois, gtboxes_batch_h, gtboxes_batch_r],
-                                   [tf.float32, tf.float32, tf.float32])
+                                   [tf.float32, tf.float32, tf.float32, tf.float32, tf.float32, tf.float32])
                     rois = tf.reshape(rois, [-1, 4])
                     labels = tf.to_int32(labels)
                     labels = tf.reshape(labels, [-1])
@@ -132,8 +132,8 @@ class DetectionNetworkR2CNN(DetectionNetworkBase):
             rois_list = self.assign_levels(all_rois=rois)
 
         # 7. build Fast-RCNN, include roi align/pooling, box head
-        bbox_pred, cls_score = self.box_head.fc_head(self.roi_extractor, rois_list, feature_pyramid,
-                                                     img_shape, self.is_training, mode=0)
+        bbox_pred, cls_score = self.box_head.fpn_fc_head(self.roi_extractor, rois_list, feature_pyramid,
+                                                         img_shape, self.is_training)
         rois = tf.concat(rois_list, axis=0, name='concat_rois')
         cls_prob = slim.softmax(cls_score, 'cls_prob')
 
@@ -183,18 +183,18 @@ class DetectionNetworkR2CNN(DetectionNetworkBase):
             allclasses_boxes = []
             allclasses_scores = []
             categories = []
+
+            x_c = (rois[:, 2] + rois[:, 0]) / 2
+            y_c = (rois[:, 3] + rois[:, 1]) / 2
+            h = rois[:, 2] - rois[:, 0] + 1
+            w = rois[:, 3] - rois[:, 1] + 1
+            theta = -90 * tf.ones_like(x_c)
+            rois = tf.transpose(tf.stack([x_c, y_c, w, h, theta]))
             for i in range(1, self.cfgs.CLASS_NUM + 1):
 
                 # 1. decode boxes in each class
                 tmp_encoded_box = bbox_pred_list[i]
                 tmp_score = score_list[i]
-
-                x_c = (rois[:, 2] + rois[:, 0]) / 2
-                y_c = (rois[:, 3] + rois[:, 1]) / 2
-                h = rois[:, 2] - rois[:, 0] + 1
-                w = rois[:, 3] - rois[:, 1] + 1
-                theta = -90 * tf.ones_like(x_c)
-                rois = tf.transpose(tf.stack([x_c, y_c, w, h, theta]))
 
                 tmp_decoded_boxes = bbox_transform.rbbox_transform_inv(boxes=rois, deltas=tmp_encoded_box,
                                                                        scale_factors=self.cfgs.ROI_SCALE_FACTORS)
@@ -231,9 +231,11 @@ class DetectionNetworkR2CNN(DetectionNetworkBase):
                 '''
                 in training. We should show the detecitons in the tensorboard. So we add this.
                 '''
-                kept_indices = tf.reshape(tf.where(tf.greater_equal(final_scores, self.cfgs.SHOW_SCORE_THRSHOLD)), [-1])
-                final_boxes = tf.gather(final_boxes, kept_indices)
-                final_scores = tf.gather(final_scores, kept_indices)
-                final_category = tf.gather(final_category, kept_indices)
+                kept_indices = tf.reshape(tf.where(tf.greater_equal(final_scores, self.cfgs.VIS_SCORE)), [-1])
+            else:
+                kept_indices = tf.reshape(tf.where(tf.greater_equal(final_scores, self.cfgs.FILTERED_SCORE)), [-1])
+            final_boxes = tf.gather(final_boxes, kept_indices)
+            final_scores = tf.gather(final_scores, kept_indices)
+            final_category = tf.gather(final_category, kept_indices)
 
             return final_boxes, final_scores, final_category

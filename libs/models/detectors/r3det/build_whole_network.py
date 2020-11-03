@@ -30,6 +30,7 @@ class DetectionNetworkR3Det(DetectionNetworkBase):
                                          activation_fn=tf.nn.relu,
                                          weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
                                          biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
+                                         trainable=self.is_training,
                                          scope='{}_{}'.format(scope_list[0], i),
                                          reuse=reuse_flag)
 
@@ -40,6 +41,7 @@ class DetectionNetworkR3Det(DetectionNetworkBase):
                                      weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
                                      biases_initializer=self.cfgs.FINAL_CONV_BIAS_INITIALIZER,
                                      scope=scope_list[2],
+                                     trainable=self.is_training,
                                      activation_fn=None,
                                      reuse=reuse_flag)
 
@@ -60,6 +62,7 @@ class DetectionNetworkR3Det(DetectionNetworkBase):
                                          stride=1,
                                          activation_fn=tf.nn.relu,
                                          scope='{}_{}'.format(scope_list[1], i),
+                                         trainable=self.is_training,
                                          reuse=reuse_flag)
 
         rpn_delta_boxes = slim.conv2d(rpn_conv2d_3x3,
@@ -69,6 +72,7 @@ class DetectionNetworkR3Det(DetectionNetworkBase):
                                       weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
                                       biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                       scope=scope_list[3],
+                                      trainable=self.is_training,
                                       activation_fn=None,
                                       reuse=reuse_flag)
 
@@ -132,6 +136,7 @@ class DetectionNetworkR3Det(DetectionNetworkBase):
                                   biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                   stride=1,
                                   activation_fn=None,
+                                  trainable=self.is_training,
                                   scope='refine_1x5_{}'.format(name))
 
         feature5x1 = slim.conv2d(inputs=feature_1x5,
@@ -141,6 +146,7 @@ class DetectionNetworkR3Det(DetectionNetworkBase):
                                  biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                  stride=1,
                                  activation_fn=None,
+                                 trainable=self.is_training,
                                  scope='refine_5x1_{}'.format(name))
 
         feature_1x1 = slim.conv2d(inputs=feature_map,
@@ -150,6 +156,7 @@ class DetectionNetworkR3Det(DetectionNetworkBase):
                                   biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                   stride=1,
                                   activation_fn=None,
+                                  trainable=self.is_training,
                                   scope='refine_1x1_{}'.format(name))
 
         feature = feature5x1 + feature_1x1
@@ -191,6 +198,7 @@ class DetectionNetworkR3Det(DetectionNetworkBase):
                                   biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                   stride=1,
                                   activation_fn=None,
+                                  trainable=self.is_training,
                                   scope='refine_1x5_{}'.format(name))
 
         feature5x1 = slim.conv2d(inputs=feature_1x5,
@@ -200,6 +208,7 @@ class DetectionNetworkR3Det(DetectionNetworkBase):
                                  biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                  stride=1,
                                  activation_fn=None,
+                                 trainable=self.is_training,
                                  scope='refine_5x1_{}'.format(name))
 
         feature_1x1 = slim.conv2d(inputs=feature_map,
@@ -209,6 +218,7 @@ class DetectionNetworkR3Det(DetectionNetworkBase):
                                   biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                   stride=1,
                                   activation_fn=None,
+                                  trainable=self.is_training,
                                   scope='refine_1x1_{}'.format(name))
 
         feature = feature5x1 + feature_1x1

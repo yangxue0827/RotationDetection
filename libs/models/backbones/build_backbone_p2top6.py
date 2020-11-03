@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 
 from libs.models.backbones import resnet, resnet_gluoncv, mobilenet_v2
 from libs.models.backbones.efficientnet import efficientnet_builder, efficientnet_lite_builder
-from libs.models.necks import fpn_p2top6
+from libs.models.necks import fpn_p2top6, scrdet_neck
 
 
 class BuildBackbone(object):
@@ -24,8 +24,10 @@ class BuildBackbone(object):
 
         if fpn_mode == 'fpn':
             fpn_func = fpn_p2top6.NeckFPN(self.cfgs)
+        elif fpn_mode == 'scrdet':
+            fpn_func = scrdet_neck.NeckSCRDet(self.cfgs)
         else:
-            raise Exception('only support [fpn, bifpn, FPN]')
+            raise Exception('only support [fpn, scrdet]')
         return fpn_func
 
     def build_backbone(self, input_img_batch):
@@ -50,7 +52,7 @@ class BuildBackbone(object):
             feature_dict = mobilenet_v2.MobileNetV2Backbone(self.cfgs).mobilenetv2_base(input_img_batch,
                                                                                         is_training=self.is_training)
 
-            return self.fpn_func.fpn(feature_dict)
+            return self.fpn_func.fpn(feature_dict, self.is_training)
 
         elif 'efficientnet-lite' in self.base_network_name:
             feature_dict = efficientnet_lite_builder.EfficientNetLiteBackbone(self.cfgs).build_model_fpn_base(

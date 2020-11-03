@@ -36,14 +36,19 @@ class ProposalSamplerR2CNN(ProposalSampler):
         fg_rois_per_image = np.round(self.cfgs.FAST_RCNN_POSITIVE_RATE * rois_per_image)
 
         # Sample rois with classification labels and bounding box regression
-        labels, rois, bbox_targets_r = self._sample_rois(all_rois, gt_boxes_h, gt_boxes_r,
-                                                         fg_rois_per_image, rois_per_image, self.cfgs.CLASS_NUM + 1)
-
+        labels, rois, bbox_targets_h, bbox_targets_r, target_gt_h, target_gt_r = self._sample_rois(all_rois, gt_boxes_h,
+                                                                                                   gt_boxes_r,
+                                                                                                   fg_rois_per_image,
+                                                                                                   rois_per_image,
+                                                                                                   self.cfgs.CLASS_NUM + 1)
         rois = rois.reshape(-1, 4)
         labels = labels.reshape(-1)
+        bbox_targets_h = bbox_targets_h.reshape(-1, (self.cfgs.CLASS_NUM + 1) * 4)
         bbox_targets_r = bbox_targets_r.reshape(-1, (self.cfgs.CLASS_NUM + 1) * 5)
+        target_gt_h = target_gt_h.reshape(-1, 4)
+        target_gt_r = target_gt_r.reshape(-1, 5)
 
-        return rois, labels, bbox_targets_r
+        return rois, labels, bbox_targets_h, bbox_targets_r, target_gt_h, target_gt_r
 
     def _get_bbox_regression_labels(self, bbox_target_data, num_classes):
         """Bounding-box regression targets (bbox_target_data) are stored in a
@@ -103,7 +108,7 @@ class ProposalSamplerR2CNN(ProposalSampler):
 
     def _compute_targets_r(self, ex_rois, gt_rois_r, labels):
         """Compute bounding-box regression targets for an image.
-        that is : [label, tx, ty, tw, th]
+        that is : [label, tx, ty, tw, th, ttheta]
         """
 
         assert ex_rois.shape[0] == gt_rois_r.shape[0]
@@ -171,18 +176,20 @@ class ProposalSamplerR2CNN(ProposalSampler):
         labels[int(fg_rois_per_this_image):] = 0
         rois = all_rois[keep_inds]
 
-        # bbox_target_data_h = _compute_targets_h(
-        #     rois, gt_boxes_h[gt_assignment[keep_inds], :-1], labels)
+        target_gt_h = gt_boxes_h[gt_assignment[keep_inds], :-1]
+        bbox_target_data_h = self._compute_targets_h(
+            rois, target_gt_h, labels)
 
+        target_gt_r = gt_boxes_r[gt_assignment[keep_inds], :-1]
         bbox_target_data_r = self._compute_targets_r(
-            rois, gt_boxes_r[gt_assignment[keep_inds], :-1], labels)
+            rois, target_gt_r, labels)
 
-        # bbox_targets_h = \
-        #     _get_bbox_regression_labels(bbox_target_data_h, num_classes)
+        bbox_targets_h = \
+            self._get_bbox_regression_labels(bbox_target_data_h, num_classes)
 
         bbox_targets_r = \
             self._get_bbox_regression_labels_r(bbox_target_data_r, num_classes)
-        return labels, rois, bbox_targets_r
+        return labels, rois, bbox_targets_h, bbox_targets_r, target_gt_h, target_gt_r
 
 
 

@@ -9,7 +9,7 @@ class NeckFPN(object):
     def __init__(self, cfgs):
         self.cfgs = cfgs
 
-    def fusion_two_layer(self, C_i, P_j, scope):
+    def fusion_two_layer(self, C_i, P_j, scope, is_training):
         '''
         i = j+1
         :param C_i: shape is [1, h, w, c]
@@ -28,6 +28,7 @@ class NeckFPN(object):
             reduce_dim_c = slim.conv2d(C_i,
                                        num_outputs=256,
                                        kernel_size=[1, 1], stride=1,
+                                       trainable=is_training,
                                        scope='reduce_dim_'+level_name)
 
             add_f = 0.5*upsample_p + 0.5*reduce_dim_c
@@ -44,13 +45,15 @@ class NeckFPN(object):
                 P5 = slim.conv2d(feature_dict['C5'],
                                  num_outputs=256,
                                  kernel_size=[1, 1],
-                                 stride=1, scope='build_P5')
+                                 stride=1,
+                                 trainable=is_training,
+                                 scope='build_P5')
 
                 if self.cfgs.ADD_GLOBAL_CTX:
                     print(10 * "ADD GLOBAL CTX.....")
                     global_ctx = tf.reduce_mean(feature_dict['C5'], axis=[1, 2], keep_dims=True)
                     global_ctx = slim.conv2d(global_ctx, kernel_size=[1, 1], num_outputs=256, stride=1,
-                                             activation_fn=None, scope='global_ctx')
+                                             activation_fn=None, trainable=is_training, scope='global_ctx')
                     pyramid_dict['P5'] = P5 + global_ctx
                 else:
                     pyramid_dict['P5'] = P5
@@ -59,11 +62,13 @@ class NeckFPN(object):
 
                     pyramid_dict['P%d' % level] = self.fusion_two_layer(C_i=feature_dict["C%d" % level],
                                                                         P_j=pyramid_dict["P%d" % (level + 1)],
-                                                                        scope='build_P%d' % level)
+                                                                        scope='build_P%d' % level,
+                                                                        is_training=is_training)
                 for level in range(5, 1, -1):  # use 3x3 conv fuse P5, P4, P3, P2
                     pyramid_dict['P%d' % level] = slim.conv2d(pyramid_dict['P%d' % level],
                                                               num_outputs=256, kernel_size=[3, 3], padding="SAME",
-                                                              stride=1, scope="fuse_P%d" % level)
+                                                              stride=1, trainable=is_training,
+                                                              scope="fuse_P%d" % level)
                 if "P6" in self.cfgs.LEVEL:
                     # if use supervised_mask, we get p6 after enlarge RF
                     pyramid_dict['P6'] = slim.avg_pool2d(pyramid_dict["P5"], kernel_size=[2, 2],

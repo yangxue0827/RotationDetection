@@ -9,7 +9,7 @@ class NeckFPNRetinaNet(object):
     def __init__(self, cfgs):
         self.cfgs = cfgs
 
-    def fusion_two_layer(self, C_i, P_j, scope):
+    def fusion_two_layer(self, C_i, P_j, scope, is_training):
         '''
         i = j+1
         :param C_i: shape is [1, h, w, c]
@@ -28,6 +28,7 @@ class NeckFPNRetinaNet(object):
             reduce_dim_c = slim.conv2d(C_i,
                                        num_outputs=self.cfgs.FPN_CHANNEL,
                                        kernel_size=[1, 1], stride=1,
+                                       trainable=is_training,
                                        scope='reduce_dim_'+level_name)
 
             add_f = 0.5*upsample_p + 0.5*reduce_dim_c
@@ -48,6 +49,7 @@ class NeckFPNRetinaNet(object):
                 P5 = slim.conv2d(feature_dict['C5'],
                                  num_outputs=self.cfgs.FPN_CHANNEL,
                                  kernel_size=[1, 1],
+                                 trainable=is_training,
                                  stride=1, scope='build_P5')
 
                 pyramid_dict['P5'] = P5
@@ -56,7 +58,8 @@ class NeckFPNRetinaNet(object):
 
                     pyramid_dict['P%d' % level] = self.fusion_two_layer(C_i=feature_dict["C%d" % level],
                                                                         P_j=pyramid_dict["P%d" % (level + 1)],
-                                                                        scope='build_P%d' % level)
+                                                                        scope='build_P%d' % level,
+                                                                        is_training=is_training)
                 for level in range(5, 2, -1):
                     pyramid_dict['P%d' % level] = slim.conv2d(pyramid_dict['P%d' % level],
                                                               num_outputs=self.cfgs.FPN_CHANNEL, kernel_size=[3, 3],
@@ -65,14 +68,14 @@ class NeckFPNRetinaNet(object):
 
                 p6 = slim.conv2d(pyramid_dict['P5'] if self.cfgs.USE_P5 else feature_dict['C5'],
                                  num_outputs=self.cfgs.FPN_CHANNEL, kernel_size=[3, 3], padding="SAME",
-                                 stride=2, scope='p6_conv')
+                                 stride=2, trainable=is_training, scope='p6_conv')
                 pyramid_dict['P6'] = p6
 
                 p7 = tf.nn.relu(p6, name='p6_relu')
 
                 p7 = slim.conv2d(p7,
                                  num_outputs=self.cfgs.FPN_CHANNEL, kernel_size=[3, 3], padding="SAME",
-                                 stride=2, scope='p7_conv')
+                                 stride=2, trainable=is_training, scope='p7_conv')
 
                 pyramid_dict['P7'] = p7
 

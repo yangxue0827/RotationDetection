@@ -116,7 +116,6 @@ class Train(object):
                        false_fn=lambda: decay(init_lr, global_step, num_gpu))
 
     def log_printer(self, deter, optimizer, global_step, tower_grads, total_loss_dict, num_gpu, graph):
-
         for k in total_loss_dict.keys():
             tf.summary.scalar('{}/{}'.format(k.split('_')[0], k), total_loss_dict[k])
 
