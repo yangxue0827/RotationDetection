@@ -90,6 +90,18 @@ class NeckSCRDet(object):
             inception_out = tf.concat(axis=3, values=[branch_0, branch_1, branch_2, branch_3])
             return inception_out
 
+    def build_inception_attention(self, inputs, is_training):
+        """Builds Inception-B block for Inception v4 network."""
+        # By default use stride=1 and SAME padding
+        inception_out = self.build_inception(inputs, is_training)
+
+        inception_attention_out = slim.conv2d(inception_out, 2, [3, 3],
+                                              trainable=is_training,
+                                              weights_initializer=self.cfgs.INITIALIZER,
+                                              activation_fn=None,
+                                              scope='inception_attention_out')
+        return inception_attention_out
+
     def squeeze_excitation_layer(self, input_x, out_dim, ratio, layer_name, is_training):
         with tf.name_scope(layer_name):
             # Global_Average_Pooling
@@ -132,13 +144,13 @@ class NeckSCRDet(object):
         return out
 
     def mdanet(self, feature, is_training):
-        with tf.variable_scope('build_C4_attention',
+        with tf.variable_scope('build_attention',
                                regularizer=slim.l2_regularizer(self.cfgs.WEIGHT_DECAY)):
             ca = self.squeeze_excitation_layer(feature, self.cfgs.FPN_CHANNEL, 16, 'SE', is_training)
 
-            pa_mask = self.build_inception(feature, is_training)
-            pa_mask = tf.nn.softmax(pa_mask)
-            pa = pa_mask[:, :, :, 0]
+            pa_mask = self.build_inception_attention(feature, is_training)
+            pa_mask_softmax = tf.nn.softmax(pa_mask)
+            pa = pa_mask_softmax[:, :, :, 0]
             pa = tf.expand_dims(pa, axis=-1)
 
             out = tf.multiply(pa, feature)

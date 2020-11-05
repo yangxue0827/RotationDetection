@@ -7,6 +7,7 @@ import cv2
 import numpy as np
 # import tfplot as tfp
 
+from libs.utils.coordinate_convert import forward_convert
 
 def view_bar(message, num, total):
     rate = num / total
@@ -60,6 +61,7 @@ def read_dota_gt_and_vis(img, gt_txt):
 
 
 def get_mask(img, boxes):
+    boxes = forward_convert(boxes)
     h, w, _ = img.shape
     mask = np.zeros([h, w])
     for b in boxes:

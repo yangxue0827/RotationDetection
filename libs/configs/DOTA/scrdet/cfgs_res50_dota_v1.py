@@ -6,6 +6,7 @@ import math
 
 """
 SCRDet
+FLOPs: 1126555840;    Trainable params: 43227534
 
 """
 
@@ -17,7 +18,7 @@ NET_NAME = 'resnet50_v1d'
 ROOT_PATH = os.path.abspath('../../')
 print(20*"++--")
 print(ROOT_PATH)
-GPU_GROUP = "3"
+GPU_GROUP = "0,1,2"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
 SHOW_TRAIN_INFO_INTE = 50
 SMRY_ITER = 200
@@ -52,6 +53,7 @@ FAST_RCNN_LOCATION_LOSS_WEIGHT = 1.0
 FAST_RCNN_CLASSIFICATION_LOSS_WEIGHT = 1.0
 RPN_SIGMA = 3.0
 FASTRCNN_SIGMA = 1.0
+USE_IOU_FACTOR = False
 
 MUTILPY_BIAS_GRADIENT = 2.0  # if None, will not multipy
 GRADIENT_CLIPPING_BY_NORM = 10.0  # if None, will not clip

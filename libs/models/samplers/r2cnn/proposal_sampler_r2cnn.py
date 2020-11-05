@@ -189,6 +189,7 @@ class ProposalSamplerR2CNN(ProposalSampler):
 
         bbox_targets_r = \
             self._get_bbox_regression_labels_r(bbox_target_data_r, num_classes)
+
         return labels, rois, bbox_targets_h, bbox_targets_r, target_gt_h, target_gt_r
 
 

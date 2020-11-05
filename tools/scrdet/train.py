@@ -59,11 +59,6 @@ class TrainSCRDet(Train):
                 if cfgs.NET_NAME in ['resnet152_v1d', 'resnet101_v1d', 'resnet50_v1d']:
                     img = img / tf.constant([cfgs.PIXEL_STD])
 
-                mask_gt = tf.py_func(get_mask,
-                                     [img_batch[i],
-                                      gtboxes_and_label_batch[i]],
-                                     [tf.float32])
-
                 gtboxes_and_label_r = tf.py_func(backward_convert,
                                                  inp=[gtboxes_and_label_batch[i]],
                                                  Tout=tf.float32)
@@ -78,7 +73,7 @@ class TrainSCRDet(Train):
                 img_h = img_h_batch[i]
                 img_w = img_w_batch[i]
 
-                inputs_list.append([img, gtboxes_and_label_h, gtboxes_and_label_r, mask_gt, num_objects, img_h, img_w])
+                inputs_list.append([img, gtboxes_and_label_h, gtboxes_and_label_r, num_objects, img_h, img_w])
 
             tower_grads = []
             biases_regularizer = tf.no_regularizer
@@ -113,24 +108,40 @@ class TrainSCRDet(Train):
                                         self.get_gtboxes_and_label,
                                         inp=[inputs_list[i][1],
                                              inputs_list[i][2],
-                                             inputs_list[i][4], ],
+                                             inputs_list[i][3], ],
                                         Tout=[tf.float32, tf.float32])
                                     gtboxes_and_label_h = tf.reshape(gtboxes_and_label_h, [-1, 5])
                                     gtboxes_and_label_r = tf.reshape(gtboxes_and_label_r, [-1, 6])
 
-                                    img = inputs_list[i][0]
+                                    img, mask_gt = inputs_list[i][0], inputs_list[i][3]
                                     img_shape = inputs_list[i][-2:]
+
                                     img = tf.image.crop_to_bounding_box(image=img,
                                                                         offset_height=0,
                                                                         offset_width=0,
                                                                         target_height=tf.cast(img_shape[0], tf.int32),
                                                                         target_width=tf.cast(img_shape[1], tf.int32))
 
+                                    mask_gt = tf.py_func(get_mask,
+                                                         [tf.squeeze(img, axis=0),
+                                                          gtboxes_and_label_r],
+                                                         [tf.float32])
+
+                                    # mask_gt = tf.Print(mask_gt, [mask_gt], 'mask_gt', summarize=50)
+                                    # mask_gt = tf.image.crop_to_bounding_box(image=tf.expand_dims(mask_gt, 0),
+                                    #                                         offset_height=0,
+                                    #                                         offset_width=0,
+                                    #                                         target_height=tf.cast(img_shape[0],
+                                    #                                                               tf.int32),
+                                    #                                         target_width=tf.cast(img_shape[1],
+                                    #                                                              tf.int32))
+
                                     outputs = scrdet.build_whole_detection_network(input_img_batch=img,
                                                                                    gtboxes_batch_h=gtboxes_and_label_h,
                                                                                    gtboxes_batch_r=gtboxes_and_label_r,
-                                                                                   mask_batch=tf.expand_dims(inputs_list[i][3], 0),
+                                                                                   mask_batch=mask_gt[0],
                                                                                    gpu_id=i)
+
                                     gtboxes_in_img_h = self.drawer.draw_boxes_with_categories(img_batch=img,
                                                                                               boxes=gtboxes_and_label_h[
                                                                                                     :, :-1],
@@ -145,16 +156,24 @@ class TrainSCRDet(Train):
                                                                                               method=1)
                                     tf.summary.image('Compare/gtboxes_h_gpu:%d' % i, gtboxes_in_img_h)
                                     tf.summary.image('Compare/gtboxes_r_gpu:%d' % i, gtboxes_in_img_r)
-                                    tf.summary.image('Compare/mask:%d' % i, tf.expand_dims(inputs_list[i][3], 0))
+                                    tf.summary.image('Compare/mask:%d' % i, tf.expand_dims(mask_gt[0], 0))
 
                                     if cfgs.ADD_BOX_IN_TENSORBOARD:
-                                        detections_in_img = self.drawer.draw_boxes_with_categories_and_scores(
+                                        detections_in_img_h = self.drawer.draw_boxes_with_categories_and_scores(
                                             img_batch=img,
                                             boxes=outputs[0],
                                             scores=outputs[1],
                                             labels=outputs[2],
+                                            method=0)
+                                        tf.summary.image('Compare/final_detection_h_gpu:%d' % i, detections_in_img_h)
+
+                                        detections_in_img_r = self.drawer.draw_boxes_with_categories_and_scores(
+                                            img_batch=img,
+                                            boxes=outputs[3],
+                                            scores=outputs[4],
+                                            labels=outputs[5],
                                             method=1)
-                                        tf.summary.image('Compare/final_detection_gpu:%d' % i, detections_in_img)
+                                        tf.summary.image('Compare/final_detection_r_gpu:%d' % i, detections_in_img_r)
 
                                     loss_dict = outputs[-1]
 

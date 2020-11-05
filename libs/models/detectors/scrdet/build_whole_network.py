@@ -9,7 +9,7 @@ import tensorflow.contrib.slim as slim
 from libs.models.detectors.two_stage_base_network import DetectionNetworkBase
 from libs.models.losses.losses import Loss
 from libs.utils import bbox_transform, nms_rotate
-from libs.models.anchor_heads import generate_h_anchors
+from libs.models.anchor_heads import generate_h_anchors, anchor_utils
 from libs.models.samplers.r2cnn.anchor_sampler_r2cnn import AnchorSamplerR2CNN
 from libs.models.samplers.r2cnn.proposal_sampler_r2cnn import ProposalSamplerR2CNN
 from libs.models.roi_extractors.roi_extractors import RoIExtractor
@@ -45,22 +45,21 @@ class DetectionNetworkSCRDet(DetectionNetworkBase):
 
         return rpn_box_pred, rpn_cls_score, rpn_cls_prob
 
-    def make_anchors(self, feature):
-        with tf.variable_scope('make_anchors'):
-            feat_h, feat_w = tf.shape(feature), tf.shape(feature)
+    def make_anchors(self, feature_to_cropped):
+        featuremap_height, featuremap_width = tf.shape(feature_to_cropped)[1], tf.shape(feature_to_cropped)[2]
+        featuremap_height = tf.cast(featuremap_height, tf.float32)
+        featuremap_width = tf.cast(featuremap_width, tf.float32)
 
-            feat_h = tf.cast(feat_h, tf.float32)
-            feat_w = tf.cast(feat_w, tf.float32)
-            anchors = tf.py_func(generate_h_anchors.generate_anchors_pre,
-                                 inp=[feat_h, feat_w, self.cfgs.ANCHOR_STRIDE,
-                                      np.array(self.cfgs.ANCHOR_SCALES) * self.cfgs.ANCHOR_STRIDE,
-                                      self.cfgs.ANCHOR_RATIOS, 4.0],
-                                 Tout=[tf.float32])
-            anchors = tf.reshape(anchors, [-1, 4])
-            return anchors
+        anchors = anchor_utils.make_anchors(base_anchor_size=self.cfgs.BASE_ANCHOR_SIZE_LIST,
+                                            anchor_scales=self.cfgs.ANCHOR_SCALES, anchor_ratios=self.cfgs.ANCHOR_RATIOS,
+                                            featuremap_height=featuremap_height,
+                                            featuremap_width=featuremap_width,
+                                            stride=self.cfgs.ANCHOR_STRIDE,
+                                            name="make_anchors_forRPN")
+        return anchors
 
     def build_loss(self, rpn_box_pred, rpn_bbox_targets, rpn_cls_score, rpn_labels,
-                   bbox_pred_h, bbox_targets_h, cls_score_h, bbox_pred_r, bbox_targets_r,
+                   bbox_pred_h, bbox_targets_h, cls_score_h, bbox_pred_r, bbox_targets_r, rois, target_gt_r,
                    cls_score_r, labels, mask_gt, pa_mask_pred):
         '''
         :param rpn_box_pred: [-1, 4]
@@ -101,12 +100,19 @@ class DetectionNetworkSCRDet(DetectionNetworkBase):
                                                                label=labels,
                                                                num_classes=self.cfgs.CLASS_NUM + 1,
                                                                sigma=self.cfgs.FASTRCNN_SIGMA)
-
-                reg_loss_r = self.losses.smooth_l1_loss_rcnn_r(bbox_pred=bbox_pred_r,
-                                                               bbox_targets=bbox_targets_r,
-                                                               label=labels,
-                                                               num_classes=self.cfgs.CLASS_NUM + 1,
-                                                               sigma=self.cfgs.FASTRCNN_SIGMA)
+                if self.cfgs.USE_IOU_FACTOR:
+                    reg_loss_r = self.losses.iou_smooth_l1_loss_rcnn_r(bbox_pred=bbox_pred_r,
+                                                                       bbox_targets=bbox_targets_r,
+                                                                       label=labels,
+                                                                       rois=rois, target_gt_r=target_gt_r,
+                                                                       num_classes=self.cfgs.CLASS_NUM + 1,
+                                                                       sigma=self.cfgs.FASTRCNN_SIGMA)
+                else:
+                    reg_loss_r = self.losses.smooth_l1_loss_rcnn_r(bbox_pred=bbox_pred_r,
+                                                                   bbox_targets=bbox_targets_r,
+                                                                   label=labels,
+                                                                   num_classes=self.cfgs.CLASS_NUM + 1,
+                                                                   sigma=self.cfgs.FASTRCNN_SIGMA)
 
                 cls_loss_h = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(
                     logits=cls_score_h,
@@ -217,6 +223,8 @@ class DetectionNetworkSCRDet(DetectionNetworkBase):
                             cls_score_h=cls_score_h,
                             bbox_pred_r=bbox_pred_r,
                             bbox_targets_r=bbox_targets_r,
+                            rois=rois,
+                            target_gt_r=target_gt_r,
                             cls_score_r=cls_score_r,
                             labels=labels,
                             mask_gt=mask_batch,

@@ -467,6 +467,56 @@ class Loss(object):
 
         return bbox_loss
 
+    def iou_smooth_l1_loss_rcnn_r(self, bbox_pred, bbox_targets, label, rois, target_gt_r, num_classes, sigma=1.0):
+        '''
+        :param bbox_pred: [-1, (cfgs.CLS_NUM +1) * 5]
+        :param bbox_targets:[-1, (cfgs.CLS_NUM +1) * 5]
+        :param label:[-1]
+        :param num_classes:
+        :param sigma:
+        :return:
+        '''
+
+        outside_mask = tf.stop_gradient(tf.to_float(tf.greater(label, 0)))
+
+        target_gt_r = tf.reshape(tf.tile(tf.reshape(target_gt_r, [-1, 1, 5]), [1, num_classes, 1]), [-1, 5])
+        x_c = (rois[:, 2] + rois[:, 0]) / 2
+        y_c = (rois[:, 3] + rois[:, 1]) / 2
+        h = rois[:, 2] - rois[:, 0] + 1
+        w = rois[:, 3] - rois[:, 1] + 1
+        theta = -90 * tf.ones_like(x_c)
+        rois = tf.transpose(tf.stack([x_c, y_c, w, h, theta]))
+        rois = tf.reshape(tf.tile(tf.reshape(rois, [-1, 1, 5]), [1, num_classes, 1]), [-1, 5])
+
+        boxes_pred = bbox_transform.rbbox_transform_inv(boxes=rois, deltas=tf.reshape(bbox_pred, [-1, 5]),
+                                                        scale_factors=self.cfgs.ROI_SCALE_FACTORS)
+        overlaps = tf.py_func(iou_rotate_calculate2,
+                              inp=[tf.reshape(boxes_pred, [-1, 5]), tf.reshape(target_gt_r, [-1, 5])],
+                              Tout=[tf.float32])
+        overlaps = tf.reshape(overlaps, [-1, num_classes])
+
+        bbox_pred = tf.reshape(bbox_pred, [-1, num_classes, 5])
+        bbox_targets = tf.reshape(bbox_targets, [-1, num_classes, 5])
+
+        value = self._smooth_l1_loss_base(bbox_pred, bbox_targets, sigma=sigma)
+        value = tf.reduce_sum(value, 2)
+        value = tf.reshape(value, [-1, num_classes])
+
+        inside_mask = tf.one_hot(tf.reshape(label, [-1, 1]),
+                                 depth=num_classes, axis=1)
+
+        inside_mask = tf.stop_gradient(
+            tf.to_float(tf.reshape(inside_mask, [-1, num_classes])))
+
+        iou_factor = tf.stop_gradient(tf.exp((1 - overlaps)) - 1) / (tf.stop_gradient(value) + self.cfgs.EPSILON)
+
+        regression_loss = tf.reduce_sum(value * inside_mask * iou_factor, 1)
+
+        normalizer = tf.to_float(tf.shape(bbox_pred)[0])
+        bbox_loss = tf.reduce_sum(regression_loss * outside_mask) / normalizer
+
+        return bbox_loss
+
     def build_attention_loss(self, mask, featuremap):
         # shape = mask.get_shape().as_list()
         shape = tf.shape(mask)
