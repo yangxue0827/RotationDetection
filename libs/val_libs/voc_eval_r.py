@@ -44,7 +44,6 @@ class EVAL(object):
                            dets[k, 0] + 1, dets[k, 1] + 1,
                            dets[k, 2] + 1, dets[k, 3] + 1, dets[k, 4] + 1))
 
-
   def write_voc_results_file(self, all_boxes, test_imgid_list, det_save_dir):
     '''
 
@@ -66,6 +65,9 @@ class EVAL(object):
       with open(det_save_path, 'wt') as f:
         for index, img_name in enumerate(test_imgid_list):
           this_img_detections = all_boxes[index]
+
+          if this_img_detections.shape[0] == 0:
+            continue
 
           this_cls_detections = this_img_detections[this_img_detections[:, 0] == cls_id]
           if this_cls_detections.shape[0] == 0:

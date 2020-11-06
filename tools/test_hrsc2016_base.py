@@ -174,6 +174,7 @@ class TestHRSC2016(object):
                         label_res_rotate_.extend(np.array(tmp_label_r)[inx])
 
                 if len(box_res_rotate_) == 0:
+                    all_boxes_r.append(np.array([]))
                     continue
 
                 det_boxes_r_ = np.array(box_res_rotate_)
