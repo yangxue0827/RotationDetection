@@ -20,6 +20,7 @@ from libs.label_name_dict.label_dict import LabelMap
 from libs.utils.draw_box_in_img import DrawBox
 from libs.utils.coordinate_convert import forward_convert, backward_convert
 from libs.utils import nms_rotate
+from libs.utils import nms
 from libs.utils.rotate_polygon_nms import rotate_gpu_nms
 
 
@@ -81,7 +82,8 @@ class TestDOTA(object):
 
         img_batch = tf.expand_dims(img_batch, axis=0)
 
-        detection_boxes, detection_scores, detection_category = det_net.build_whole_detection_network(
+        detection_boxes_h, detection_scores_h, detection_category_h, \
+        detection_boxes_r, detection_scores_r, detection_category_r = det_net.build_whole_detection_network(
             input_img_batch=img_batch)
 
         init_op = tf.group(
@@ -107,9 +109,8 @@ class TestDOTA(object):
 
                 img = cv2.imread(img_path)
 
-                box_res_rotate = []
-                label_res_rotate = []
-                score_res_rotate = []
+                box_res, label_res, score_res = [], [], []
+                box_res_rotate, label_res_rotate, score_res_rotate = [], [], []
 
                 imgH = img.shape[0]
                 imgW = img.shape[1]
@@ -150,14 +151,27 @@ class TestDOTA(object):
                                 new_h, new_w = min(int(short_size * float(self.args.h_len) / self.args.w_len), max_len), short_size
                             img_resize = cv2.resize(src_img, (new_w, new_h))
 
-                            resized_img, det_boxes_r_, det_scores_r_, det_category_r_ = \
+                            resized_img, det_boxes_h_, det_scores_h_, det_category_h_, \
+                            det_boxes_r_, det_scores_r_, det_category_r_ = \
                                 sess.run(
-                                    [img_batch, detection_boxes, detection_scores, detection_category],
+                                    [img_batch, detection_boxes_h, detection_scores_h, detection_category_h,
+                                     detection_boxes_r, detection_scores_r, detection_category_r],
                                     feed_dict={img_plac: img_resize[:, :, ::-1]}
                                 )
 
                             resized_h, resized_w = resized_img.shape[1], resized_img.shape[2]
                             src_h, src_w = src_img.shape[0], src_img.shape[1]
+
+                            if len(det_boxes_h_) > 0:
+                                det_boxes_h_[:, 0::2] *= (src_w / resized_w)
+                                det_boxes_h_[:, 1::2] *= (src_h / resized_h)
+                                for ii in range(len(det_boxes_h_)):
+                                    box = det_boxes_h_[ii]
+                                    box[0::2] = box[0::2] + ww_
+                                    box[1::2] = box[1::2] + hh_
+                                    box_res.append(box)
+                                    label_res.append(det_category_h_[ii])
+                                    score_res.append(det_scores_h_[ii])
 
                             if len(det_boxes_r_) > 0:
                                 det_boxes_r_ = forward_convert(det_boxes_r_, False)
@@ -173,11 +187,25 @@ class TestDOTA(object):
                                     score_res_rotate.append(det_scores_r_[ii])
 
                             if self.args.flip_img:
+                                det_boxes_h_flip, det_scores_h_flip, det_category_h_flip, \
                                 det_boxes_r_flip, det_scores_r_flip, det_category_r_flip = \
                                     sess.run(
-                                        [detection_boxes, detection_scores, detection_category],
+                                        [detection_boxes_h, detection_scores_h, detection_category_h,
+                                         detection_boxes_r, detection_scores_r, detection_category_r],
                                         feed_dict={img_plac: cv2.flip(img_resize, flipCode=1)[:, :, ::-1]}
                                     )
+
+                                if len(det_boxes_h_) > 0:
+                                    det_boxes_h_flip[:, 0::2] *= (src_w / resized_w)
+                                    det_boxes_h_flip[:, 1::2] *= (src_h / resized_h)
+                                    for ii in range(len(det_boxes_h_flip)):
+                                        box = det_boxes_h_flip[ii]
+                                        box[0::2] = src_w - box[0::2] + ww_
+                                        box[1::2] = box[1::2] + hh_
+                                        box_res.append(box)
+                                        label_res.append(det_category_h_flip[ii])
+                                        score_res.append(det_scores_h_flip[ii])
+
                                 if len(det_boxes_r_flip) > 0:
                                     det_boxes_r_flip = forward_convert(det_boxes_r_flip, False)
                                     det_boxes_r_flip[:, 0::2] *= (src_w / resized_w)
@@ -191,11 +219,25 @@ class TestDOTA(object):
                                         label_res_rotate.append(det_category_r_flip[ii])
                                         score_res_rotate.append(det_scores_r_flip[ii])
 
+                                det_boxes_h_flip, det_scores_h_flip, det_category_h_flip,\
                                 det_boxes_r_flip, det_scores_r_flip, det_category_r_flip = \
                                     sess.run(
-                                        [detection_boxes, detection_scores, detection_category],
+                                        [detection_boxes_h, detection_scores_h, detection_category_h,
+                                         detection_boxes_r, detection_scores_r, detection_category_r],
                                         feed_dict={img_plac: cv2.flip(img_resize, flipCode=0)[:, :, ::-1]}
                                     )
+
+                                if len(det_boxes_h_) > 0:
+                                    det_boxes_h_flip[:, 0::2] *= (src_w / resized_w)
+                                    det_boxes_h_flip[:, 1::2] *= (src_h / resized_h)
+                                    for ii in range(len(det_boxes_h_flip)):
+                                        box = det_boxes_h_flip[ii]
+                                        box[0::2] = box[0::2] + ww_
+                                        box[1::2] = src_h - box[1::2] + hh_
+                                        box_res.append(box)
+                                        label_res.append(det_category_h_flip[ii])
+                                        score_res.append(det_scores_h_flip[ii])
+
                                 if len(det_boxes_r_flip) > 0:
                                     det_boxes_r_flip = forward_convert(det_boxes_r_flip, False)
                                     det_boxes_r_flip[:, 0::2] *= (src_w / resized_w)
@@ -209,17 +251,25 @@ class TestDOTA(object):
                                         label_res_rotate.append(det_category_r_flip[ii])
                                         score_res_rotate.append(det_scores_r_flip[ii])
 
+                box_res = np.array(box_res)
+                label_res = np.array(label_res)
+                score_res = np.array(score_res)
                 box_res_rotate = np.array(box_res_rotate)
                 label_res_rotate = np.array(label_res_rotate)
                 score_res_rotate = np.array(score_res_rotate)
 
-                box_res_rotate_ = []
-                label_res_rotate_ = []
-                score_res_rotate_ = []
-                threshold = {'roundabout': 0.1, 'tennis-court': 0.3, 'swimming-pool': 0.1, 'storage-tank': 0.2,
-                             'soccer-ball-field': 0.3, 'small-vehicle': 0.2, 'ship': 0.2, 'plane': 0.3,
-                             'large-vehicle': 0.1, 'helicopter': 0.2, 'harbor': 0.0001, 'ground-track-field': 0.3,
-                             'bridge': 0.0001, 'basketball-court': 0.3, 'baseball-diamond': 0.3}
+                box_res_rotate_, label_res_rotate_, score_res_rotate_ = [], [], []
+                box_res_, label_res_, score_res_ = [], [], []
+
+                threshold_r = {'roundabout': 0.1, 'tennis-court': 0.3, 'swimming-pool': 0.1, 'storage-tank': 0.2,
+                               'soccer-ball-field': 0.3, 'small-vehicle': 0.2, 'ship': 0.2, 'plane': 0.3,
+                               'large-vehicle': 0.1, 'helicopter': 0.2, 'harbor': 0.0001, 'ground-track-field': 0.3,
+                               'bridge': 0.0001, 'basketball-court': 0.3, 'baseball-diamond': 0.3}
+
+                threshold_h = {'roundabout': 0.35, 'tennis-court': 0.35, 'swimming-pool': 0.4, 'storage-tank': 0.3,
+                               'soccer-ball-field': 0.3, 'small-vehicle': 0.4, 'ship': 0.35, 'plane': 0.35,
+                               'large-vehicle': 0.4, 'helicopter': 0.4, 'harbor': 0.3, 'ground-track-field': 0.4,
+                               'bridge': 0.3, 'basketball-court': 0.4, 'baseball-diamond': 0.3}
 
                 for sub_class in range(1, self.cfgs.CLASS_NUM + 1):
                     index = np.where(label_res_rotate == sub_class)[0]
@@ -246,14 +296,37 @@ class TestDOTA(object):
                     jitter = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
                     jitter[:, 0] += np.random.rand(tmp_boxes_r_.shape[0], ) / 1000
                     inx = rotate_gpu_nms(np.array(tmp, np.float32) + np.array(jitter, np.float32),
-                                         float(threshold[self.label_name_map[sub_class]]), 0)
+                                         float(threshold_r[self.label_name_map[sub_class]]), 0)
 
                     box_res_rotate_.extend(np.array(tmp_boxes_r)[inx])
                     score_res_rotate_.extend(np.array(tmp_score_r)[inx])
                     label_res_rotate_.extend(np.array(tmp_label_r)[inx])
 
-                result_dict = {'boxes': np.array(box_res_rotate_), 'scores': np.array(score_res_rotate_),
-                               'labels': np.array(label_res_rotate_), 'image_id': img_path}
+                for sub_class in range(1, self.cfgs.CLASS_NUM + 1):
+                    index = np.where(label_res == sub_class)[0]
+                    if len(index) == 0:
+                        continue
+                    tmp_boxes_h = box_res[index]
+                    tmp_label_h = label_res[index]
+                    tmp_score_h = score_res[index]
+
+                    tmp_boxes_h = np.array(tmp_boxes_h)
+                    tmp = np.zeros([tmp_boxes_h.shape[0], tmp_boxes_h.shape[1] + 1])
+                    tmp[:, 0:-1] = tmp_boxes_h
+                    tmp[:, -1] = np.array(tmp_score_h)
+
+                    inx = nms.py_cpu_nms(dets=np.array(tmp, np.float32),
+                                         thresh=float(threshold_h[self.label_name_map[sub_class]]),
+                                         max_output_size=5000)
+
+                    box_res_.extend(np.array(tmp_boxes_h)[inx])
+                    score_res_.extend(np.array(tmp_score_h)[inx])
+                    label_res_.extend(np.array(tmp_label_h)[inx])
+
+                result_dict = {'boxes_h': np.array(box_res_), 'scores_h': np.array(score_res_),
+                               'labels_h': np.array(label_res_), 'boxes_r': np.array(box_res_rotate_),
+                               'scores_r': np.array(score_res_rotate_),
+                               'labels_r': np.array(label_res_rotate_), 'image_id': img_path}
                 result_queue.put_nowait(result_dict)
 
     def test_dota(self, det_net, real_test_img_list, txt_name):
@@ -283,16 +356,16 @@ class TestDOTA(object):
             if self.args.show_box:
 
                 nake_name = res['image_id'].split('/')[-1]
-                tools.makedirs(os.path.join(save_path, 'dota_img_vis'))
-                draw_path = os.path.join(save_path, 'dota_img_vis', nake_name)
+                tools.makedirs(os.path.join(save_path, 'dota_img_vis_r'))
+                draw_path_r = os.path.join(save_path, 'dota_img_vis_r', nake_name)
 
                 draw_img = np.array(cv2.imread(res['image_id']), np.float32)
-                detected_boxes = backward_convert(res['boxes'], with_label=False)
+                detected_boxes = backward_convert(res['boxes_r'], with_label=False)
 
-                detected_indices = res['scores'] >= self.cfgs.VIS_SCORE
-                detected_scores = res['scores'][detected_indices]
+                detected_indices = res['scores_r'] >= self.cfgs.VIS_SCORE
+                detected_scores = res['scores_r'][detected_indices]
                 detected_boxes = detected_boxes[detected_indices]
-                detected_categories = res['labels'][detected_indices]
+                detected_categories = res['labels_r'][detected_indices]
 
                 drawer = DrawBox(self.cfgs)
 
@@ -303,29 +376,52 @@ class TestDOTA(object):
                                                                            method=1,
                                                                            is_csl=True,
                                                                            in_graph=False)
-                cv2.imwrite(draw_path, final_detections)
+                cv2.imwrite(draw_path_r, final_detections)
+
+                tools.makedirs(os.path.join(save_path, 'dota_img_vis_h'))
+                draw_path_h = os.path.join(save_path, 'dota_img_vis_h', nake_name)
+                detected_indices = res['scores_h'] >= self.cfgs.VIS_SCORE
+                detected_scores = res['scores_h'][detected_indices]
+                detected_boxes = res['boxes_h'][detected_indices]
+                detected_categories = res['labels_h'][detected_indices]
+
+                final_detections = drawer.draw_boxes_with_label_and_scores(draw_img,
+                                                                           boxes=detected_boxes,
+                                                                           labels=detected_categories,
+                                                                           scores=detected_scores,
+                                                                           method=0,
+                                                                           in_graph=False)
+                cv2.imwrite(draw_path_h, final_detections)
 
             else:
                 CLASS_DOTA = self.name_label_map.keys()
-                write_handle = {}
+                write_handle_r, write_handle_h = {}, {}
 
-                tools.makedirs(os.path.join(save_path, 'dota_res'))
+                tools.makedirs(os.path.join(save_path, 'dota_res_r'))
+                tools.makedirs(os.path.join(save_path, 'dota_res_h'))
                 for sub_class in CLASS_DOTA:
                     if sub_class == 'back_ground':
                         continue
-                    write_handle[sub_class] = open(os.path.join(save_path, 'dota_res', 'Task1_%s.txt' % sub_class), 'a+')
+                    write_handle_r[sub_class] = open(os.path.join(save_path, 'dota_res_r', 'Task1_%s.txt' % sub_class), 'a+')
+                    write_handle_h[sub_class] = open(os.path.join(save_path, 'dota_res_h', 'Task2_%s.txt' % sub_class), 'a+')
 
-                for i, rbox in enumerate(res['boxes']):
+                for i, rbox in enumerate(res['boxes_r']):
                     command = '%s %.3f %.1f %.1f %.1f %.1f %.1f %.1f %.1f %.1f\n' % (res['image_id'].split('/')[-1].split('.')[0],
-                                                                                     res['scores'][i],
+                                                                                     res['scores_r'][i],
                                                                                      rbox[0], rbox[1], rbox[2], rbox[3],
                                                                                      rbox[4], rbox[5], rbox[6], rbox[7],)
-                    write_handle[self.label_name_map[res['labels'][i]]].write(command)
+                    write_handle_r[self.label_name_map[res['labels_r'][i]]].write(command)
+                for i, hbox in enumerate(res['boxes_h']):
+                    command = '%s %.3f %.1f %.1f %.1f %.1f\n' % (res['image_id'].split('/')[-1].split('.')[0],
+                                                                 res['scores_h'][i],
+                                                                 hbox[0], hbox[1], hbox[2], hbox[3])
+                    write_handle_h[self.label_name_map[res['labels_h'][i]]].write(command)
 
                 for sub_class in CLASS_DOTA:
                     if sub_class == 'back_ground':
                         continue
-                    write_handle[sub_class].close()
+                    write_handle_r[sub_class].close()
+                    write_handle_h[sub_class].close()
 
                 fw = open(txt_name, 'a+')
                 fw.write('{}\n'.format(res['image_id'].split('/')[-1]))

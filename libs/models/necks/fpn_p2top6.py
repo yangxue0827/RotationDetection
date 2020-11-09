@@ -58,13 +58,13 @@ class NeckFPN(object):
                 else:
                     pyramid_dict['P5'] = P5
 
-                for level in range(4, 1, -1):  # build [P4, P3, P2]
+                for level in range(4, int(self.cfgs.LEVEL[0][-1]) - 1, -1):  # build [P4, P3, P2]
 
                     pyramid_dict['P%d' % level] = self.fusion_two_layer(C_i=feature_dict["C%d" % level],
                                                                         P_j=pyramid_dict["P%d" % (level + 1)],
                                                                         scope='build_P%d' % level,
                                                                         is_training=is_training)
-                for level in range(5, 1, -1):  # use 3x3 conv fuse P5, P4, P3, P2
+                for level in range(5, int(self.cfgs.LEVEL[0][-1]) - 1, -1):  # use 3x3 conv fuse P5, P4, P3, P2
                     pyramid_dict['P%d' % level] = slim.conv2d(pyramid_dict['P%d' % level],
                                                               num_outputs=256, kernel_size=[3, 3], padding="SAME",
                                                               stride=1, trainable=is_training,

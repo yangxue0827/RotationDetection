@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, print_function
 
 
-from libs.models.backbones import resnet, resnet_gluoncv, mobilenet_v2
+from libs.models.backbones import resnet, resnet_gluoncv, mobilenet_v2, darknet
 from libs.models.backbones.efficientnet import efficientnet_builder, efficientnet_lite_builder
 from libs.models.necks import fpn_p3top7, bifpn_p3top7
 
@@ -52,7 +52,7 @@ class BuildBackbone(object):
             feature_dict = mobilenet_v2.MobileNetV2Backbone(self.cfgs).mobilenetv2_base(input_img_batch,
                                                                                         is_training=self.is_training)
 
-            return self.fpn_func.fpn_retinanet(feature_dict)
+            return self.fpn_func.fpn_retinanet(feature_dict, self.is_training)
 
         elif 'efficientnet-lite' in self.base_network_name:
             feature_dict = efficientnet_lite_builder.EfficientNetLiteBackbone(self.cfgs).build_model_fpn_base(
@@ -67,6 +67,11 @@ class BuildBackbone(object):
                 input_img_batch,
                 model_name=self.base_network_name,
                 training=True)
+            return self.fpn_func.fpn_retinanet(feature_dict, self.is_training)
+        elif 'darknet' in self.base_network_name:
+            feature_dict = darknet.DarkNetBackbone(self.cfgs).darknet53_body(input_img_batch,
+                                                                             is_training=self.is_training)
+
             return self.fpn_func.fpn_retinanet(feature_dict, self.is_training)
 
         else:

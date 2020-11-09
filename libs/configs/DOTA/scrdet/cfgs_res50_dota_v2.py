@@ -6,7 +6,8 @@ import math
 
 """
 SCRDet
-FLOPs: 693885378;    Trainable params: 43227534
+FLOPs: 1126555840;    Trainable params: 43227534
+
 """
 
 # ------------------------------------------------
@@ -17,11 +18,11 @@ NET_NAME = 'resnet50_v1d'
 ROOT_PATH = os.path.abspath('../../')
 print(20*"++--")
 print(ROOT_PATH)
-GPU_GROUP = "3"
+GPU_GROUP = "1,2,3"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
 SHOW_TRAIN_INFO_INTE = 50
 SMRY_ITER = 200
-SAVE_WEIGHTS_INTE = 15000
+SAVE_WEIGHTS_INTE = 27000
 
 SUMMARY_PATH = ROOT_PATH + '/output/summary'
 TEST_SAVE_PATH = ROOT_PATH + '/tools/test_result'

@@ -182,6 +182,48 @@ class Loss(object):
 
         return tf.reduce_sum(regression_loss * iou_factor) / normalizer
 
+    def modulated_rotation_5p_loss(self, targets, preds, anchor_state, ratios, sigma=3.0):
+
+        targets = tf.reshape(targets, [-1, 5])
+
+        sigma_squared = sigma ** 2
+        indices = tf.reshape(tf.where(tf.equal(anchor_state, 1)), [-1, ])
+        preds = tf.gather(preds, indices)
+        targets = tf.gather(targets, indices)
+        ratios = tf.gather(ratios, indices)
+
+        normalizer = tf.stop_gradient(tf.where(tf.equal(anchor_state, 1)))
+        normalizer = tf.cast(tf.shape(normalizer)[0], tf.float32)
+        normalizer = tf.maximum(1.0, normalizer)
+
+        regression_diff = preds - targets
+        regression_diff = tf.abs(regression_diff)
+        loss1 = tf.where(
+            tf.less(regression_diff, 1.0 / sigma_squared),
+            0.5 * sigma_squared * tf.pow(regression_diff, 2),
+            regression_diff - 0.5 / sigma_squared
+        )
+        loss1 = tf.reduce_sum(loss1, 1)
+
+        loss2_1 = preds[:, 0] - targets[:, 0]
+        loss2_2 = preds[:, 1] - targets[:, 1]
+        loss2_3 = preds[:, 2] - targets[:, 3] - tf.log(ratios)
+        loss2_4 = preds[:, 3] - targets[:, 2] + tf.log(ratios)
+        loss2_5 = tf.minimum((preds[:, 4] - targets[:, 4] + 1.570796), (targets[:, 4] - preds[:, 4] + 1.570796))
+
+        box_diff_2 = tf.stack([loss2_1, loss2_2, loss2_3, loss2_4, loss2_5], 1)
+        abs_box_diff_2 = tf.abs(box_diff_2)
+        loss2 = tf.where(
+            tf.less(abs_box_diff_2, 1.0 / sigma_squared),
+            0.5 * sigma_squared * tf.pow(abs_box_diff_2, 2),
+            abs_box_diff_2 - 0.5 / sigma_squared
+        )
+        loss2 = tf.reduce_sum(loss2, 1)
+        loss = tf.minimum(loss1, loss2)
+        loss = tf.reduce_sum(loss) / normalizer
+
+        return loss
+
     def angle_focal_loss(self, labels, pred, anchor_state, alpha=0.25, gamma=2.0):
 
         indices = tf.reshape(tf.where(tf.equal(anchor_state, 1)), [-1, ])

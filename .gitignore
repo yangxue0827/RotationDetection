@@ -122,10 +122,13 @@ __pycache__/
 *tmp*
 *.mp4*
 *.MP4*
+*rsdet*
 *dcl*
 *r3det_dcl*
 *ablation_study*
 *icme*
+*yolo*
+*darknet*
 
 demo
 tools/*/demo.py
