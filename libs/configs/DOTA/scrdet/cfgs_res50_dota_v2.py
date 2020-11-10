@@ -8,6 +8,29 @@ import math
 SCRDet
 FLOPs: 1126555840;    Trainable params: 43227534
 
+This is your result for task 1:
+
+mAP: 0.6916972750745738
+ap of each class: plane:0.8909985807974242, baseball-diamond:0.734378148982089, bridge:0.4653872367693641, ground-track-field:0.6201808484543158, small-vehicle:0.7386623678963109, large-vehicle:0.7386844265386695, ship:0.8443007868791074, tennis-court:0.8963949103246807, basketball-court:0.7767372443632161, storage-tank:0.8218790290502844, soccer-ball-field:0.4274783928875002, roundabout:0.6197849606558654, harbor:0.6435711069295844, swimming-pool:0.6603202451631471, helicopter:0.49670084042704665
+The submitted information is :
+
+Description: FPN_Res50D_DOTA_1x_20201106_48.6w_r
+Username: SJTU-Det
+Institute: SJTU
+Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
+TeamMembers: yangxue
+
+This is your evaluation result for task 2:
+
+mAP: 0.7137825733570665
+ap of each class: plane:0.8937447925125703, baseball-diamond:0.7808557384575618, bridge:0.5294626196745248, ground-track-field:0.6211107049574457, small-vehicle:0.752854355892333, large-vehicle:0.7351867093765855, ship:0.8541577756398899, tennis-court:0.9053014375120334, basketball-court:0.7897723084385333, storage-tank:0.8297786293301226, soccer-ball-field:0.44720521072473535, roundabout:0.6098000730575412, harbor:0.7457277562149336, swimming-pool:0.6962840073339679, helicopter:0.5154964812332218
+The submitted information is :
+
+Description: FPN_Res50D_DOTA_1x_20201106_48.6w_h
+Username: SJTU-Det
+Institute: SJTU
+Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
+TeamMembers: yangxue
 """
 
 # ------------------------------------------------
