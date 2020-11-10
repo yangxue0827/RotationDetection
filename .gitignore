@@ -128,7 +128,6 @@ __pycache__/
 *ablation_study*
 *icme*
 *yolo*
-*darknet*
 
 demo
 tools/*/demo.py
