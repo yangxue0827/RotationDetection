@@ -7,7 +7,17 @@ import math
 """
 RetinaNet-H
 FLOPs: 974501532;    Trainable params: 49130388
+This is your result for task 1:
 
+mAP: 0.6444964295117241
+ap of each class: plane:0.8901867511103236, baseball-diamond:0.7012686597492714, bridge:0.4228891221408001, ground-track-field:0.6397414936828507, small-vehicle:0.6825617995113188, large-vehicle:0.5246615044986218, ship:0.733647839712775, tennis-court:0.9081283665155168, basketball-court:0.7378951221636981, storage-tank:0.7582823106802029, soccer-ball-field:0.40800259905241326, roundabout:0.5626065355351864, harbor:0.5339872781465107, swimming-pool:0.6763786762737724, helicopter:0.48720838390259885
+The submitted information is :
+
+Description: RetinaNet_DOTA_2x_20201109_70.2w
+Username: yangxue
+Institute: DetectionTeamUCAS
+Emailadress: yangxue16@mails.ucas.ac.cn
+TeamMembers: yangxue, yangjirui
 
 """
 
@@ -113,6 +123,6 @@ IOU_NEGATIVE_THRESHOLD = 0.4
 NMS = True
 NMS_IOU_THRESHOLD = 0.1
 MAXIMUM_DETECTIONS = 100
-FILTERED_SCORE = 0.1
+FILTERED_SCORE = 0.05
 VIS_SCORE = 0.4
 
