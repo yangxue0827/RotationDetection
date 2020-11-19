@@ -7,7 +7,8 @@ import math
 import sys
 sys.path.append('../../..')
 
-from libs.label_name_dict.label_dict import LABEL_NAME_MAP
+from libs.label_name_dict.label_dict import LabelMap
+from libs.configs import cfgs
 
 
 def coordinate_convert_r(box):
@@ -165,11 +166,13 @@ def WriterXMLFiles(filename, path, gtbox_label_list, w, h, d):
     segname.appendChild(doc.createTextNode("0"))
     root.appendChild(segname)
 
+    label_name_map = LabelMap(cfgs).label2name()
+
     for gtbox_label in gtbox_label_list:
 
         nodeobject = doc.createElement('object')
         nodename = doc.createElement('name')
-        nodename.appendChild(doc.createTextNode(str(LABEL_NAME_MAP[gtbox_label[-1]])))
+        nodename.appendChild(doc.createTextNode(str(label_name_map[gtbox_label[-1]])))
         nodeobject.appendChild(nodename)
 
         nodetruncated = doc.createElement('truncated')

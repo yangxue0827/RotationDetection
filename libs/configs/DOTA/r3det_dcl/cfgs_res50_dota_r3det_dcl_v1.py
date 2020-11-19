@@ -5,89 +5,30 @@ import tensorflow as tf
 import math
 
 """
-FLOPs: 2265025702;    Trainable params: 72323263
-
-single scale:
+FLOPs: 1263438187;    Trainable params: 37785791
 This is your result for task 1:
 
-    mAP: 0.7621689030515238
+    mAP: 0.7121184762618237
     ap of each class:
-    plane:0.8911299075888718,
-    baseball-diamond:0.8319356150323267,
-    bridge:0.532965628899156,
-    ground-track-field:0.692229444940269,
-    small-vehicle:0.7885344440845781,
-    large-vehicle:0.8253443952966053,
-    ship:0.8717523692116588,
-    tennis-court:0.9036865664703386,
-    basketball-court:0.8635620193886776,
-    storage-tank:0.8658526534313077,
-    soccer-ball-field:0.6689637165098199,
-    roundabout:0.6450680681312201,
-    harbor:0.6886764453856856,
-    swimming-pool:0.6993915095320309,
-    helicopter:0.6634407618703122
+    plane:0.8879877475181992,
+    baseball-diamond:0.778076165652175,
+    bridge:0.46840197829363145,
+    ground-track-field:0.6584321304370467,
+    small-vehicle:0.7486973752001116,
+    large-vehicle:0.7496100108721503,
+    ship:0.8569940719256488,
+    tennis-court:0.9023482027992554,
+    basketball-court:0.7931574284009301,
+    storage-tank:0.8405654367548424,
+    soccer-ball-field:0.5659071452082054,
+    roundabout:0.6376705402201622,
+    harbor:0.577215213506967,
+    swimming-pool:0.6762310908612682,
+    helicopter:0.5404826062767616
 
 The submitted information is :
 
-Description: RetinaNet_DOTA_R3Det_DCL_B_2x_20201026_183.6w
-Username: yangxue
-Institute: DetectionTeamUCAS
-Emailadress: yangxue16@mails.ucas.ac.cn
-TeamMembers: yangxue, yangjirui
-
-multi-scale:
-This is your result for task 1:
-
-    mAP: 0.7670382656312196
-    ap of each class:
-    plane:0.8912587225241578,
-    baseball-diamond:0.8295350063178848,
-    bridge:0.5354391578943396,
-    ground-track-field:0.7226694690814012,
-    small-vehicle:0.7828926735591332,
-    large-vehicle:0.8219394631377006,
-    ship:0.8679072689260785,
-    tennis-court:0.9067367273506963,
-    basketball-court:0.8658560298103354,
-    storage-tank:0.8678816823772975,
-    soccer-ball-field:0.6748765620510818,
-    roundabout:0.6687503362282022,
-    harbor:0.7019636971279444,
-    swimming-pool:0.6940805604576306,
-    helicopter:0.673786627624411
-
-The submitted information is :
-
-Description: RetinaNet_DOTA_R3Det_DCL_B_4x_20201026_162w_ms
-Username: yangxue
-Institute: DetectionTeamUCAS
-Emailadress: yangxue16@mails.ucas.ac.cn
-TeamMembers: yangxue, yangjirui
-
-This is your result for task 1:
-
-    mAP: 0.7697170603172414
-    ap of each class:
-    plane:0.8926232861407345,
-    baseball-diamond:0.8359568124943043,
-    bridge:0.5305427879227442,
-    ground-track-field:0.7275505523517319,
-    small-vehicle:0.7813035809001221,
-    large-vehicle:0.8196570061078225,
-    ship:0.8694352114813823,
-    tennis-court:0.9036266911006428,
-    basketball-court:0.8597687568319556,
-    storage-tank:0.8693901181479016,
-    soccer-ball-field:0.6619147551751572,
-    roundabout:0.6556220897240033,
-    harbor:0.732884993776407,
-    swimming-pool:0.7056251744598303,
-    helicopter:0.699854088143882
-
-The submitted information is :
-
-Description: RetinaNet_DOTA_R3Det_DCL_B_4x_20201026_162w_ms_flip
+Description: RetinaNet_DOTA_R3Det_DCL_B_2x_20201024_97.2w
 Username: SJTU-Det
 Institute: SJTU
 Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
@@ -95,8 +36,8 @@ TeamMembers: yangxue
 """
 
 # ------------------------------------------------
-VERSION = 'RetinaNet_DOTA_R3Det_DCL_B_4x_20201026'
-NET_NAME = 'resnet152_v1d'  # 'MobilenetV2'
+VERSION = 'RetinaNet_DOTA_R3Det_DCL_B_2x_20201024'
+NET_NAME = 'resnet50_v1d'  # 'MobilenetV2'
 
 # ---------------------------------------- System
 ROOT_PATH = os.path.abspath('../../')
@@ -106,7 +47,7 @@ GPU_GROUP = "0,1,2,3"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
 SHOW_TRAIN_INFO_INTE = 20
 SMRY_ITER = 200
-SAVE_WEIGHTS_INTE = 27000 * 4
+SAVE_WEIGHTS_INTE = 27000 * 2
 
 SUMMARY_PATH = ROOT_PATH + '/output/summary'
 TEST_SAVE_PATH = ROOT_PATH + '/tools/test_result'
@@ -153,17 +94,17 @@ DATASET_NAME = 'DOTA'  # 'pascal', 'coco'
 PIXEL_MEAN = [123.68, 116.779, 103.939]  # R, G, B. In tf, channel is RGB. In openCV, channel is BGR
 PIXEL_MEAN_ = [0.485, 0.456, 0.406]
 PIXEL_STD = [0.229, 0.224, 0.225]  # R, G, B. In tf, channel is RGB. In openCV, channel is BGR
-IMG_SHORT_SIDE_LEN = [800, 400, 600, 1000, 1200]
-IMG_MAX_LENGTH = 1200
+IMG_SHORT_SIDE_LEN = 800
+IMG_MAX_LENGTH = 800
 CLASS_NUM = 15
 OMEGA = 180 / 256.
 ANGLE_MODE = 0
 
-IMG_ROTATE = True
-RGB2GRAY = True
-VERTICAL_FLIP = True
+IMG_ROTATE = False
+RGB2GRAY = False
+VERTICAL_FLIP = False
 HORIZONTAL_FLIP = True
-IMAGE_PYRAMID = True
+IMAGE_PYRAMID = False
 
 # --------------------------------------------- Network
 SUBNETS_WEIGHTS_INITIALIZER = tf.random_normal_initializer(mean=0.0, stddev=0.01, seed=None)

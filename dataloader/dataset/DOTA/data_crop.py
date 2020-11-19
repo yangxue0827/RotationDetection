@@ -7,7 +7,7 @@ import sys
 sys.path.append('../../..')
 
 from utils.tools import makedirs
-from libs.box_utils.coordinate_convert import backward_convert
+from libs.utils.coordinate_convert import backward_convert
 
 
 def save_to_xml(save_path, im_height, im_width, objects_axis, label_name):

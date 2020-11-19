@@ -5,108 +5,73 @@ import tensorflow as tf
 import math
 
 """
-FLOPs: 2265025702;    Trainable params: 72323263
-
-single scale:
-This is your result for task 1:
-
-    mAP: 0.7621689030515238
-    ap of each class:
-    plane:0.8911299075888718,
-    baseball-diamond:0.8319356150323267,
-    bridge:0.532965628899156,
-    ground-track-field:0.692229444940269,
-    small-vehicle:0.7885344440845781,
-    large-vehicle:0.8253443952966053,
-    ship:0.8717523692116588,
-    tennis-court:0.9036865664703386,
-    basketball-court:0.8635620193886776,
-    storage-tank:0.8658526534313077,
-    soccer-ball-field:0.6689637165098199,
-    roundabout:0.6450680681312201,
-    harbor:0.6886764453856856,
-    swimming-pool:0.6993915095320309,
-    helicopter:0.6634407618703122
-
-The submitted information is :
-
-Description: RetinaNet_DOTA_R3Det_DCL_B_2x_20201026_183.6w
-Username: yangxue
-Institute: DetectionTeamUCAS
-Emailadress: yangxue16@mails.ucas.ac.cn
-TeamMembers: yangxue, yangjirui
-
-multi-scale:
-This is your result for task 1:
-
-    mAP: 0.7670382656312196
-    ap of each class:
-    plane:0.8912587225241578,
-    baseball-diamond:0.8295350063178848,
-    bridge:0.5354391578943396,
-    ground-track-field:0.7226694690814012,
-    small-vehicle:0.7828926735591332,
-    large-vehicle:0.8219394631377006,
-    ship:0.8679072689260785,
-    tennis-court:0.9067367273506963,
-    basketball-court:0.8658560298103354,
-    storage-tank:0.8678816823772975,
-    soccer-ball-field:0.6748765620510818,
-    roundabout:0.6687503362282022,
-    harbor:0.7019636971279444,
-    swimming-pool:0.6940805604576306,
-    helicopter:0.673786627624411
-
-The submitted information is :
-
-Description: RetinaNet_DOTA_R3Det_DCL_B_4x_20201026_162w_ms
-Username: yangxue
-Institute: DetectionTeamUCAS
-Emailadress: yangxue16@mails.ucas.ac.cn
-TeamMembers: yangxue, yangjirui
+BCL + OMEGA = 180 / 32. + data aug + ms
+FLOPs: 1321979063;    Trainable params: 52136440
 
 This is your result for task 1:
 
-    mAP: 0.7697170603172414
+    mAP: 0.7197849386403127
     ap of each class:
-    plane:0.8926232861407345,
-    baseball-diamond:0.8359568124943043,
-    bridge:0.5305427879227442,
-    ground-track-field:0.7275505523517319,
-    small-vehicle:0.7813035809001221,
-    large-vehicle:0.8196570061078225,
-    ship:0.8694352114813823,
-    tennis-court:0.9036266911006428,
-    basketball-court:0.8597687568319556,
-    storage-tank:0.8693901181479016,
-    soccer-ball-field:0.6619147551751572,
-    roundabout:0.6556220897240033,
-    harbor:0.732884993776407,
-    swimming-pool:0.7056251744598303,
-    helicopter:0.699854088143882
+    plane:0.888767706661227,
+    baseball-diamond:0.828813250009659,
+    bridge:0.4680099872101205,
+    ground-track-field:0.6901660404277621,
+    small-vehicle:0.7395262726408154,
+    large-vehicle:0.5667009043812319,
+    ship:0.7347841545028257,
+    tennis-court:0.9071577005837769,
+    basketball-court:0.8229722946512178,
+    storage-tank:0.8448119293093586,
+    soccer-ball-field:0.6186025857112213,
+    roundabout:0.6441106031308795,
+    harbor:0.628617739475033,
+    swimming-pool:0.7122314212831211,
+    helicopter:0.7015014896264388
 
 The submitted information is :
 
-Description: RetinaNet_DOTA_R3Det_DCL_B_4x_20201026_162w_ms_flip
-Username: SJTU-Det
-Institute: SJTU
-Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
-TeamMembers: yangxue
+Description: RetinaNet_DOTA_DCL_B_3x_20200923_145.8w
+
+
+This is your result for task 1:
+
+    mAP: 0.7301021435398962
+    ap of each class:
+    plane:0.8770187842801944,
+    baseball-diamond:0.8267941412496465,
+    bridge:0.5127762497195772,
+    ground-track-field:0.7429087472658292,
+    small-vehicle:0.7430367724213736,
+    large-vehicle:0.5717593529976157,
+    ship:0.7535736625119606,
+    tennis-court:0.9066598303041958,
+    basketball-court:0.8420467411496289,
+    storage-tank:0.85672175425764,
+    soccer-ball-field:0.6380583684613818,
+    roundabout:0.653533415863242,
+    harbor:0.6392204165860068,
+    swimming-pool:0.7104658633500178,
+    helicopter:0.676958052680133
+
+The submitted information is :
+
+Description: RetinaNet_DOTA_DCL_B_3x_20200923_ms_145.8w
+
 """
 
 # ------------------------------------------------
-VERSION = 'RetinaNet_DOTA_R3Det_DCL_B_4x_20201026'
-NET_NAME = 'resnet152_v1d'  # 'MobilenetV2'
+VERSION = 'RetinaNet_DOTA_DCL_B_3x_20200923'
+NET_NAME = 'resnet101_v1d'  # 'MobilenetV2'
 
 # ---------------------------------------- System
 ROOT_PATH = os.path.abspath('../../')
 print(20*"++--")
 print(ROOT_PATH)
-GPU_GROUP = "0,1,2,3"
+GPU_GROUP = "0,1,2"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
 SHOW_TRAIN_INFO_INTE = 20
-SMRY_ITER = 200
-SAVE_WEIGHTS_INTE = 27000 * 4
+SMRY_ITER = 2000
+SAVE_WEIGHTS_INTE = 27000 * 3
 
 SUMMARY_PATH = ROOT_PATH + '/output/summary'
 TEST_SAVE_PATH = ROOT_PATH + '/tools/test_result'
@@ -135,7 +100,6 @@ GRADIENT_CLIPPING_BY_NORM = 10.0  # if None, will not clip
 CLS_WEIGHT = 1.0
 REG_WEIGHT = 1.0
 ANGLE_WEIGHT = 0.5
-USE_IOU_FACTOR = True
 REG_LOSS_MODE = None
 ALPHA = 1.0
 BETA = 1.0
@@ -156,7 +120,7 @@ PIXEL_STD = [0.229, 0.224, 0.225]  # R, G, B. In tf, channel is RGB. In openCV, 
 IMG_SHORT_SIDE_LEN = [800, 400, 600, 1000, 1200]
 IMG_MAX_LENGTH = 1200
 CLASS_NUM = 15
-OMEGA = 180 / 256.
+OMEGA = 180 / 32.
 ANGLE_MODE = 0
 
 IMG_ROTATE = True
@@ -194,8 +158,6 @@ SHARE_NET = True
 USE_P5 = True
 IOU_POSITIVE_THRESHOLD = 0.5
 IOU_NEGATIVE_THRESHOLD = 0.4
-REFINE_IOU_POSITIVE_THRESHOLD = [0.6, 0.7]
-REFINE_IOU_NEGATIVE_THRESHOLD = [0.5, 0.6]
 
 NMS = True
 NMS_IOU_THRESHOLD = 0.1

@@ -6,8 +6,8 @@ import cv2
 import sys
 sys.path.append('../../..')
 
-from utils.tools import mkdir
-from libs.box_utils.coordinate_convert import backward_convert
+from utils.tools import makedirs
+from libs.utils.coordinate_convert import backward_convert
 
 
 USE_HEAD = True
@@ -201,12 +201,12 @@ def clip_image(file_idx, image, boxes_all, width, height, stride_w, stride_h):
                                        np.where(center_x[:] <= (bottom_right_col - top_left_col))[0])
                 idx = np.intersect1d(cond1, cond2)
                 if len(idx) > 0 and (subImage.shape[0] > 5 and subImage.shape[1] > 5):
-                    mkdir(os.path.join(save_dir, 'images'))
+                    makedirs(os.path.join(save_dir, 'images'))
                     img = os.path.join(save_dir, 'images',
                                        "%s_%04d_%04d.jpg" % (file_idx, top_left_row, top_left_col))
                     cv2.imwrite(img, subImage)
 
-                    mkdir(os.path.join(save_dir, 'labelxml'))
+                    makedirs(os.path.join(save_dir, 'labelxml'))
                     xml = os.path.join(save_dir, 'labelxml',
                                        "%s_%04d_%04d.xml" % (file_idx, top_left_row, top_left_col))
                     save_to_xml(xml, "%s_%04d_%04d" % (file_idx, top_left_row, top_left_col),

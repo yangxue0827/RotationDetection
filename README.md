@@ -1,5 +1,7 @@
 # UranusDet
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 ## Abstract
 This is a tensorflow-based rotation detection benchmark, also called UranusDet. 
 UranusDet is completed by [YangXue](https://yangxue0827.github.io/).
@@ -19,8 +21,8 @@ Techniques:
   - [ ] [RSDet](https://arxiv.org/abs/1911.08299)
   - [x] [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow), [Pytorch code](https://github.com/SJTU-Thinklab-Det/r3det-on-mmdetection)
   - [x] [Circular Smooth Label (CSL)](https://arxiv.org/abs/2003.05597): [TF code](https://github.com/Thinklab-SJTU/CSL_RetinaNet_Tensorflow)
-  - [ ] [Densely Coded Label (DCL)](): [TF code](https://github.com/Thinklab-SJTU/DCL_RetinaNet_Tensorflow)
-  - [ ] Mixed method: R<sup>3</sup>Det-DCL
+  - [x] [Densely Coded Label (DCL)](): [TF code](https://github.com/Thinklab-SJTU/DCL_RetinaNet_Tensorflow)
+  - [x] Mixed method: R<sup>3</sup>Det-DCL
 - [x] Loss: CE, [Focal Loss](https://arxiv.org/abs/1708.02002), [Smooth L1 Loss](https://arxiv.org/abs/1504.08083), [IoU-Smooth L1 Loss](https://arxiv.org/abs/1811.07126)
 
 

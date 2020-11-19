@@ -13,7 +13,6 @@ import math
 from tqdm import tqdm
 import argparse
 from multiprocessing import Queue, Process
-sys.path.append("../")
 
 from utils import tools
 from libs.label_name_dict.label_dict import LabelMap
@@ -32,9 +31,6 @@ def parse_args():
     parser.add_argument('--gpus', dest='gpus',
                         help='gpu id',
                         default='0,1,2,3,4,5,6,7', type=str)
-    parser.add_argument('--eval_num', dest='eval_num',
-                        help='the num of eval imgs',
-                        default=np.inf, type=int)
     parser.add_argument('--show_box', '-s', default=False,
                         action='store_true')
     parser.add_argument('--multi_scale', '-ms', default=False,

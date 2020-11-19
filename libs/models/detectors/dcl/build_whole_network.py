@@ -6,19 +6,20 @@ import tensorflow as tf
 import tensorflow.contrib.slim as slim
 
 from libs.models.detectors.single_stage_base_network import DetectionNetworkBase
-from libs.models.losses.losses_csl import LossCSL
+from libs.models.losses.losses_dcl import LossDCL
 from libs.utils import bbox_transform, nms_rotate
 from libs.utils.coordinate_convert import coordinate_present_convert
-from libs.models.samplers.csl.anchor_sampler_csl import AnchorSamplerCSL
+from libs.models.samplers.dcl.anchor_sampler_dcl import AnchorSamplerDCL
+from utils.densely_coded_label import get_code_len, angle_label_decode
 
 
-class DetectionNetworkCSL(DetectionNetworkBase):
+class DetectionNetworkDCL(DetectionNetworkBase):
 
     def __init__(self, cfgs, is_training):
-        super(DetectionNetworkCSL, self).__init__(cfgs, is_training)
-        self.anchor_sampler_csl = AnchorSamplerCSL(cfgs)
-        self.losses = LossCSL(self.cfgs)
-        self.coding_len = cfgs.ANGLE_RANGE // cfgs.OMEGA
+        super(DetectionNetworkDCL, self).__init__(cfgs, is_training)
+        self.anchor_sampler_csl = AnchorSamplerDCL(cfgs)
+        self.losses = LossDCL(self.cfgs)
+        self.coding_len = get_code_len(int(cfgs.ANGLE_RANGE / cfgs.OMEGA), mode=cfgs.ANGLE_MODE)
 
     def rpn_reg_net(self, inputs, scope_list, reuse_flag, level):
         rpn_conv2d_3x3 = inputs
@@ -30,12 +31,12 @@ class DetectionNetworkCSL(DetectionNetworkBase):
                                          biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                          stride=1,
                                          activation_fn=tf.nn.relu,
-                                         trainable=self.is_training,
                                          scope='{}_{}'.format(scope_list[1], i),
+                                         trainable=self.is_training,
                                          reuse=reuse_flag)
 
         rpn_delta_boxes = slim.conv2d(rpn_conv2d_3x3,
-                                      num_outputs=5 * self.num_anchors_per_location,
+                                      num_outputs=4 * self.num_anchors_per_location,
                                       kernel_size=[3, 3],
                                       stride=1,
                                       weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
@@ -52,11 +53,11 @@ class DetectionNetworkCSL(DetectionNetworkBase):
                                     weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
                                     biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                     scope=scope_list[4],
-                                    trainable=self.is_training,
                                     activation_fn=None,
+                                    trainable=self.is_training,
                                     reuse=reuse_flag)
 
-        rpn_delta_boxes = tf.reshape(rpn_delta_boxes, [-1, 5],
+        rpn_delta_boxes = tf.reshape(rpn_delta_boxes, [-1, 4],
                                      name='rpn_{}_regression_reshape'.format(level))
         rpn_angle_cls = tf.reshape(rpn_angle_cls, [-1, self.coding_len],
                                    name='rpn_{}_angle_cls_reshape'.format(level))
@@ -93,7 +94,7 @@ class DetectionNetworkCSL(DetectionNetworkBase):
             return rpn_delta_boxes_list, rpn_scores_list, rpn_probs_list, rpn_angle_cls_list
 
     def build_whole_detection_network(self, input_img_batch, gtboxes_batch_h=None, gtboxes_batch_r=None,
-                                      gt_smooth_label=None, gpu_id=0):
+                                      gt_encode_label=None, gpu_id=0):
 
         if self.is_training:
             gtboxes_batch_h = tf.reshape(gtboxes_batch_h, [-1, 5])
@@ -102,8 +103,8 @@ class DetectionNetworkCSL(DetectionNetworkBase):
             gtboxes_batch_r = tf.reshape(gtboxes_batch_r, [-1, 6])
             gtboxes_batch_r = tf.cast(gtboxes_batch_r, tf.float32)
 
-            gt_smooth_label = tf.reshape(gt_smooth_label, [-1, self.coding_len])
-            gt_smooth_label = tf.cast(gt_smooth_label, tf.float32)
+            gt_encode_label = tf.reshape(gt_encode_label, [-1, self.coding_len])
+            gt_encode_label = tf.cast(gt_encode_label, tf.float32)
 
         # 1. build backbone
         feature_pyramid = self.build_backbone(input_img_batch)
@@ -125,7 +126,7 @@ class DetectionNetworkCSL(DetectionNetworkBase):
                 labels, target_delta, anchor_states, target_boxes, target_encode_label = tf.py_func(
                     func=self.anchor_sampler_csl.anchor_target_layer,
                     inp=[gtboxes_batch_h, gtboxes_batch_r,
-                         gt_smooth_label, anchors, gpu_id],
+                         gt_encode_label, anchors, gpu_id],
                     Tout=[tf.float32, tf.float32, tf.float32,
                           tf.float32, tf.float32])
 
@@ -146,7 +147,9 @@ class DetectionNetworkCSL(DetectionNetworkBase):
                 else:
                     reg_loss = self.losses.smooth_l1_loss(target_delta, rpn_box_pred, anchor_states)
 
-                angle_cls_loss = self.losses.angle_focal_loss(target_encode_label, rpn_angle_cls, anchor_states)
+                angle_cls_loss = self.losses.angle_cls_period_focal_loss(target_encode_label, rpn_angle_cls,
+                                                                         anchor_states, target_boxes,
+                                                                         decimal_weight=self.cfgs.DATASET_NAME.startswith('DOTA'))
 
                 self.losses_dict['cls_loss'] = cls_loss * self.cfgs.CLS_WEIGHT
                 self.losses_dict['reg_loss'] = reg_loss * self.cfgs.REG_WEIGHT
@@ -154,23 +157,22 @@ class DetectionNetworkCSL(DetectionNetworkBase):
 
         # 5. postprocess
         with tf.variable_scope('postprocess_detctions'):
-            boxes, scores, category, boxes_angle = self.postprocess_detctions(rpn_bbox_pred=rpn_box_pred,
-                                                                              rpn_cls_prob=rpn_cls_prob,
-                                                                              rpn_angle_prob=tf.sigmoid(rpn_angle_cls),
-                                                                              anchors=anchors)
-            boxes = tf.stop_gradient(boxes)
+            scores, category, boxes_angle = self.postprocess_detctions(rpn_bbox_pred=rpn_box_pred,
+                                                                       rpn_cls_prob=rpn_cls_prob,
+                                                                       rpn_angle_prob=tf.sigmoid(rpn_angle_cls),
+                                                                       anchors=anchors)
             scores = tf.stop_gradient(scores)
             category = tf.stop_gradient(category)
             boxes_angle = tf.stop_gradient(boxes_angle)
 
         if self.is_training:
-            return boxes, scores, category, boxes, self.losses_dict
+            return boxes_angle, scores, category, self.losses_dict
         else:
             return boxes_angle, scores, category
 
     def postprocess_detctions(self, rpn_bbox_pred, rpn_cls_prob, rpn_angle_prob, anchors):
 
-        return_boxes_pred = []
+        # return_boxes_pred = []
         return_boxes_pred_angle = []
         return_scores = []
         return_labels = []
@@ -185,7 +187,11 @@ class DetectionNetworkCSL(DetectionNetworkBase):
             rpn_bbox_pred_ = tf.gather(rpn_bbox_pred, indices)
             scores = tf.gather(scores, indices)
             rpn_angle_prob_ = tf.gather(rpn_angle_prob, indices)
-            angle_cls = tf.cast(tf.argmax(rpn_angle_prob_, axis=1), tf.float32)
+
+            angle_cls = tf.py_func(angle_label_decode,
+                                   inp=[rpn_angle_prob_, self.cfgs.ANGLE_RANGE, self.cfgs.OMEGA, self.cfgs.ANGLE_MODE],
+                                   Tout=[tf.float32])
+            angle_cls = tf.reshape(angle_cls, [-1, ]) * -1
 
             if self.cfgs.METHOD == 'H':
                 x_c = (anchors_[:, 2] + anchors_[:, 0]) / 2
@@ -201,12 +207,10 @@ class DetectionNetworkCSL(DetectionNetworkBase):
                                       Tout=[tf.float32])
                 anchors_ = tf.reshape(anchors_, [-1, 5])
 
-            boxes_pred = bbox_transform.rbbox_transform_inv(boxes=anchors_, deltas=rpn_bbox_pred_)
+            boxes_pred = bbox_transform.rbbox_transform_inv_dcl(boxes=anchors_, deltas=rpn_bbox_pred_)
+            boxes_pred = tf.reshape(boxes_pred, [-1, 4])
 
-            boxes_pred = tf.reshape(boxes_pred, [-1, 5])
-            angle_cls = (tf.reshape(angle_cls, [-1, ]) * -1 - 0.5) * self.cfgs.OMEGA
-
-            x, y, w, h, theta = tf.unstack(boxes_pred, axis=1)
+            x, y, w, h = tf.unstack(boxes_pred, axis=1)
             boxes_pred_angle = tf.transpose(tf.stack([x, y, w, h, angle_cls]))
 
             if self.cfgs.ANGLE_RANGE == 180:
@@ -215,10 +219,10 @@ class DetectionNetworkCSL(DetectionNetworkBase):
                 # boxes_pred = tf.gather(boxes_pred, indx)
                 # scores = tf.gather(scores, indx)
 
-                boxes_pred = tf.py_func(coordinate_present_convert,
-                                        inp=[boxes_pred, 1],
-                                        Tout=[tf.float32])
-                boxes_pred = tf.reshape(boxes_pred, [-1, 5])
+                # boxes_pred = tf.py_func(coordinate_present_convert,
+                #                         inp=[boxes_pred, 1],
+                #                         Tout=[tf.float32])
+                # boxes_pred = tf.reshape(boxes_pred, [-1, 5])
 
                 boxes_pred_angle = tf.py_func(coordinate_present_convert,
                                               inp=[boxes_pred_angle, 1],
@@ -231,18 +235,18 @@ class DetectionNetworkCSL(DetectionNetworkBase):
                                                 max_output_size=100 if self.is_training else 1000,
                                                 use_gpu=False)
 
-            tmp_boxes_pred = tf.reshape(tf.gather(boxes_pred, nms_indices), [-1, 5])
+            # tmp_boxes_pred = tf.reshape(tf.gather(boxes_pred, nms_indices), [-1, 5])
             tmp_boxes_pred_angle = tf.reshape(tf.gather(boxes_pred_angle, nms_indices), [-1, 5])
             tmp_scores = tf.reshape(tf.gather(scores, nms_indices), [-1, ])
 
-            return_boxes_pred.append(tmp_boxes_pred)
+            # return_boxes_pred.append(tmp_boxes_pred)
             return_boxes_pred_angle.append(tmp_boxes_pred_angle)
             return_scores.append(tmp_scores)
             return_labels.append(tf.ones_like(tmp_scores) * (j + 1))
 
-        return_boxes_pred = tf.concat(return_boxes_pred, axis=0)
+        # return_boxes_pred = tf.concat(return_boxes_pred, axis=0)
         return_boxes_pred_angle = tf.concat(return_boxes_pred_angle, axis=0)
         return_scores = tf.concat(return_scores, axis=0)
         return_labels = tf.concat(return_labels, axis=0)
 
-        return return_boxes_pred, return_scores, return_labels, return_boxes_pred_angle
+        return return_scores, return_labels, return_boxes_pred_angle
