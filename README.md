@@ -21,7 +21,7 @@ Techniques:
   - [ ] [RSDet](https://arxiv.org/abs/1911.08299)
   - [x] [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow), [Pytorch code](https://github.com/SJTU-Thinklab-Det/r3det-on-mmdetection)
   - [x] [Circular Smooth Label (CSL)](https://arxiv.org/abs/2003.05597): [TF code](https://github.com/Thinklab-SJTU/CSL_RetinaNet_Tensorflow)
-  - [x] [Densely Coded Label (DCL)](): [TF code](https://github.com/Thinklab-SJTU/DCL_RetinaNet_Tensorflow)
+  - [x] [Densely Coded Label (DCL)](https://arxiv.org/abs/2011.09670): [TF code](https://github.com/Thinklab-SJTU/DCL_RetinaNet_Tensorflow)
   - [x] Mixed method: R<sup>3</sup>Det-DCL
 - [x] Loss: CE, [Focal Loss](https://arxiv.org/abs/1708.02002), [Smooth L1 Loss](https://arxiv.org/abs/1504.08083), [IoU-Smooth L1 Loss](https://arxiv.org/abs/1811.07126)
 
@@ -147,6 +147,13 @@ tensorboard --logdir=.
 If this is useful for your research, please consider cite.
 
 ```
+@article{yang2019r3det,
+    title={Dense Label Encoding for Boundary Discontinuity Free Rotation Detection},
+    author={Yang, Xue and Hou, Liping and Zhou, Yue and Wang, Wentao and Yan, Junchi},
+    journal={arXiv preprint arXiv:2011.09670},
+    year={2020}
+}
+
 @article{yang2020arbitrary,
     title={Arbitrary-Oriented Object Detection with Circular Smooth Label},
     author={Yang, Xue and Yan, Junchi},
