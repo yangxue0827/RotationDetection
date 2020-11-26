@@ -27,6 +27,10 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
             gtboxes_batch_r = tf.reshape(gtboxes_batch_r, [self.batch_size, -1, 6])
             gtboxes_batch_r = tf.cast(gtboxes_batch_r, tf.float32)
 
+        if self.cfgs.USE_GN:
+            input_img_batch = tf.reshape(input_img_batch, [self.batch_size, self.cfgs.IMG_SHORT_SIDE_LEN,
+                                                           self.cfgs.IMG_MAX_LENGTH, 3])
+
         # 1. build backbone
         feature_pyramid = self.build_backbone(input_img_batch)
 
@@ -59,21 +63,21 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
                                              anchor_batch[0], anchor_states[0], 1)
 
                 labels = tf.reshape(labels, [-1, self.cfgs.CLASS_NUM])
-                target_delta = tf.reshape(target_delta, [-1, 4])
+                target_delta = tf.reshape(target_delta, [-1, 5])
                 anchor_states = tf.reshape(anchor_states, [-1, ])
                 target_boxes = tf.reshape(target_boxes, [-1, 5])
 
                 cls_loss = self.losses.focal_loss(labels, tf.reshape(rpn_cls_score, [-1, self.cfgs.CLASS_NUM]), anchor_states)
 
                 if self.cfgs.REG_LOSS_MODE == 0:
-                    reg_loss = self.losses.iou_smooth_l1_loss_log(target_delta, tf.reshape(rpn_box_pred, [-1, 4]), anchor_states,
+                    reg_loss = self.losses.iou_smooth_l1_loss_log(target_delta, tf.reshape(rpn_box_pred, [-1, 5]), anchor_states,
                                                                   target_boxes, anchors)
                 elif self.cfgs.REG_LOSS_MODE == 1:
-                    reg_loss = self.losses.iou_smooth_l1_loss_exp(target_delta, tf.reshape(rpn_box_pred, [-1, 4]), anchor_states,
+                    reg_loss = self.losses.iou_smooth_l1_loss_exp(target_delta, tf.reshape(rpn_box_pred, [-1, 5]), anchor_states,
                                                                   target_boxes, anchors, alpha=self.cfgs.ALPHA,
                                                                   beta=self.cfgs.BETA)
                 else:
-                    reg_loss = self.losses.smooth_l1_loss(target_delta, tf.reshape(rpn_box_pred, [-1, 4]), anchor_states)
+                    reg_loss = self.losses.smooth_l1_loss(target_delta, tf.reshape(rpn_box_pred, [-1, 5]), anchor_states)
 
                 self.losses_dict['cls_loss'] = cls_loss * self.cfgs.CLS_WEIGHT
                 self.losses_dict['reg_loss'] = reg_loss * self.cfgs.REG_WEIGHT

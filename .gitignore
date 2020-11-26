@@ -127,6 +127,7 @@ __pycache__/
 *icme*
 *yolo*
 *gwd*
+*fcos*
 
 demo
 tools/*/demo.py

@@ -27,6 +27,10 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
             gtboxes_batch_r = tf.reshape(gtboxes_batch_r, [-1, 6])
             gtboxes_batch_r = tf.cast(gtboxes_batch_r, tf.float32)
 
+        if self.cfgs.USE_GN:
+            input_img_batch = tf.reshape(input_img_batch, [1, self.cfgs.IMG_SHORT_SIDE_LEN,
+                                                           self.cfgs.IMG_MAX_LENGTH, 3])
+
         # 1. build backbone
         feature_pyramid = self.build_backbone(input_img_batch)
 

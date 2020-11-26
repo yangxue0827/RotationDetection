@@ -11,12 +11,12 @@ from __future__ import print_function
 import numpy as np
 import numpy.random as npr
 
-from libs.models.samplers.anchor_samper import AnchorSampler
+from libs.models.samplers.samper import Sampler
 from libs.utils.cython_utils.cython_bbox import bbox_overlaps
 from libs.utils.bbox_transform import bbox_transform
 
 
-class AnchorSamplerR2CNN(AnchorSampler):
+class AnchorSamplerR2CNN(Sampler):
 
     def anchor_target_layer(self, gt_boxes, img_shape, all_anchors, is_restrict_bg=False):
         """Same as the anchor target layer in original Fast/er RCNN """

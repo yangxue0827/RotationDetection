@@ -4,12 +4,12 @@ from __future__ import print_function
 
 import numpy as np
 
-from libs.models.samplers.anchor_samper import AnchorSampler
+from libs.models.samplers.samper import Sampler
 from libs.utils.rbbox_overlaps import rbbx_overlaps
 from libs.utils import bbox_transform
 
 
-class RefineAnchorSamplerR3Det(AnchorSampler):
+class RefineAnchorSamplerR3Det(Sampler):
 
     def refine_anchor_target_layer(self, gt_boxes_r, anchors, pos_threshold, neg_threshold, gpu_id=0):
 

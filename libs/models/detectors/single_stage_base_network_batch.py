@@ -38,12 +38,16 @@ class DetectionNetworkBase(object):
                                          num_outputs=self.cfgs.FPN_CHANNEL,
                                          kernel_size=[3, 3],
                                          stride=1,
-                                         activation_fn=tf.nn.relu,
+                                         activation_fn=None if self.cfgs.USE_GN else tf.nn.relu,
                                          weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
                                          biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                          scope='{}_{}'.format(scope_list[0], i),
                                          trainable=self.is_training,
                                          reuse=reuse_flag)
+
+            if self.cfgs.USE_GN:
+                rpn_conv2d_3x3 = tf.contrib.layers.group_norm(rpn_conv2d_3x3)
+                rpn_conv2d_3x3 = tf.nn.relu(rpn_conv2d_3x3)
 
         rpn_box_scores = slim.conv2d(rpn_conv2d_3x3,
                                      num_outputs=self.cfgs.CLASS_NUM * self.num_anchors_per_location,
@@ -71,10 +75,14 @@ class DetectionNetworkBase(object):
                                          weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
                                          biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                          stride=1,
-                                         activation_fn=tf.nn.relu,
+                                         activation_fn=None if self.cfgs.USE_GN else tf.nn.relu,
                                          scope='{}_{}'.format(scope_list[1], i),
                                          trainable=self.is_training,
                                          reuse=reuse_flag)
+
+            if self.cfgs.USE_GN:
+                rpn_conv2d_3x3 = tf.contrib.layers.group_norm(rpn_conv2d_3x3)
+                rpn_conv2d_3x3 = tf.nn.relu(rpn_conv2d_3x3)
 
         rpn_delta_boxes = slim.conv2d(rpn_conv2d_3x3,
                                       num_outputs=5 * self.num_anchors_per_location,
@@ -114,10 +122,6 @@ class DetectionNetworkBase(object):
                     rpn_scores_list.append(rpn_box_scores)
                     rpn_probs_list.append(rpn_box_probs)
                     rpn_delta_boxes_list.append(rpn_delta_boxes)
-
-                # rpn_all_delta_boxes = tf.concat(rpn_delta_boxes_list, axis=0)
-                # rpn_all_boxes_scores = tf.concat(rpn_scores_list, axis=0)
-                # rpn_all_boxes_probs = tf.concat(rpn_probs_list, axis=0)
 
             return rpn_delta_boxes_list, rpn_scores_list, rpn_probs_list
 

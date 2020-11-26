@@ -27,12 +27,16 @@ class DetectionNetworkRefineRetinaNet(DetectionNetworkBase):
                                          num_outputs=self.cfgs.FPN_CHANNEL,
                                          kernel_size=[3, 3],
                                          stride=1,
-                                         activation_fn=tf.nn.relu,
+                                         activation_fn=None if self.cfgs.USE_GN else tf.nn.relu,
                                          weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
                                          biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                          trainable=self.is_training,
                                          scope='{}_{}'.format(scope_list[0], i),
                                          reuse=reuse_flag)
+
+            if self.cfgs.USE_GN:
+                rpn_conv2d_3x3 = tf.contrib.layers.group_norm(rpn_conv2d_3x3)
+                rpn_conv2d_3x3 = tf.nn.relu(rpn_conv2d_3x3)
 
         rpn_box_scores = slim.conv2d(rpn_conv2d_3x3,
                                      num_outputs=self.cfgs.CLASS_NUM * self.num_anchors_per_location,
@@ -60,10 +64,14 @@ class DetectionNetworkRefineRetinaNet(DetectionNetworkBase):
                                          weights_initializer=self.cfgs.SUBNETS_WEIGHTS_INITIALIZER,
                                          biases_initializer=self.cfgs.SUBNETS_BIAS_INITIALIZER,
                                          stride=1,
-                                         activation_fn=tf.nn.relu,
+                                         activation_fn=None if self.cfgs.USE_GN else tf.nn.relu,
                                          trainable=self.is_training,
                                          scope='{}_{}'.format(scope_list[1], i),
                                          reuse=reuse_flag)
+
+            if self.cfgs.USE_GN:
+                rpn_conv2d_3x3 = tf.contrib.layers.group_norm(rpn_conv2d_3x3)
+                rpn_conv2d_3x3 = tf.nn.relu(rpn_conv2d_3x3)
 
         rpn_delta_boxes = slim.conv2d(rpn_conv2d_3x3,
                                       num_outputs=5 * self.num_anchors_per_location,
@@ -167,6 +175,10 @@ class DetectionNetworkRefineRetinaNet(DetectionNetworkBase):
 
             gtboxes_batch_r = tf.reshape(gtboxes_batch_r, [-1, 6])
             gtboxes_batch_r = tf.cast(gtboxes_batch_r, tf.float32)
+
+        if self.cfgs.USE_GN:
+            input_img_batch = tf.reshape(input_img_batch, [1, self.cfgs.IMG_SHORT_SIDE_LEN,
+                                                           self.cfgs.IMG_MAX_LENGTH, 3])
 
         # 1. build backbone
         feature_pyramid = self.build_backbone(input_img_batch)

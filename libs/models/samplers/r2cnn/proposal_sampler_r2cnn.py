@@ -11,12 +11,12 @@ from __future__ import print_function
 import numpy as np
 import numpy.random as npr
 
-from libs.models.samplers.proposal_samper import ProposalSampler
+from libs.models.samplers.samper import Sampler
 from libs.utils.cython_utils.cython_bbox import bbox_overlaps
 from libs.utils.bbox_transform import bbox_transform, rbbox_transform
 
 
-class ProposalSamplerR2CNN(ProposalSampler):
+class ProposalSamplerR2CNN(Sampler):
 
     def proposal_target_layer(self, rpn_rois, gt_boxes_h, gt_boxes_r):
         """

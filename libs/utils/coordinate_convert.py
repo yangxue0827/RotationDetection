@@ -260,53 +260,95 @@ def coordinate90_2_180_tf(coords, is_radian=True, change_range=False):
     return coords_new_
 
 
-def coords_regular(coords):
-    # [-180, -90) -> [-90, 90)
-    theta = coords[:, 4]
-    convert_mask = np.logical_and(np.greater_equal(theta, -180), np.less(theta, -90))
-    remain_mask = np.logical_not(convert_mask)
-    remain_coords = coords * np.reshape(remain_mask, [-1, 1])
+def sort_points(pts):
 
-    coords[:, [2, 3]] = coords[:, [3, 2]]
-    coords[:, 4] -= 90
+    x_argsort = np.argsort(pts[:, 0])
 
-    convert_coords = coords * np.reshape(convert_mask, [-1, 1])
-    coords_new = remain_coords + convert_coords
-    return coords_new
+    point1 = pts[x_argsort[0]]  # point1 has the min X
+    point1_index = x_argsort[0]
 
+    tmp_point = pts[x_argsort[1]]  # maybe the point1
+    if point1[0] == tmp_point[0]:
+        # if has two same x, select the point which has smaller y as point1
+        if tmp_point[1] < point1[1]:
+            point1 = tmp_point
+            point1_index = x_argsort[1]
+
+    valid_index = np.array([True, True, True, True])
+    valid_index[point1_index] = False
+    # print (pts[valid_index], '\n***')
+    point_a, point_b, point_c = pts[valid_index]
+
+    vector_1a = point_a - point1
+    vector_1b = point_b - point1
+    vector_1c = point_c - point1
+
+    # ensure point3
+    if np.cross(vector_1a, vector_1b) * np.cross(vector_1a, vector_1c) < 0:
+        point3 = point_a
+        if np.cross(vector_1a, vector_1b) < 0:
+            point2, point4 = point_b, point_c
+        else:
+            point2, point4 = point_c, point_b
+
+    elif np.cross(vector_1b, vector_1a) * np.cross(vector_1b, vector_1c) < 0:
+        point3 = point_b
+        if np.cross(vector_1b, vector_1a) < 0:
+            point2, point4 = point_a, point_c
+        else:
+            point2, point4 = point_c, point_a
+    else:
+        point3 = point_c
+        if np.cross(vector_1c, vector_1a) < 0:
+            point2, point4 = point_a, point_b
+        else:
+            point2, point4 = point_b, point_a
+
+    return np.array([point1, point2, point3, point4], dtype=np.float32)
+
+
+def sort_box_points(boxes, with_label=True):
+
+    out_boxes = []
+    boxes = np.float32(boxes)
+    if with_label:
+        circle_boxes = boxes[:, :-1]
+    else:
+        circle_boxes = boxes
+
+    for points in circle_boxes:
+        tmp_points = sort_points(points.reshape((-1, 2))).reshape((-1,))
+        out_boxes.append(tmp_points)
+    out_boxes = np.array(out_boxes)
+    if with_label:
+        tmp = np.concatenate([out_boxes, boxes[:, -1].reshape((-1, 1))], axis=1)
+        return np.array(tmp, dtype=np.float32)
+    else:
+        return np.array(out_boxes, dtype=np.float32)
 
 if __name__ == '__main__':
-    # coord = np.array([[150, 150, 50, 100, -90, 1],
-    #                   [150, 150, 100, 50, -90, 1],
-    #                   [150, 150, 50, 100, -45, 1],
-    #                   [150, 150, 100, 50, -45, 1]])
-    #
-    # coord1 = np.array([[150, 150, 100, 50, 0],
-    #                   [150, 150, 100, 50, -90],
-    #                   [150, 150, 100, 50, 45],
-    #                   [150, 150, 100, 50, -45]])
-    #
-    # coord2 = forward_convert(coord)
-    # coord3 = forward_convert(coord1, mode=-1)
-    # print(coord2)
-    # print(coordinate_present_convert(coord, mode=-1))
+    boxes = np.array([[70, 40, 80, 70, 10, 80, 0, 50],
+                      [10, 0, 30, 10, 20, 80, 0, 70],
+                      [40, 0, 80, 40, 40, 80, 0, 40],
+                      [60, 0, 80, 20, 20, 80, 0, 60],
+                      [20, 0, 80, 60, 60, 80, 0, 20],
+                      [0, 0, 80, 0, 80, 80, 0, 80]])
+    sorted_boxes = sort_box_points(boxes, False)
+    print(sorted_boxes)
 
-    coord3 = np.array([[150, 150, 150, 20, -95],
-                      [150, 150, 20, 150, -5]], dtype=np.float32)
-    print(forward_convert(coord3, False))
 
-    # coord4 = np.array([[0, 0, 0, 180, 20, 180, 20, 0],
-    #                    [10, 0, 0, 20, 180, 20, 180, 0]], dtype=np.float32)
-    # print(backward_convert(coord4, False))
-    # coord5 = np.array([[-3.0636845, 1.479856, 51.584435, 33.250473, -17.427048]])
-    # print(coordinate_present_convert(coord5, 1))
 
-    # coord4 = coordinate5_2_8_tf(tf.convert_to_tensor(coord3))
-    # coord5 = coordinate_present_convert(coordinate_present_convert(coord3, mode=-1), mode=1)
-    # print(coord5)
-    #
-    # with tf.Session() as sess:
-    #     coord4_ = sess.run([coord4])
-    #     print(coord4_)
-        # print(backward_convert(coord4_, False))
+
+
+
+
+
+
+
+
+
+
+
+
+
 

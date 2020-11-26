@@ -10,14 +10,14 @@ from __future__ import print_function
 
 import numpy as np
 
-from libs.models.samplers.anchor_samper import AnchorSampler
+from libs.models.samplers.samper import Sampler
 from libs.utils.cython_utils.cython_bbox import bbox_overlaps
 from libs.utils.rbbox_overlaps import rbbx_overlaps
 from libs.utils import bbox_transform
 from libs.utils.coordinate_convert import coordinate_present_convert
 
 
-class AnchorSamplerRetinaNet(AnchorSampler):
+class AnchorSamplerRetinaNet(Sampler):
 
     def anchor_target_layer(self, gt_boxes_h_batch, gt_boxes_r_batch, anchor_batch, gpu_id=0):
 
@@ -74,7 +74,7 @@ class AnchorSamplerRetinaNet(AnchorSampler):
             all_anchor_states.append(anchor_states)
             all_target_boxes.append(target_boxes)
 
-        return np.array(all_labels, np.float32), np.array(all_target_delta, np.float32)[:, :, :-1], \
+        return np.array(all_labels, np.float32), np.array(all_target_delta, np.float32), \
                np.array(all_anchor_states, np.float32), np.array(all_target_boxes, np.float32), \
 
 
