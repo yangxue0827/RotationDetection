@@ -115,6 +115,19 @@ class Train(object):
                        true_fn=lambda: warmup(init_lr, global_step, warmup_step),
                        false_fn=lambda: decay(init_lr, global_step, num_gpu))
 
+    def loss_dict(self, inputs, num_gpu):
+        total_loss_dict = {'total_losses': tf.constant(0., tf.float32)}
+        total_losses = 0.0
+        for k in inputs.keys():
+            if k not in total_loss_dict.keys():
+                total_loss_dict[k] = tf.constant(0., tf.float32)
+            total_losses += inputs[k]
+            total_loss_dict[k] += inputs[k] / num_gpu
+
+        total_losses /= num_gpu
+        total_loss_dict['total_losses'] += total_losses
+        return total_loss_dict, total_losses
+
     def log_printer(self, deter, optimizer, global_step, tower_grads, total_loss_dict, num_gpu, graph):
         for k in total_loss_dict.keys():
             tf.summary.scalar('{}/{}'.format(k.split('_')[0], k), total_loss_dict[k])
@@ -191,11 +204,16 @@ class Train(object):
 
                         end = time.time()
 
-                        print('***'*20)
-                        print("""%s: global_step:%d  current_step:%d"""
+                        print('***'*24)
+                        print("%s: global_step:%d  current_step:%d"
                               % (training_time, (global_stepnp-1)*num_gpu, step*num_gpu))
-                        print("""per_cost_time:%.3fs"""
-                              % ((end - start) / num_gpu))
+
+                        seconds = (self.cfgs.MAX_ITERATION - (global_stepnp-1) * num_gpu) * (end - start) / num_gpu
+                        m, s = divmod(seconds, 60)
+                        h, m = divmod(m, 60)
+                        d, h = divmod(h, 24)
+                        print("speed: %.3fs, remaining training time: %02d:%02d:%02d:%02d" % ((end - start) / num_gpu, d, h, m, s))
+
                         loss_str = ''
                         for k in total_loss_dict_.keys():
                             loss_str += '%s:%.3f\n' % (k, total_loss_dict_[k])
@@ -219,7 +237,13 @@ class Train(object):
                     save_ckpt = os.path.join(save_dir, '{}_'.format(self.cfgs.DATASET_NAME) +
                                              str((global_stepnp-1)*num_gpu) + 'model.ckpt')
                     saver.save(sess, save_ckpt)
-                    print(' weights had been saved')
+                    print('Weights had been saved')
+
+                if (global_stepnp-1)*num_gpu > self.cfgs.MAX_ITERATION:
+                    break
+
+            print('***' * 24)
+            print('End of training！')
 
             coord.request_stop()
             coord.join(threads)

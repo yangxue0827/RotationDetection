@@ -44,6 +44,7 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
         anchor_list = self.make_anchors(feature_pyramid)
         anchors = tf.concat(anchor_list, axis=0)
         anchor_batch = [anchors for _ in range(self.batch_size)]
+        anchors = tf.concat(anchor_batch, axis=0)
 
         # 4. build loss
         if self.is_training:

@@ -80,13 +80,6 @@ class TrainCSL(Train):
             biases_regularizer = tf.no_regularizer
             weights_regularizer = tf.contrib.layers.l2_regularizer(cfgs.WEIGHT_DECAY)
 
-            total_loss_dict = {
-                'cls_loss': tf.constant(0., tf.float32),
-                'reg_loss': tf.constant(0., tf.float32),
-                'angle_cls_loss': tf.constant(0., tf.float32),
-                'total_losses': tf.constant(0., tf.float32),
-            }
-
             with tf.variable_scope(tf.get_variable_scope()):
                 for i in range(num_gpu):
                     with tf.device('/gpu:%d' % i):
@@ -175,14 +168,7 @@ class TrainCSL(Train):
                                                          detections_angle_in_img)
 
                                     loss_dict = outputs[-1]
-
-                                    total_losses = 0.0
-                                    for k in loss_dict.keys():
-                                        total_losses += loss_dict[k]
-                                        total_loss_dict[k] += loss_dict[k] / num_gpu
-
-                                    total_losses /= num_gpu
-                                    total_loss_dict['total_losses'] += total_losses
+                                    total_loss_dict, total_losses = self.loss_dict(loss_dict, num_gpu)
 
                                     if i == num_gpu - 1:
                                         regularization_losses = tf.get_collection(

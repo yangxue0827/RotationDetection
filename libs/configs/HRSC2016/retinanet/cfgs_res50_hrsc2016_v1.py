@@ -5,7 +5,11 @@ import tensorflow as tf
 import math
 
 """
-RetinaNet-H + gwd
+RetinaNet-H
+FLOPs: 836056770;    Trainable params: 32325246
+cls : ship|| Recall: 0.9372964169381107 || Precison: 0.5391100702576113|| AP: 0.8427558835614876
+F1:0.8743348342202211 P:0.8790123456790123 R:0.8697068403908795
+mAP is : 0.8427558835614876
 
 """
 
