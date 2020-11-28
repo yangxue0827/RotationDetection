@@ -243,7 +243,7 @@ class Train(object):
                     break
 
             print('***' * 24)
-            print('End of training！')
+            print('End of training.')
 
             coord.request_stop()
             coord.join(threads)
