@@ -21,7 +21,7 @@ class AnchorSamplerRetinaNet(Sampler):
 
     def anchor_target_layer(self, gt_boxes_h_batch, gt_boxes_r_batch, anchor_batch, gpu_id=0):
 
-        all_labels, all_target_delta, all_anchor_states, all_target_boxes, all_target_encode_label = [], [], [], [], []
+        all_labels, all_target_delta, all_anchor_states, all_target_boxes = [], [], [], []
         for i in range(self.cfgs.BATCH_SIZE):
             anchors = np.array(anchor_batch[i], np.float32)
             gt_boxes_h = gt_boxes_h_batch[i, :, :]
@@ -75,7 +75,7 @@ class AnchorSamplerRetinaNet(Sampler):
             all_target_boxes.append(target_boxes)
 
         return np.array(all_labels, np.float32), np.array(all_target_delta, np.float32), \
-               np.array(all_anchor_states, np.float32), np.array(all_target_boxes, np.float32), \
+               np.array(all_anchor_states, np.float32), np.array(all_target_boxes, np.float32)
 
 
 

@@ -139,3 +139,61 @@ def rbbox_transform(ex_rois, gt_rois, scale_factors=None):
     targets = np.vstack((targets_dx, targets_dy, targets_dw, targets_dh, targets_dtheta)).transpose()
 
     return targets
+
+
+def qbbox_transform(ex_rois, gt_rois, scale_factors=None):
+
+    w = ex_rois[:, 8]
+    h = ex_rois[:, 9]
+
+    targets_dx1 = (gt_rois[:, 0] - ex_rois[:, 0]) / w
+    targets_dy1 = (gt_rois[:, 1] - ex_rois[:, 1]) / h
+    targets_dx2 = (gt_rois[:, 2] - ex_rois[:, 2]) / w
+    targets_dy2 = (gt_rois[:, 3] - ex_rois[:, 3]) / h
+    targets_dx3 = (gt_rois[:, 4] - ex_rois[:, 4]) / w
+    targets_dy3 = (gt_rois[:, 5] - ex_rois[:, 5]) / h
+    targets_dx4 = (gt_rois[:, 6] - ex_rois[:, 6]) / w
+    targets_dy4 = (gt_rois[:, 7] - ex_rois[:, 7]) / h
+
+    # if scale_factors:
+    #     targets_dx *= scale_factors[0]
+    #     targets_dy *= scale_factors[1]
+    #     targets_dw *= scale_factors[2]
+    #     targets_dh *= scale_factors[3]
+    #     targets_dtheta *= scale_factors[4]
+
+    targets = np.vstack((targets_dx1, targets_dy1, targets_dx2, targets_dy2,
+                         targets_dx3, targets_dy3, targets_dx4, targets_dy4)).transpose()
+
+    return targets
+
+
+def qbbox_transform_inv(boxes, deltas, scale_factors=None):
+    dx1 = deltas[:, 0]
+    dy1 = deltas[:, 1]
+    dx2 = deltas[:, 2]
+    dy2 = deltas[:, 3]
+    dx3 = deltas[:, 4]
+    dy3 = deltas[:, 5]
+    dx4 = deltas[:, 6]
+    dy4 = deltas[:, 7]
+
+    # if scale_factors:
+    #     dx /= scale_factors[0]
+    #     dy /= scale_factors[1]
+    #     dw /= scale_factors[2]
+    #     dh /= scale_factors[3]
+    #     dtheta /= scale_factors[4]
+
+    pred_x_1 = dx1 * boxes[:, 2] + boxes[:, 0]
+    pred_y_1 = dy1 * boxes[:, 3] + boxes[:, 1]
+    pred_x_2 = dx2 * boxes[:, 2] + boxes[:, 0]
+    pred_y_2 = dy2 * boxes[:, 3] + boxes[:, 1]
+    pred_x_3 = dx3 * boxes[:, 2] + boxes[:, 0]
+    pred_y_3 = dy3 * boxes[:, 3] + boxes[:, 1]
+    pred_x_4 = dx4 * boxes[:, 2] + boxes[:, 0]
+    pred_y_4 = dy4 * boxes[:, 3] + boxes[:, 1]
+
+    # pred_theta = dtheta * 180 / np.pi + boxes[:, 4]
+
+    return tf.transpose(tf.stack([pred_x_1, pred_y_1, pred_x_2, pred_y_2, pred_x_3, pred_y_3, pred_x_4, pred_y_4]))

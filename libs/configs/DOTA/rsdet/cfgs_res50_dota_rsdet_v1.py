@@ -5,24 +5,23 @@ import tensorflow as tf
 import math
 
 """
-RSDet-8p
-
+RSDet-5p
+FLOPs: 860451115;    Trainable params: 33002916
 This is your result for task 1:
 
-mAP: 0.6727423650267537
-ap of each class: plane:0.8839346472596076, baseball-diamond:0.7104926703230673, bridge:0.4330823738329618, ground-track-field:0.6508970563363848, small-vehicle:0.6849253155621244, large-vehicle:0.6102196316871491, ship:0.7961936701620749, tennis-court:0.8947516994949227, basketball-court:0.7455840121634438, storage-tank:0.7672332259150044, soccer-ball-field:0.5496680505639349, roundabout:0.6350320699137543, harbor:0.5842793618604702, swimming-pool:0.6505404500942658, helicopter:0.4943012402321392
+mAP: 0.6605200411622921
+ap of each class: plane:0.8870654106758245, baseball-diamond:0.7268503783923166, bridge:0.4291863271038613, ground-track-field:0.6491441522226533, small-vehicle:0.6791811400732405, large-vehicle:0.5291229360078313, ship:0.7267297470095706, tennis-court:0.9025198415246758, basketball-court:0.7698198708926544, storage-tank:0.8022000971627501, soccer-ball-field:0.5130537969212124, roundabout:0.5820649854991844, harbor:0.5364528563483577, swimming-pool:0.672263075454247, helicopter:0.5021460021460021
 The submitted information is :
 
-Description: RetinaNet_DOTA_2x_20201128_162w
+Description: RetinaNet_DOTA_2x_20201107_70.2w
 Username: SJTU-Det
 Institute: SJTU
 Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
 TeamMembers: yangxue
-
 """
 
 # ------------------------------------------------
-VERSION = 'RetinaNet_DOTA_2x_20201128'
+VERSION = 'RetinaNet_DOTA_2x_20201107'
 NET_NAME = 'resnet50_v1d'  # 'MobilenetV2'
 
 # ---------------------------------------- System
@@ -60,16 +59,17 @@ MUTILPY_BIAS_GRADIENT = 2.0  # if None, will not multipy
 GRADIENT_CLIPPING_BY_NORM = 10.0  # if None, will not clip
 
 CLS_WEIGHT = 1.0
-REG_WEIGHT = 1.0
+REG_WEIGHT = 1.0 / 5.0
+REG_LOSS_MODE = None
 ALPHA = 1.0
 BETA = 1.0
 
 BATCH_SIZE = 1
 EPSILON = 1e-5
 MOMENTUM = 0.9
-LR = 1e-3
-DECAY_STEP = [SAVE_WEIGHTS_INTE*18, SAVE_WEIGHTS_INTE*24, SAVE_WEIGHTS_INTE*30]
-MAX_ITERATION = SAVE_WEIGHTS_INTE*30
+LR = 5e-4
+DECAY_STEP = [SAVE_WEIGHTS_INTE*12, SAVE_WEIGHTS_INTE*16, SAVE_WEIGHTS_INTE*20]
+MAX_ITERATION = SAVE_WEIGHTS_INTE*20
 WARM_SETP = int(1.0 / 4.0 * SAVE_WEIGHTS_INTE)
 
 # -------------------------------------------- Dataset

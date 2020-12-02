@@ -122,11 +122,12 @@ __pycache__/
 *tmp*
 *.mp4*
 *.MP4*
-*rsdet*
 *ablation_study*
 *icme*
 *yolo*
 *gwd*
+*r3det_gwd*
+*r2cnn_gwd*
 *fcos*
 
 demo

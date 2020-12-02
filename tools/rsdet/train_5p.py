@@ -13,15 +13,13 @@ sys.path.append("../../")
 
 from tools.train_base import Train
 from libs.configs import cfgs
-from libs.models.detectors.r3det_dcl import build_whole_network
+from libs.models.detectors.rsdet import build_whole_network_5p
 from libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
-from utils.densely_coded_label import angle_label_encode
-from libs.utils.coordinate_convert import coordinate_present_convert
 
 os.environ["CUDA_VISIBLE_DEVICES"] = cfgs.GPU_GROUP
 
 
-class TrainR3DetDCL(Train):
+class TrainRSDet(Train):
 
     def get_gtboxes_and_label(self, gtboxes_and_label_h, gtboxes_and_label_r, num_objects):
         return gtboxes_and_label_h[:int(num_objects), :].astype(np.float32), \
@@ -36,8 +34,8 @@ class TrainR3DetDCL(Train):
             tf.summary.scalar('lr', lr)
 
             optimizer = tf.train.MomentumOptimizer(lr, momentum=cfgs.MOMENTUM)
-            r3det_dcl = build_whole_network.DetectionNetworkR3DetDCL(cfgs=self.cfgs,
-                                                                     is_training=True)
+            rsdet = build_whole_network_5p.DetectionNetworkRSDet(cfgs=self.cfgs,
+                                                                 is_training=True)
 
             with tf.name_scope('get_batch'):
                 if cfgs.IMAGE_PYRAMID:
@@ -102,22 +100,6 @@ class TrainR3DetDCL(Train):
                                     gtboxes_and_label_h = tf.reshape(gtboxes_and_label_h, [-1, 5])
                                     gtboxes_and_label_r = tf.reshape(gtboxes_and_label_r, [-1, 6])
 
-                                    if cfgs.ANGLE_RANGE == 180:
-                                        gtboxes_and_label_r_ = tf.py_func(coordinate_present_convert,
-                                                                          inp=[gtboxes_and_label_r, -1],
-                                                                          Tout=tf.float32)
-                                        gtboxes_and_label_r_ = tf.reshape(gtboxes_and_label_r_, [-1, 6])
-
-                                        gt_encode_label = tf.py_func(angle_label_encode,
-                                                                     inp=[gtboxes_and_label_r_[:, -2], cfgs.ANGLE_RANGE,
-                                                                          cfgs.OMEGA, cfgs.ANGLE_MODE],
-                                                                     Tout=tf.float32)
-                                    else:
-                                        gt_encode_label = tf.py_func(angle_label_encode,
-                                                                     inp=[gtboxes_and_label_r[:, -2], cfgs.ANGLE_RANGE,
-                                                                          cfgs.OMEGA, cfgs.ANGLE_MODE],
-                                                                     Tout=tf.float32)
-
                                     img = inputs_list[i][0]
                                     img_shape = inputs_list[i][-2:]
                                     img = tf.image.crop_to_bounding_box(image=img,
@@ -126,11 +108,10 @@ class TrainR3DetDCL(Train):
                                                                         target_height=tf.cast(img_shape[0], tf.int32),
                                                                         target_width=tf.cast(img_shape[1], tf.int32))
 
-                                    outputs = r3det_dcl.build_whole_detection_network(input_img_batch=img,
-                                                                                      gtboxes_batch_h=gtboxes_and_label_h,
-                                                                                      gtboxes_batch_r=gtboxes_and_label_r,
-                                                                                      gt_encode_label=gt_encode_label,
-                                                                                      gpu_id=i)
+                                    outputs = rsdet.build_whole_detection_network(input_img_batch=img,
+                                                                                  gtboxes_batch_h=gtboxes_and_label_h,
+                                                                                  gtboxes_batch_r=gtboxes_and_label_r,
+                                                                                  gpu_id=i)
                                     gtboxes_in_img_h = self.drawer.draw_boxes_with_categories(img_batch=img,
                                                                                               boxes=gtboxes_and_label_h[
                                                                                                     :, :-1],
@@ -142,8 +123,7 @@ class TrainR3DetDCL(Train):
                                                                                                     :, :-1],
                                                                                               labels=gtboxes_and_label_r[
                                                                                                      :, -1],
-                                                                                              method=1,
-                                                                                              is_csl=True)
+                                                                                              method=1)
                                     tf.summary.image('Compare/gtboxes_h_gpu:%d' % i, gtboxes_in_img_h)
                                     tf.summary.image('Compare/gtboxes_r_gpu:%d' % i, gtboxes_in_img_r)
 
@@ -153,8 +133,7 @@ class TrainR3DetDCL(Train):
                                             boxes=outputs[0],
                                             scores=outputs[1],
                                             labels=outputs[2],
-                                            method=1,
-                                            is_csl=True)
+                                            method=1)
                                         tf.summary.image('Compare/final_detection_gpu:%d' % i, detections_in_img)
 
                                     loss_dict = outputs[-1]
@@ -171,9 +150,9 @@ class TrainR3DetDCL(Train):
                             if cfgs.GRADIENT_CLIPPING_BY_NORM is not None:
                                 grads = slim.learning.clip_gradient_norms(grads, cfgs.GRADIENT_CLIPPING_BY_NORM)
                             tower_grads.append(grads)
-            self.log_printer(r3det_dcl, optimizer, global_step, tower_grads, total_loss_dict, num_gpu, graph)
+            self.log_printer(rsdet, optimizer, global_step, tower_grads, total_loss_dict, num_gpu, graph)
 
 if __name__ == '__main__':
 
-    trainer = TrainR3DetDCL(cfgs)
+    trainer = TrainRSDet(cfgs)
     trainer.main()

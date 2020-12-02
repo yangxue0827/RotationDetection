@@ -56,7 +56,9 @@ More results and trained models are available in the [MODEL_ZOO.md](MODEL_ZOO.md
 2. cuda 10.0                     
 3. [opencv(cv2)](https://pypi.org/project/opencv-python/)       
 4. [tfplot 0.2.0](https://github.com/wookayin/tensorflow-plot) (optional)            
-5. tensorflow-gpu 1.13                              
+5. tensorflow-gpu 1.13
+6. tqdm 4.54.0
+7. Shapely 1.7.1
 
 ## Download Model
 ### Pretrain weights

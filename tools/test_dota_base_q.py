@@ -98,8 +98,8 @@ class TestDOTA(object):
 
             for img_path in images:
 
-                if 'P0016' not in img_path:
-                    continue
+                # if 'P0016' not in img_path:
+                #     continue
 
                 img = cv2.imread(img_path)
 
@@ -156,7 +156,7 @@ class TestDOTA(object):
                             src_h, src_w = src_img.shape[0], src_img.shape[1]
 
                             if len(det_boxes_r_) > 0:
-                                det_boxes_r_ = forward_convert(det_boxes_r_, False)
+                                # det_boxes_r_ = forward_convert(det_boxes_r_, False)
                                 det_boxes_r_[:, 0::2] *= (src_w / resized_w)
                                 det_boxes_r_[:, 1::2] *= (src_h / resized_h)
 
@@ -283,11 +283,11 @@ class TestDOTA(object):
                 draw_path = os.path.join(save_path, 'dota_img_vis', nake_name)
 
                 draw_img = np.array(cv2.imread(res['image_id']), np.float32)
-                detected_boxes = backward_convert(res['boxes'], with_label=False)
+                # detected_boxes = backward_convert(res['boxes'], with_label=False)
 
                 detected_indices = res['scores'] >= self.cfgs.VIS_SCORE
                 detected_scores = res['scores'][detected_indices]
-                detected_boxes = detected_boxes[detected_indices]
+                detected_boxes = res['boxes'][detected_indices]
                 detected_categories = res['labels'][detected_indices]
 
                 drawer = DrawBox(self.cfgs)
@@ -296,8 +296,8 @@ class TestDOTA(object):
                                                                            boxes=detected_boxes,
                                                                            labels=detected_categories,
                                                                            scores=detected_scores,
-                                                                           method=1,
-                                                                           is_csl=True,
+                                                                           method=2,
+                                                                           is_csl=False,
                                                                            in_graph=False)
                 cv2.imwrite(draw_path, final_detections)
 

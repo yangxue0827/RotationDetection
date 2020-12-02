@@ -1,15 +1,15 @@
 <?xml version="1.0" ?>
 <annotation>
-<folder>VOC2007</folder>
+<folder>DOTA1.0</folder>
 <filename>000024.jpg</filename>
 <source>
-<database>The VOC2007 Database</database>
-<annotation>PASCAL VOC2007</annotation>
+<database>The DOTA Database</database>
+<annotation>XML</annotation>
 <image>flickr</image>
-<flickrid>322409915</flickrid>
+<flickrid>xxxxxxxx</flickrid>
 </source>
 <owner>
-<flickrid>knautia</flickrid>
+<flickrid>xxxxxxxx</flickrid>
 <name>yang</name>
 </owner>
 <size>

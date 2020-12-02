@@ -118,7 +118,7 @@ class DrawBox(object):
             draw_obj.line(xy=[top_right, bottom_right],
                           fill=color,
                           width=width)
-        else:
+        elif method == 1:
             x_c, y_c, w, h, theta = box[0], box[1], box[2], box[3], box[4]
             rect = ((x_c, y_c), (w, h), theta)
             rect = cv2.boxPoints(rect)
@@ -133,6 +133,19 @@ class DrawBox(object):
                           fill=color,
                           width=width)
             draw_obj.line(xy=[(rect[3][0], rect[3][1]), (rect[0][0], rect[0][1])],
+                          fill=color,
+                          width=width)
+        else:
+            draw_obj.line(xy=[(box[0], box[1]), (box[2], box[3])],
+                          fill=color,
+                          width=width)
+            draw_obj.line(xy=[(box[2], box[3]), (box[4], box[5])],
+                          fill=color,
+                          width=width)
+            draw_obj.line(xy=[(box[4], box[5]), (box[6], box[7])],
+                          fill=color,
+                          width=width)
+            draw_obj.line(xy=[(box[6], box[7]), (box[0], box[1])],
                           fill=color,
                           width=width)
 
