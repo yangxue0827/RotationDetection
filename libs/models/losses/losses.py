@@ -97,8 +97,7 @@ class Loss(object):
         target_boxes = tf.gather(target_boxes, indices)
         anchors = tf.gather(anchors, indices)
 
-        boxes_pred = bbox_transform.rbbox_transform_inv(boxes=anchors, deltas=preds,
-                                                        scale_factors=self.cfgs.ANCHOR_SCALE_FACTORS)
+        boxes_pred = bbox_transform.rbbox_transform_inv(boxes=anchors, deltas=preds)
 
         # compute smooth L1 loss
         # f(x) = 0.5 * (sigma * x)^2          if |x| < 1 / sigma / sigma
@@ -147,8 +146,7 @@ class Loss(object):
         target_boxes = tf.gather(target_boxes, indices)
         anchors = tf.gather(anchors, indices)
 
-        boxes_pred = bbox_transform.rbbox_transform_inv(boxes=anchors, deltas=preds,
-                                                        scale_factors=self.cfgs.ANCHOR_SCALE_FACTORS)
+        boxes_pred = bbox_transform.rbbox_transform_inv(boxes=anchors, deltas=preds)
 
         # compute smooth L1 loss
         # f(x) = 0.5 * (sigma * x)^2          if |x| < 1 / sigma / sigma

@@ -98,12 +98,13 @@ class ReadTFRecord(object):
         # assert batch_size == 1, "we only support batch_size is 1.We may support large batch_size in the future"
 
         valid_dataset= ['DOTA1.5', 'ICDAR2015', 'pascal', 'coco', 'bdd100k', 'DOTA', 'DOTA800', 'DOTA600', 'MLT',
-                        'HRSC2016', 'UCAS-AOD', 'OHD-SJTU', 'OHD-SJTU-600', 'OHD-SJTU-ALL-600', 'DOTATrain', 'SSDD++']
+                        'HRSC2016', 'UCAS-AOD', 'OHD-SJTU', 'OHD-SJTU-600', 'OHD-SJTU-ALL-600', 'DOTATrain', 'SSDD++',
+                        'SKU110K-R', 'SKU110K']
         if dataset_name not in valid_dataset:
             raise ValueError('dataSet name must be in {}'.format(valid_dataset))
 
         if is_training:
-            pattern = os.path.join('../../dataloader/tfrecord', dataset_name + '_train*')
+            pattern = os.path.join('../../dataloader/tfrecord', dataset_name + '_*')
         else:
             pattern = os.path.join('../../dataloader/tfrecord', dataset_name + '_test*')
 
@@ -128,7 +129,7 @@ class ReadTFRecord(object):
 
 
 if __name__ == '__main__':
-    os.environ["CUDA_VISIBLE_DEVICES"] = '0,1'
+    os.environ["CUDA_VISIBLE_DEVICES"] = '1'
     from libs.configs import cfgs
     reader = ReadTFRecord(cfgs)
     num_gpu = len(cfgs.GPU_GROUP.strip().split(','))
@@ -156,9 +157,9 @@ if __name__ == '__main__':
         img_name_batch_, img_batch_, gtboxes_and_label_batch_, num_objects_batch_, img_h_batch_, img_w_batch_ \
             = sess.run([img_name_batch, img_batch, gtboxes_and_label_batch, num_objects_batch, img_h_batch, img_w_batch])
 
-        print(img_name_batch_.shape)
+        print(img_name_batch_[0])
         print(img_batch_.shape)
-        print(gtboxes_and_label_batch_.shape)
+        print(gtboxes_and_label_batch_)
         print(num_objects_batch_.shape)
         print(img_h_batch_.shape)
         print('debug')

@@ -13,7 +13,6 @@ import os
 import pickle
 import numpy as np
 
-from libs.configs import cfgs
 from libs.utils import iou_rotate
 from libs.utils import coordinate_convert
 from utils import tools
@@ -266,7 +265,7 @@ class EVAL(object):
                                             test_imgid_list=test_imgid_list,
                                             cls_name=cls,
                                             annopath=test_annotation_path,
-                                            use_07_metric=cfgs.USE_07_METRIC,
+                                            use_07_metric=self.cfgs.USE_07_METRIC,
                                             ovthresh=self.cfgs.EVAL_THRESHOLD)
       AP_list += [AP]
       print("cls : {}|| Recall: {} || Precison: {}|| AP: {}".format(cls, recall[-1], precision[-1], AP))
@@ -275,7 +274,7 @@ class EVAL(object):
       # print("{}_precision: {}".format(cls, precision[-1]))
       r = np.array(recall)
       p = np.array(precision)
-      F1 = 2 * r * p / (r + p)
+      F1 = 2 * r * p / (r + p + 1e-5)
       max_ind = np.argmax(F1)
       print('F1:{} P:{} R:{}'.format(F1[max_ind], p[max_ind], r[max_ind]))
 

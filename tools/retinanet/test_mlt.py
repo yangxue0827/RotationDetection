@@ -9,11 +9,11 @@ import sys
 sys.path.append("../../")
 
 from libs.models.detectors.retinanet import build_whole_network
-from tools.test_dota_base import TestDOTA
+from tools.test_mlt_base import TestMLT
 from libs.configs import cfgs
 
 
-class TestDOTARetinaNet(TestDOTA):
+class TestMLTRetinaNet(TestMLT):
 
     def eval(self):
         txt_name = '{}.txt'.format(self.cfgs.VERSION)
@@ -21,14 +21,14 @@ class TestDOTARetinaNet(TestDOTA):
 
         retinanet = build_whole_network.DetectionNetworkRetinaNet(cfgs=self.cfgs,
                                                                   is_training=False)
-        self.test_dota(det_net=retinanet, real_test_img_list=real_test_img_list, txt_name=txt_name)
+        self.test_mlt(det_net=retinanet, real_test_img_list=real_test_img_list, txt_name=txt_name)
 
         if not self.args.show_box:
             os.remove(txt_name)
 
 if __name__ == '__main__':
 
-    tester = TestDOTARetinaNet(cfgs)
+    tester = TestMLTRetinaNet(cfgs)
     tester.eval()
 
 

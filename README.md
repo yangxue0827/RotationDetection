@@ -15,13 +15,13 @@ Techniques:
 - [x] Detectors: 
   - [x] [R<sup>2</sup>CNN (Faster-RCNN-H)](https://arxiv.org/abs/1706.09579): [TF code](https://github.com/DetectionTeamUCAS/R2CNN_Faster-RCNN_Tensorflow)
   - [ ] [RRPN (Faster-RCNN-R)](https://arxiv.org/pdf/1703.01086): [TF code](https://github.com/DetectionTeamUCAS/RRPN_Faster-RCNN_Tensorflow)
-  - [x] [SCRDet](https://arxiv.org/abs/1811.07126): [R<sup>2</sup>CNN++](), [IoU-Smooth L1 Loss](https://github.com/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation)
+  - [x] [SCRDet **(ICCV19)**](https://arxiv.org/abs/1811.07126): [R<sup>2</sup>CNN++](), [IoU-Smooth L1 Loss](https://github.com/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation)
   - [x] [RetinaNet-H, RetinaNet-R](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation)
   - [x] [RefineRetinaNet (CascadeRetinaNet)](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow)
   - [ ] [FCOS](https://arxiv.org/abs/1904.01355)
-  - [x] [RSDet](https://arxiv.org/abs/1911.08299)
-  - [x] [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow), [Pytorch code](https://github.com/SJTU-Thinklab-Det/r3det-on-mmdetection)
-  - [x] [Circular Smooth Label (CSL)](https://arxiv.org/abs/2003.05597): [TF code](https://github.com/Thinklab-SJTU/CSL_RetinaNet_Tensorflow)
+  - [x] [RSDet **(AAAI21)**](https://arxiv.org/abs/1911.08299): [TF code](https://github.com/Mrqianduoduo/RSDet-8P-4R)
+  - [x] [R<sup>3</sup>Det **(AAAI21)**](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow), [Pytorch code](https://github.com/SJTU-Thinklab-Det/r3det-on-mmdetection)
+  - [x] [Circular Smooth Label (CSL, **ECCV20**)](https://arxiv.org/abs/2003.05597): [TF code](https://github.com/Thinklab-SJTU/CSL_RetinaNet_Tensorflow)
   - [x] [Densely Coded Label (DCL)](https://arxiv.org/abs/2011.09670): [TF code](https://github.com/Thinklab-SJTU/DCL_RetinaNet_Tensorflow)
   - [x] Mixed method: R<sup>3</sup>Det-DCL
 - [x] Loss: CE, [Focal Loss](https://arxiv.org/abs/1708.02002), [Smooth L1 Loss](https://arxiv.org/abs/1504.08083), [IoU-Smooth L1 Loss](https://arxiv.org/abs/1811.07126), [Modulated Loss](https://arxiv.org/abs/1911.08299)
@@ -41,6 +41,7 @@ More results and trained models are available in the [MODEL_ZOO.md](MODEL_ZOO.md
 |:------------:|:------------:|:------------:|:------------:|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:---------:|:---------:|:---------:|    
 | [RetinaNet-H](https://arxiv.org/abs/1908.05612) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 64.17 | [Baidu Drive (j5l0)](https://pan.baidu.com/s/1Qh_LE6QeGsOBYqMzjAESsA) | H | Reg. | smooth L1 | **180** | × | [cfgs_res50_dota_v15.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v15.py) |
 | [RetinaNet-H](https://arxiv.org/abs/1908.05612) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 65.73 | [Baidu Drive (jum2)](https://pan.baidu.com/s/19-hEtCGxLfYuluTATQJpdg) | H | Reg. | smooth L1 | **90** | × | [cfgs_res50_dota_v4.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v4.py) |
+| [IoU-Smooth L1](https://arxiv.org/abs/1811.07126) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 66.99 | [Baidu Drive ()]() | H | Reg. | **iou-smooth L1** | 90 | × | [cfgs_res50_dota_v5.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v5.py) |
 | [RSDet](https://arxiv.org/pdf/1911.08299) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 67.27 | [Baidu Drive (6nt5)](https://pan.baidu.com/s/1-4iXqRMvCOIEtrMFwtXyew) | H | Reg. | modulated loss | - | × | [cfgs_res50_dota_rsdet_v2.py](./libs/configs/DOTA/rsdet/cfgs_res50_dota_rsdet_v2.py) |
 | [CSL](https://arxiv.org/abs/2003.05597) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 67.38 | [Baidu Drive (g3wt)](https://pan.baidu.com/s/1nrIs-oYA53qQzlPjqYkMJQ) | H | **Cls.: Gaussian (r=1, w=10)** | smooth L1 | 180 | x | [cfgs_res50_dota_v45.py](./libs/configs/DOTA/csl/cfgs_res50_dota_v45.py) |
 | [DCL](https://arxiv.org/abs/2011.09670) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 67.39 | [Baidu Drive (p9tu)](https://pan.baidu.com/s/1TZ9V0lTTQnMhiepxK1mdqg) | H | **Cls.: BCL (w=180/256)** | smooth L1 | 180 | × | [cfgs_res50_dota_dcl_v5.py](./libs/configs/DOTA/dcl/cfgs_res50_dota_dcl_v5.py) |
@@ -73,9 +74,13 @@ More results and trained models are available in the [MODEL_ZOO.md](MODEL_ZOO.md
 ## Compile
     ```  
     cd $PATH_ROOT/libs/utils/cython_utils
+    rm *.so
+    rm *.c
     python setup.py build_ext --inplace (or make)
     
     cd $PATH_ROOT/libs/utils/
+    rm *.so
+    rm *.cpp
     python setup.py build_ext --inplace
     ```
 
@@ -168,7 +173,7 @@ If you find our code useful for your research, please consider cite.
 
 @article{yang2019r3det,
     title={R3Det: Refined Single-Stage Detector with Feature Refinement for Rotating Object},
-    author={Yang, Xue and Liu, Qingqing and Yan, Junchi and Li, Ang and Zhang, Zhiqiang and Yu, Gang},
+    author={Yang, Xue and Yan, Junchi and Feng, Ziming and He, Tao},
     journal={arXiv preprint arXiv:1908.05612},
     year={2019}
 }

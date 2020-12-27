@@ -13,7 +13,7 @@ sys.path.append("../../")
 
 from tools.train_base import Train
 from libs.configs import cfgs
-from libs.models.detectors.retinenet import build_whole_network_batch
+from libs.models.detectors.retinanet import build_whole_network_batch
 from libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
 
 os.environ["CUDA_VISIBLE_DEVICES"] = cfgs.GPU_GROUP

@@ -30,13 +30,13 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Test HRSC2016')
     parser.add_argument('--img_dir', dest='img_dir',
                         help='images path',
-                        default='/data/dataset/HRSC2016/HRSC2016/Test/AllImages', type=str)
+                        default='/data/dataset/UCAS-AOD/VOCdevkit_test/JPEGImages', type=str)
     parser.add_argument('--image_ext', dest='image_ext',
                         help='image format',
-                        default='.bmp', type=str)
+                        default='.png', type=str)
     parser.add_argument('--test_annotation_path', dest='test_annotation_path',
                         help='test annotate path',
-                        default='/data/dataset/HRSC2016/HRSC2016/Test/xmls', type=str)
+                        default='/data/dataset/UCAS-AOD/VOCdevkit_test/Annotations', type=str)
     parser.add_argument('--gpu', dest='gpu',
                         help='gpu index',
                         default='0', type=str)
@@ -53,7 +53,7 @@ def parse_args():
     return args
 
 
-class TestHRSC2016(object):
+class TestUCASAOD(object):
 
     def __init__(self, cfgs):
         self.cfgs = cfgs

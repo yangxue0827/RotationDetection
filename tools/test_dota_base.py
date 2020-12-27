@@ -27,7 +27,7 @@ def parse_args():
 
     parser.add_argument('--test_dir', dest='test_dir',
                         help='evaluate imgs dir ',
-                        default='/data/DOTA/test/images/', type=str)
+                        default='/data/dataset/DOTA/test/images/', type=str)
     parser.add_argument('--gpus', dest='gpus',
                         help='gpu id',
                         default='0,1,2,3,4,5,6,7', type=str)
@@ -98,8 +98,8 @@ class TestDOTA(object):
 
             for img_path in images:
 
-                if 'P0016' not in img_path:
-                    continue
+                # if 'P0016' not in img_path:
+                #     continue
 
                 img = cv2.imread(img_path)
 

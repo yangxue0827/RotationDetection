@@ -16,12 +16,12 @@ from tqdm import tqdm
 sys.path.append("../../")
 
 from libs.models.detectors.retinanet import build_whole_network
-from tools.test_hrsc2016_base import TestHRSC2016
+from tools.test_ucas_aod_base import TestUCASAOD
 from libs.configs import cfgs
 from libs.val_libs.voc_eval_r import EVAL
 
 
-class TestHRSC2016RetinaNet(TestHRSC2016):
+class TestUCASAODRetinaNet(TestUCASAOD):
 
     def eval(self):
         retinanet = build_whole_network.DetectionNetworkRetinaNet(cfgs=self.cfgs,
@@ -48,5 +48,5 @@ class TestHRSC2016RetinaNet(TestHRSC2016):
 
 if __name__ == '__main__':
 
-    tester = TestHRSC2016RetinaNet(cfgs)
+    tester = TestUCASAODRetinaNet(cfgs)
     tester.eval()

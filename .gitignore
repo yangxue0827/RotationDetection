@@ -134,6 +134,8 @@ demo
 tools/*/demo.py
 tools/*/demos/*
 tools/*/test_dota/*
+tools/*/test_mlt/*
+tools/*/test_ucas_aod/*
 tools/*/test_icdar2015/*
 tools/*/test_ohd_sjtu/*
 output/summary/*

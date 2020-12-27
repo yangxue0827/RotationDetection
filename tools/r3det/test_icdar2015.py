@@ -8,27 +8,27 @@ import os
 import sys
 sys.path.append("../../")
 
-from libs.models.detectors.retinanet import build_whole_network
-from tools.test_dota_base import TestDOTA
+from libs.models.detectors.r3det import build_whole_network
+from tools.test_icdar2015_base import TestICDAR2015
 from libs.configs import cfgs
 
 
-class TestDOTARetinaNet(TestDOTA):
+class TestICDAR2015R3Det(TestICDAR2015):
 
     def eval(self):
         txt_name = '{}.txt'.format(self.cfgs.VERSION)
         real_test_img_list = self.get_test_image()
 
-        retinanet = build_whole_network.DetectionNetworkRetinaNet(cfgs=self.cfgs,
-                                                                  is_training=False)
-        self.test_dota(det_net=retinanet, real_test_img_list=real_test_img_list, txt_name=txt_name)
+        r3det = build_whole_network.DetectionNetworkR3Det(cfgs=self.cfgs,
+                                                          is_training=False)
+        self.test_icdar2015(det_net=r3det, real_test_img_list=real_test_img_list, txt_name=txt_name)
 
         if not self.args.show_box:
             os.remove(txt_name)
 
 if __name__ == '__main__':
 
-    tester = TestDOTARetinaNet(cfgs)
+    tester = TestICDAR2015R3Det(cfgs)
     tester.eval()
 
 

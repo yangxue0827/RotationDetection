@@ -29,7 +29,7 @@ def parse_args():
 
     parser.add_argument('--test_dir', dest='test_dir',
                         help='evaluate imgs dir ',
-                        default='/data/dataset/ICDAR2015/ch4_test_images', type=str)
+                        default='/data/dataset/MLT/test/ch8_test_images', type=str)
     parser.add_argument('--gpus', dest='gpus',
                         help='gpu id',
                         default='0,1,2,3,4,5,6,7', type=str)
@@ -46,7 +46,7 @@ def parse_args():
     return args
 
 
-class TestICDAR2015(object):
+class TestMLT(object):
 
     def __init__(self, cfgs):
         self.cfgs = cfgs
@@ -220,9 +220,9 @@ class TestICDAR2015(object):
                                'image_id': a_img}
                 result_queue.put_nowait(result_dict)
 
-    def test_icdar2015(self, det_net, real_test_img_list, txt_name):
+    def test_mlt(self, det_net, real_test_img_list, txt_name):
 
-        save_path = os.path.join('./test_icdar2015', self.cfgs.VERSION)
+        save_path = os.path.join('./test_mlt', self.cfgs.VERSION)
         tools.makedirs(save_path)
 
         nr_records = len(real_test_img_list)
@@ -244,10 +244,10 @@ class TestICDAR2015(object):
 
         for i in range(nr_records):
             res = result_queue.get()
-            tools.makedirs(os.path.join(save_path, 'icdar2015_res'))
+            tools.makedirs(os.path.join(save_path, 'mlt_res'))
             if res['boxes'].shape[0] == 0:
-                fw_txt_dt = open(os.path.join(save_path, 'icdar2015_res', 'res_{}.txt'.format(res['image_id'].split('/')[-1].split('.')[0])),
-                                 'w')
+                fw_txt_dt = open(os.path.join(save_path, 'mlt_res', 'res_{}.txt'.format(
+                    res['image_id'].split('/')[-1].split('.')[0].split('ts_')[1])), 'w')
                 fw_txt_dt.close()
                 pbar.update(1)
 
@@ -268,8 +268,8 @@ class TestICDAR2015(object):
             if self.args.show_box:
                 boxes = backward_convert(boxes, False)
                 nake_name = res['image_id'].split('/')[-1]
-                tools.makedirs(os.path.join(save_path, 'icdar2015_img_vis'))
-                draw_path = os.path.join(save_path, 'icdar2015_img_vis', nake_name)
+                tools.makedirs(os.path.join(save_path, 'mlt_img_vis'))
+                draw_path = os.path.join(save_path, 'mlt_img_vis', nake_name)
                 draw_img = np.array(cv2.imread(res['image_id']), np.float32)
 
                 drawer = DrawBox(self.cfgs)
@@ -283,11 +283,13 @@ class TestICDAR2015(object):
                 cv2.imwrite(draw_path, final_detections)
 
             else:
-                fw_txt_dt = open(os.path.join(save_path, 'icdar2015_res', 'res_{}.txt'.format(res['image_id'].split('/')[-1].split('.')[0])), 'w')
 
-                for box in boxes:
-                    line = '%d,%d,%d,%d,%d,%d,%d,%d\n' % (box[0], box[1], box[2], box[3],
-                                                          box[4], box[5], box[6], box[7])
+                fw_txt_dt = open(os.path.join(save_path, 'mlt_res', 'res_{}.txt'.format(
+                    res['image_id'].split('/')[-1].split('.')[0].split('ts_')[1])), 'w')
+
+                for ii, box in enumerate(boxes):
+                    line = '%d,%d,%d,%d,%d,%d,%d,%d,%.3f\n' % (box[0], box[1], box[2], box[3],
+                                                               box[4], box[5], box[6], box[7], res['scores'][ii])
                     fw_txt_dt.write(line)
                 fw_txt_dt.close()
 

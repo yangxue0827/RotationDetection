@@ -232,7 +232,7 @@ class Train(object):
 
                     save_dir = os.path.join(self.cfgs.TRAINED_CKPT, self.cfgs.VERSION)
                     if not os.path.exists(save_dir):
-                        os.mkdir(save_dir)
+                        os.makedirs(save_dir)
 
                     save_ckpt = os.path.join(save_dir, '{}_'.format(self.cfgs.DATASET_NAME) +
                                              str((global_stepnp-1)*num_gpu) + 'model.ckpt')

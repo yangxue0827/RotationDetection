@@ -97,6 +97,11 @@ class LabelMap(object):
                 'back_ground': 0,
                 'ship': 1
             }
+        elif self.cfgs.DATASET_NAME.startswith('SKU110K-R'):
+            name_label_map = {
+                'back_ground': 0,
+                'commodity': 1
+            }
         elif self.cfgs.DATASET_NAME.startswith('UCAS-AOD'):
             name_label_map = {
                 'back_ground': 0,
@@ -163,6 +168,7 @@ class LabelMap(object):
                 'rider': 10
             }
         else:
+            name_label_map = {}
             assert 'please set label dict!'
         return name_label_map
 

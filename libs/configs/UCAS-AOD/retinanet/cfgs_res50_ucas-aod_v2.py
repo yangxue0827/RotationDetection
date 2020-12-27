@@ -1,55 +1,39 @@
-76# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from __future__ import division, print_function, absolute_import
 import os
 import tensorflow as tf
 import math
 
 """
-RSDet-8p
+FLOPs: 473586607;    Trainable params: 32373651
+USE_07_METRIC
+cls : plane|| Recall: 0.9742663656884876 || Precison: 0.6779767514923029|| AP: 0.9067626363210479
+F1:0.9695303550973655 P:0.9841860465116279 R:0.9553047404063205
+cls : car|| Recall: 0.9364461738002594 || Precison: 0.6406388642413487|| AP: 0.8775737543129423
+F1:0.9069920844327176 P:0.9228187919463087 R:0.8916990920881972
+mAP is : 0.8921681953169951
 
-This is your result for task 1:
-
-mAP: 0.6727423650267537
-ap of each class:
-plane:0.8839346472596076,
-baseball-diamond:0.7104926703230673,
-bridge:0.4330823738329618,
-ground-track-field:0.6508970563363848,
-small-vehicle:0.6849253155621244,
-large-vehicle:0.6102196316871491,
-ship:0.7961936701620749,
-tennis-court:0.8947516994949227,
-basketball-court:0.7455840121634438,
-storage-tank:0.7672332259150044,
-soccer-ball-field:0.5496680505639349,
-roundabout:0.6350320699137543,
-harbor:0.5842793618604702,
-swimming-pool:0.6505404500942658,
-helicopter:0.4943012402321392
-
-The submitted information is :
-
-Description: RetinaNet_DOTA_2x_20201128_162w
-Username: SJTU-Det
-Institute: SJTU
-Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
-TeamMembers: yangxue
-
+USE_12_METRIC
+cls : plane|| Recall: 0.9742663656884876 || Precison: 0.6779767514923029|| AP: 0.9701266324637011
+F1:0.9695303550973655 P:0.9841860465116279 R:0.9553047404063205
+cls : car|| Recall: 0.9364461738002594 || Precison: 0.6406388642413487|| AP: 0.9005414507320325
+F1:0.9069920844327176 P:0.9228187919463087 R:0.8916990920881972
+mAP is : 0.9353340415978668
 """
 
 # ------------------------------------------------
-VERSION = 'RetinaNet_DOTA_2x_20201128'
+VERSION = 'RetinaNet_UCAS-AOD_1x_20201225'
 NET_NAME = 'resnet50_v1d'  # 'MobilenetV2'
 
 # ---------------------------------------- System
 ROOT_PATH = os.path.abspath('../../')
 print(20*"++--")
 print(ROOT_PATH)
-GPU_GROUP = "1,2,3"
+GPU_GROUP = "2"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
 SHOW_TRAIN_INFO_INTE = 20
 SMRY_ITER = 200
-SAVE_WEIGHTS_INTE = 27000 * 2
+SAVE_WEIGHTS_INTE = 5000
 
 SUMMARY_PATH = ROOT_PATH + '/output/summary'
 TEST_SAVE_PATH = ROOT_PATH + '/utils/test_result'
@@ -63,13 +47,14 @@ else:
 
 PRETRAINED_CKPT = ROOT_PATH + '/dataloader/pretrained_weights/' + weights_name + '.ckpt'
 TRAINED_CKPT = os.path.join(ROOT_PATH, 'output/trained_weights')
-EVALUATE_DIR = ROOT_PATH + '/output/evaluate_result_pickle/'
+EVALUATE_R_DIR = ROOT_PATH + '/output/evaluate_result_pickle/'
 
-# ------------------------------------------ Train and Test
+# ------------------------------------------ Train and test
 RESTORE_FROM_RPN = False
 FIXED_BLOCKS = 1  # allow 0~3
 FREEZE_BLOCKS = [True, False, False, False, False]  # for gluoncv backbone
 USE_07_METRIC = True
+EVAL_THRESHOLD = 0.5
 ADD_BOX_IN_TENSORBOARD = True
 
 MUTILPY_BIAS_GRADIENT = 2.0  # if None, will not multipy
@@ -77,6 +62,7 @@ GRADIENT_CLIPPING_BY_NORM = 10.0  # if None, will not clip
 
 CLS_WEIGHT = 1.0
 REG_WEIGHT = 1.0
+REG_LOSS_MODE = None
 ALPHA = 1.0
 BETA = 1.0
 
@@ -84,18 +70,18 @@ BATCH_SIZE = 1
 EPSILON = 1e-5
 MOMENTUM = 0.9
 LR = 1e-3
-DECAY_STEP = [SAVE_WEIGHTS_INTE*18, SAVE_WEIGHTS_INTE*24, SAVE_WEIGHTS_INTE*30]
-MAX_ITERATION = SAVE_WEIGHTS_INTE*30
+DECAY_STEP = [SAVE_WEIGHTS_INTE*12, SAVE_WEIGHTS_INTE*16, SAVE_WEIGHTS_INTE*20]
+MAX_ITERATION = SAVE_WEIGHTS_INTE*20
 WARM_SETP = int(1.0 / 4.0 * SAVE_WEIGHTS_INTE)
 
 # -------------------------------------------- Dataset
-DATASET_NAME = 'DOTA'  # 'pascal', 'coco'
+DATASET_NAME = 'UCAS-AOD'  # 'pascal', 'coco'
 PIXEL_MEAN = [123.68, 116.779, 103.939]  # R, G, B. In tf, channel is RGB. In openCV, channel is BGR
 PIXEL_MEAN_ = [0.485, 0.456, 0.406]
 PIXEL_STD = [0.229, 0.224, 0.225]  # R, G, B. In tf, channel is RGB. In openCV, channel is BGR
 IMG_SHORT_SIDE_LEN = 800
-IMG_MAX_LENGTH = 800
-CLASS_NUM = 15
+IMG_MAX_LENGTH = 1500
+CLASS_NUM = 2
 
 IMG_ROTATE = False
 RGB2GRAY = False
@@ -137,5 +123,4 @@ NMS = True
 NMS_IOU_THRESHOLD = 0.1
 MAXIMUM_DETECTIONS = 100
 FILTERED_SCORE = 0.05
-VIS_SCORE = 0.4
-
+VIS_SCORE = 0.8
