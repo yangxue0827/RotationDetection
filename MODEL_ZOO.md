@@ -5,7 +5,7 @@
 | [RetinaNet-H](https://arxiv.org/abs/1908.05612) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 64.17 | [Baidu Drive (j5l0)](https://pan.baidu.com/s/1Qh_LE6QeGsOBYqMzjAESsA) | H | Reg. | smooth L1 | **180** | 2x | × | 3X GeForce RTX 2080 Ti | 1 | [cfgs_res50_dota_v15.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v15.py) |
 | [RetinaNet-H](https://arxiv.org/abs/1908.05612) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 65.73 | [Baidu Drive (jum2)](https://pan.baidu.com/s/19-hEtCGxLfYuluTATQJpdg) | H | Reg. | smooth L1 | **90** | 2x | × | 3X GeForce RTX 2080 Ti | 1 | [cfgs_res50_dota_v4.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v4.py) |
 |||||
-| [IoU-Smooth L1](https://arxiv.org/abs/1811.07126) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 66.99 | [Baidu Drive ()]() | H | Reg. | **iou-smooth L1** | 90 | 1x | × | 1X GeForce RTX 2080 Ti | 1 | [cfgs_res50_dota_v5.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v5.py) |
+| [IoU-Smooth L1](https://arxiv.org/abs/1811.07126) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 66.99 | [Baidu Drive (bc83)](https://pan.baidu.com/s/19lyx6WvThr61xrbpkC9nQg) | H | Reg. | **iou-smooth L1** | 90 | 1x | × | 1X GeForce RTX 2080 Ti | 1 | [cfgs_res50_dota_v5.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v5.py) |
 |||||
 | [RSDet](https://arxiv.org/pdf/1911.08299) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 67.27 | [Baidu Drive (6nt5)](https://pan.baidu.com/s/1-4iXqRMvCOIEtrMFwtXyew) | H | Reg. | modulated loss | - | 2x | × | 8X GeForce RTX 2080 Ti | 1 | [cfgs_res50_dota_rsdet_v2.py](./libs/configs/DOTA/rsdet/cfgs_res50_dota_rsdet_v2.py) |
 |||||
