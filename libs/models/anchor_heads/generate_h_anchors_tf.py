@@ -9,6 +9,7 @@ from __future__ import division
 from __future__ import print_function
 
 import numpy as np
+import tensorflow as tf
 
 
 # Verify that we compute the same anchors as Shaoqing's matlab implementation:
@@ -46,11 +47,12 @@ def gereate_centering_anchor(
     Generate anchor (reference) windows by enumerating aspect ratios X
     scales wrt a reference (0, 0, 15, 15) window.
     """
-    base_anchor = np.array([1, 1, base_size, base_size]) - (base_size // 2)
+    base_anchor = tf.convert_to_tensor(np.array([1, 1, base_size, base_size]) - (base_size // 2))
     ratio_anchors = _ratio_enum(base_anchor, ratios)
-    anchors = np.vstack([_scale_enum(ratio_anchors[i, :], scales)
-                         for i in range(ratio_anchors.shape[0])])
-    return anchors.astype(np.float32)
+    anchors = tf.cast(tf.stack([_scale_enum(ratio_anchors[i, :], scales)
+                                for i in range(ratio_anchors.shape[0])]), tf.float32)
+
+    return anchors
 
 
 def generate_anchors(base_size=16, ratios=[0.5, 1, 2],
@@ -60,11 +62,11 @@ def generate_anchors(base_size=16, ratios=[0.5, 1, 2],
     scales wrt a reference (0, 0, 15, 15) window.
     """
 
-    base_anchor = np.array([1, 1, base_size, base_size]) - 1
+    base_anchor = tf.convert_to_tensor(np.array([1, 1, base_size, base_size]) - 1.)
     ratio_anchors = _ratio_enum(base_anchor, ratios)
-    anchors = np.vstack([_scale_enum(ratio_anchors[i, :], scales)
-                         for i in range(ratio_anchors.shape[0])])
-    return anchors.astype(np.float32)
+    anchors = tf.cast(tf.concat([_scale_enum(ratio_anchors[i, :], scales)
+                                for i in range(ratio_anchors.shape[0])], axis=0), tf.float32)
+    return anchors
 
 
 def _whctrs(anchor):
@@ -84,13 +86,11 @@ def _mkanchors(ws, hs, x_ctr, y_ctr):
     Given a vector of widths (ws) and heights (hs) around a center
     (x_ctr, y_ctr), output a set of anchors (windows).
     """
+    # ws = tf.expand_dims(ws, axis=1)
+    # hs = tf.expand_dims(hs, axis=1)
+    anchors = tf.stack([x_ctr - 0.5 * (ws - 1.), y_ctr - 0.5 * (hs - 1.),
+              x_ctr + 0.5 * (ws - 1.), y_ctr + 0.5 * (hs - 1.)], axis=1)
 
-    ws = ws[:, np.newaxis]
-    hs = hs[:, np.newaxis]
-    anchors = np.hstack((x_ctr - 0.5 * (ws - 1),
-                         y_ctr - 0.5 * (hs - 1),
-                         x_ctr + 0.5 * (ws - 1),
-                         y_ctr + 0.5 * (hs - 1)))
     return anchors
 
 
@@ -102,8 +102,8 @@ def _ratio_enum(anchor, ratios):
     w, h, x_ctr, y_ctr = _whctrs(anchor)
     size = w * h
     size_ratios = size / ratios
-    ws = np.round(np.sqrt(size_ratios))
-    hs = np.round(ws * ratios)
+    ws = tf.round(tf.sqrt(size_ratios))
+    hs = tf.round(ws * ratios)
     anchors = _mkanchors(ws, hs, x_ctr, y_ctr)
     return anchors
 
@@ -128,30 +128,33 @@ def generate_anchors_pre(height, width, feat_stride, anchor_scales=(8, 16, 32),
     anchors = generate_anchors(
         base_size=base_size, ratios=np.array(anchor_ratios),
         scales=np.array(anchor_scales))
-    A = anchors.shape[0]
-    shift_x = np.arange(0, width) * feat_stride
-    shift_y = np.arange(0, height) * feat_stride
-    shift_x, shift_y = np.meshgrid(shift_x, shift_y)
-    shifts = np.vstack((shift_x.ravel(), shift_y.ravel(), shift_x.ravel(),
-                        shift_y.ravel())).transpose()
-    K = shifts.shape[0]
+    A = tf.shape(anchors)[0]
+    shift_x = tf.range(width) * feat_stride
+    shift_y = tf.range(height) * feat_stride
+    shift_x, shift_y = tf.meshgrid(shift_x, shift_y)
+    shift_x = tf.reshape(shift_x, [-1, ])
+    shift_y = tf.reshape(shift_y, [-1, ])
+    shifts = tf.transpose(tf.stack([shift_x, shift_y, shift_x, shift_x]))
+    K = tf.shape(shifts)[0]
     # width changes faster, so here it is H, W, C
-    anchors = anchors.reshape((1, A, 4)) + shifts.reshape((1, K, 4)).transpose(
-        (1, 0, 2))
-    anchors = anchors.reshape((K * A, 4)).astype(np.float32, copy=False)
+    anchors = tf.cast(tf.reshape(anchors, [1, A, 4]), tf.float32) + tf.cast(tf.transpose(tf.reshape(shifts, [1, K, 4]), [1, 0, 2]), tf.float32)
+    anchors = tf.cast(tf.reshape(anchors, [K * A, 4]), tf.float32)
 
     return anchors
 
 
 if __name__ == '__main__':
-    anchors = generate_anchors_pre(64, 64, 8, anchor_scales=np.array([2 ** 0, 2 ** (1.0 / 3.0), 2 ** (2.0 / 3.0)]) * 8,
+    anchors_tf = generate_anchors_pre(64, 64, 8, anchor_scales=np.array([2 ** 0, 2 ** (1.0 / 3.0), 2 ** (2.0 / 3.0)]) * 8,
                                    anchor_ratios=(0.5, 1.0, 2.0), base_size=4)
-    print(anchors[:10])
+    with tf.Session() as sess:
+        anchors = sess.run(anchors_tf)
+        print(anchors[:10])
+        print(anchors.shape)
 
-    # x_c = (anchors[:, 2] - anchors[:, 0]) / 2
-    # y_c = (anchors[:, 3] - anchors[:, 1]) / 2
-    # h = anchors[:, 2] - anchors[:, 0] + 1
-    # w = anchors[:, 3] - anchors[:, 1] + 1
-    # theta = -90 * np.ones_like(x_c)
-    # anchors = np.stack([x_c, y_c]).transpose()
-    print(anchors.shape)
+        # x_c = (anchors[:, 2] - anchors[:, 0]) / 2
+        # y_c = (anchors[:, 3] - anchors[:, 1]) / 2
+        # h = anchors[:, 2] - anchors[:, 0] + 1
+        # w = anchors[:, 3] - anchors[:, 1] + 1
+        # theta = -90 * np.ones_like(x_c)
+        # anchors = np.stack([x_c, y_c]).transpose()
+        # print(anchors.shape)

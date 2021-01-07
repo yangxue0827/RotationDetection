@@ -115,6 +115,22 @@ class Train(object):
                        true_fn=lambda: warmup(init_lr, global_step, warmup_step),
                        false_fn=lambda: decay(init_lr, global_step, num_gpu))
 
+    def warmup_and_cosine_lr(self, init_lr, global_step, warmup_step, decay_steps, alpha=1e-6):
+        def warmup(end_lr, global_step, warmup_step):
+            start_lr = end_lr * 0.1
+            global_step = tf.cast(global_step, tf.float32)
+            return start_lr + (end_lr - start_lr) * global_step / warmup_step
+
+        def cosine_lr(init_lr, global_step, decay_steps, alpha=0.0):
+            return tf.train.cosine_decay(learning_rate=init_lr,
+                                         global_step=global_step - warmup_step,
+                                         decay_steps=decay_steps - warmup_step,
+                                         alpha=alpha)
+
+        return tf.cond(tf.less_equal(global_step, warmup_step),
+                       true_fn=lambda: warmup(init_lr, global_step, warmup_step),
+                       false_fn=lambda: cosine_lr(init_lr, global_step, decay_steps, alpha))
+
     def loss_dict(self, inputs, num_gpu):
         total_loss_dict = {'total_losses': tf.constant(0., tf.float32)}
         total_losses = 0.0
@@ -162,7 +178,7 @@ class Train(object):
         summary_op = tf.summary.merge_all()
 
         restorer, restore_ckpt = deter.get_restorer()
-        saver = tf.train.Saver(max_to_keep=10)
+        saver = tf.train.Saver(max_to_keep=20)
 
         init_op = tf.group(
             tf.global_variables_initializer(),

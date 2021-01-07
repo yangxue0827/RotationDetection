@@ -129,6 +129,7 @@ __pycache__/
 *r3det_gwd*
 *r2cnn_gwd*
 *fcos*
+*swa*
 
 demo
 tools/*/demo.py

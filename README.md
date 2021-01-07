@@ -26,7 +26,7 @@ Techniques:
   - [ ] [GWD](): coming soon! 
   - [x] Mixed method: R<sup>3</sup>Det-DCL
 - [x] Loss: CE, [Focal Loss](https://arxiv.org/abs/1708.02002), [Smooth L1 Loss](https://arxiv.org/abs/1504.08083), [IoU-Smooth L1 Loss](https://arxiv.org/abs/1811.07126), [Modulated Loss](https://arxiv.org/abs/1911.08299)
-
+- [x] Others: [SWA](https://arxiv.org/pdf/2012.12645.pdf), exportPb
 
 ![3](demo.gif)
 
@@ -46,7 +46,8 @@ More results and trained models are available in the [MODEL_ZOO.md](MODEL_ZOO.md
 | [RSDet](https://arxiv.org/pdf/1911.08299) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 67.27 | [Baidu Drive (6nt5)](https://pan.baidu.com/s/1-4iXqRMvCOIEtrMFwtXyew) | H | Reg. | modulated loss | - | × | [cfgs_res50_dota_rsdet_v2.py](./libs/configs/DOTA/rsdet/cfgs_res50_dota_rsdet_v2.py) |
 | [CSL](https://arxiv.org/abs/2003.05597) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 67.38 | [Baidu Drive (g3wt)](https://pan.baidu.com/s/1nrIs-oYA53qQzlPjqYkMJQ) | H | **Cls.: Gaussian (r=1, w=10)** | smooth L1 | 180 | x | [cfgs_res50_dota_v45.py](./libs/configs/DOTA/csl/cfgs_res50_dota_v45.py) |
 | [DCL](https://arxiv.org/abs/2011.09670) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 67.39 | [Baidu Drive (p9tu)](https://pan.baidu.com/s/1TZ9V0lTTQnMhiepxK1mdqg) | H | **Cls.: BCL (w=180/256)** | smooth L1 | 180 | × | [cfgs_res50_dota_dcl_v5.py](./libs/configs/DOTA/dcl/cfgs_res50_dota_dcl_v5.py) |
-| GWD | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 68.93 | coming soon! | - | - |  |  | × | - |
+| GWD | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 68.93 | coming soon! | H | - | Reg. | gwd | × | [cfgs_res50_dota_v10.py](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) |
+| GWD **+ SWD** | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 69.92 | coming soon! | H | - | Reg. |  gwd| × | [cfgs_res50_dota_v10.py](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) |
 | [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 70.66 | [Baidu Drive (30lt)](https://pan.baidu.com/s/143sGeLNjXzcpxi9GV7FVyA) | H->R | Reg. | smooth L1 | 90 | × | [cfgs_res50_dota_r3det_v1.py](./libs/configs/DOTA/r3det/cfgs_res50_dota_r3det_v1.py) |
 | **[R<sup>3</sup>Det-DCL](https://arxiv.org/abs/2011.09670)** | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 71.21 | [Baidu Drive (jueq)](https://pan.baidu.com/s/1XR31i3T-C5R16giBxQUNWw) | H->R | **Cls.: BCL (w=180/256)** | iou-smooth L1 | 90->180 | × | [cfgs_res50_dota_r3det_dcl_v1.py](./libs/configs/DOTA/r3det_dcl/cfgs_res50_dota_r3det_dcl_v1.py) |
 | [R<sup>2</sup>CNN (Faster-RCNN)](https://arxiv.org/abs/1706.09579) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 72.27 | [Baidu Drive (wt2b)](https://pan.baidu.com/s/1R_31U2jl7gj6OMvirURnsg) | H->R | Reg. | smooth L1 | 90 | × | [cfgs_res50_dota_v1.py](./libs/configs/DOTA/r2cnn/cfgs_res50_dota_v1.py) |
@@ -127,10 +128,10 @@ More results and trained models are available in the [MODEL_ZOO.md](MODEL_ZOO.md
 1. For large-scale image, take DOTA dataset as a example (the output file or visualization is in $PATH_ROOT/tools/#DETECTOR/test_dota/VERSION): 
     ```  
     cd $PATH_ROOT/tools/#DETECTOR
-    python test_dota_ms.py --test_dir='/PATH/TO/IMAGES/'  
-                           --gpus=0,1,2,3,4,5,6,7  
-                           -ms (multi-scale testing, optional)
-                           -s (visualization, optional)
+    python test_dota.py --test_dir='/PATH/TO/IMAGES/'  
+                        --gpus=0,1,2,3,4,5,6,7  
+                        -ms (multi-scale testing, optional)
+                        -s (visualization, optional)
     ``` 
 
     **Notice: In order to set the breakpoint conveniently, the read and write mode of the file is' a+'. If the model of the same #VERSION needs to be tested again, the original test results need to be deleted.**
@@ -138,11 +139,11 @@ More results and trained models are available in the [MODEL_ZOO.md](MODEL_ZOO.md
 2. For small-scale image, take HRSC2016 dataset as a example: 
     ```  
     cd $PATH_ROOT/tools/#DETECTOR
-    python test_hrsc2016_ms.py --test_dir='/PATH/TO/IMAGES/'  
-                               --gpu=0
-                               --image_ext='bmp'
-                               --test_annotation_path='/PATH/TO/ANNOTATIONS'
-                               -s (visualization, optional)
+    python test_hrsc2016.py --test_dir='/PATH/TO/IMAGES/'  
+                            --gpu=0
+                            --image_ext='bmp'
+                            --test_annotation_path='/PATH/TO/ANNOTATIONS'
+                            -s (visualization, optional)
     ``` 
 
 ## Tensorboard

@@ -149,7 +149,7 @@ def enum_ratios(anchors, anchor_ratios):
     ws = tf.reshape(ws / sqrt_ratios[:, tf.newaxis], [-1, 1])
     hs = tf.reshape(hs * sqrt_ratios[:, tf.newaxis], [-1, 1])
 
-    return hs, ws
+    return ws, hs
 
 
 def shift_anchor(anchors, stride):

@@ -42,16 +42,16 @@ def parse_args():
                         default=np.inf, type=int)
     parser.add_argument('--h_len', dest='h_len',
                         help='image height',
-                        default=600, type=int)
+                        default=[600, 800, 1024, 1300, 1600], type=list)
     parser.add_argument('--w_len', dest='w_len',
                         help='image width',
-                        default=600, type=int)
+                        default=[600, 800, 1024, 1300, 1600], type=list)
     parser.add_argument('--h_overlap', dest='h_overlap',
                         help='height overlap',
-                        default=150, type=int)
+                        default=[150, 200, 300, 300, 400], type=list)
     parser.add_argument('--w_overlap', dest='w_overlap',
                         help='width overlap',
-                        default=150, type=int)
+                        default=[150, 200, 300, 300, 400], type=list)
     args = parser.parse_args()
     return args
 
@@ -111,100 +111,102 @@ class TestDOTA(object):
                 imgH = img.shape[0]
                 imgW = img.shape[1]
 
-                img_short_side_len_list = self.cfgs.IMG_SHORT_SIDE_LEN if isinstance(self.cfgs.IMG_SHORT_SIDE_LEN, list) else [
-                    self.cfgs.IMG_SHORT_SIDE_LEN]
-                img_short_side_len_list = [img_short_side_len_list[0]] if not self.args.multi_scale else img_short_side_len_list
+                for h_len, w_len, h_overlap, w_overlap in zip(self.args.h_len, self.args.w_len, self.args.h_overlap, self.args.w_overlap):
 
-                if imgH < self.args.h_len:
-                    temp = np.zeros([self.args.h_len, imgW, 3], np.float32)
-                    temp[0:imgH, :, :] = img
-                    img = temp
-                    imgH = self.args.h_len
+                    img_short_side_len_list = self.cfgs.IMG_SHORT_SIDE_LEN if isinstance(self.cfgs.IMG_SHORT_SIDE_LEN, list) else [
+                        self.cfgs.IMG_SHORT_SIDE_LEN]
+                    img_short_side_len_list = [img_short_side_len_list[0]] if not self.args.multi_scale else img_short_side_len_list
 
-                if imgW < self.args.w_len:
-                    temp = np.zeros([imgH, self.args.w_len, 3], np.float32)
-                    temp[:, 0:imgW, :] = img
-                    img = temp
-                    imgW = self.args.w_len
+                    if imgH < h_len:
+                        temp = np.zeros([h_len, imgW, 3], np.float32)
+                        temp[0:imgH, :, :] = img
+                        img = temp
+                        imgH = h_len
 
-                for hh in range(0, imgH, self.args.h_len - self.args.h_overlap):
-                    if imgH - hh - 1 < self.args.h_len:
-                        hh_ = imgH - self.args.h_len
-                    else:
-                        hh_ = hh
-                    for ww in range(0, imgW, self.args.w_len - self.args.w_overlap):
-                        if imgW - ww - 1 < self.args.w_len:
-                            ww_ = imgW - self.args.w_len
+                    if imgW < w_len:
+                        temp = np.zeros([imgH, w_len, 3], np.float32)
+                        temp[:, 0:imgW, :] = img
+                        img = temp
+                        imgW = w_len
+
+                    for hh in range(0, imgH, h_len - h_overlap):
+                        if imgH - hh - 1 < h_len:
+                            hh_ = imgH - h_len
                         else:
-                            ww_ = ww
-                        src_img = img[hh_:(hh_ + self.args.h_len), ww_:(ww_ + self.args.w_len), :]
-
-                        for short_size in img_short_side_len_list:
-                            max_len = self.cfgs.IMG_MAX_LENGTH
-                            if self.args.h_len < self.args.w_len:
-                                new_h, new_w = short_size, min(int(short_size * float(self.args.w_len) / self.args.h_len), max_len)
+                            hh_ = hh
+                        for ww in range(0, imgW, w_len - w_overlap):
+                            if imgW - ww - 1 < w_len:
+                                ww_ = imgW - w_len
                             else:
-                                new_h, new_w = min(int(short_size * float(self.args.h_len) / self.args.w_len), max_len), short_size
-                            img_resize = cv2.resize(src_img, (new_w, new_h))
+                                ww_ = ww
+                            src_img = img[hh_:(hh_ + h_len), ww_:(ww_ + w_len), :]
 
-                            resized_img, det_boxes_r_, det_scores_r_, det_category_r_ = \
-                                sess.run(
-                                    [img_batch, detection_boxes, detection_scores, detection_category],
-                                    feed_dict={img_plac: img_resize[:, :, ::-1]}
-                                )
+                            for short_size in img_short_side_len_list:
+                                max_len = self.cfgs.IMG_MAX_LENGTH
+                                if h_len < w_len:
+                                    new_h, new_w = short_size, min(int(short_size * float(w_len) / h_len), max_len)
+                                else:
+                                    new_h, new_w = min(int(short_size * float(h_len) / w_len), max_len), short_size
+                                img_resize = cv2.resize(src_img, (new_w, new_h))
 
-                            resized_h, resized_w = resized_img.shape[1], resized_img.shape[2]
-                            src_h, src_w = src_img.shape[0], src_img.shape[1]
-
-                            if len(det_boxes_r_) > 0:
-                                det_boxes_r_ = forward_convert(det_boxes_r_, False)
-                                det_boxes_r_[:, 0::2] *= (src_w / resized_w)
-                                det_boxes_r_[:, 1::2] *= (src_h / resized_h)
-
-                                for ii in range(len(det_boxes_r_)):
-                                    box_rotate = det_boxes_r_[ii]
-                                    box_rotate[0::2] = box_rotate[0::2] + ww_
-                                    box_rotate[1::2] = box_rotate[1::2] + hh_
-                                    box_res_rotate.append(box_rotate)
-                                    label_res_rotate.append(det_category_r_[ii])
-                                    score_res_rotate.append(det_scores_r_[ii])
-
-                            if self.args.flip_img:
-                                det_boxes_r_flip, det_scores_r_flip, det_category_r_flip = \
+                                resized_img, det_boxes_r_, det_scores_r_, det_category_r_ = \
                                     sess.run(
-                                        [detection_boxes, detection_scores, detection_category],
-                                        feed_dict={img_plac: cv2.flip(img_resize, flipCode=1)[:, :, ::-1]}
+                                        [img_batch, detection_boxes, detection_scores, detection_category],
+                                        feed_dict={img_plac: img_resize[:, :, ::-1]}
                                     )
-                                if len(det_boxes_r_flip) > 0:
-                                    det_boxes_r_flip = forward_convert(det_boxes_r_flip, False)
-                                    det_boxes_r_flip[:, 0::2] *= (src_w / resized_w)
-                                    det_boxes_r_flip[:, 1::2] *= (src_h / resized_h)
 
-                                    for ii in range(len(det_boxes_r_flip)):
-                                        box_rotate = det_boxes_r_flip[ii]
-                                        box_rotate[0::2] = (src_w - box_rotate[0::2]) + ww_
+                                resized_h, resized_w = resized_img.shape[1], resized_img.shape[2]
+                                src_h, src_w = src_img.shape[0], src_img.shape[1]
+
+                                if len(det_boxes_r_) > 0:
+                                    det_boxes_r_ = forward_convert(det_boxes_r_, False)
+                                    det_boxes_r_[:, 0::2] *= (src_w / resized_w)
+                                    det_boxes_r_[:, 1::2] *= (src_h / resized_h)
+
+                                    for ii in range(len(det_boxes_r_)):
+                                        box_rotate = det_boxes_r_[ii]
+                                        box_rotate[0::2] = box_rotate[0::2] + ww_
                                         box_rotate[1::2] = box_rotate[1::2] + hh_
                                         box_res_rotate.append(box_rotate)
-                                        label_res_rotate.append(det_category_r_flip[ii])
-                                        score_res_rotate.append(det_scores_r_flip[ii])
+                                        label_res_rotate.append(det_category_r_[ii])
+                                        score_res_rotate.append(det_scores_r_[ii])
 
-                                det_boxes_r_flip, det_scores_r_flip, det_category_r_flip = \
-                                    sess.run(
-                                        [detection_boxes, detection_scores, detection_category],
-                                        feed_dict={img_plac: cv2.flip(img_resize, flipCode=0)[:, :, ::-1]}
-                                    )
-                                if len(det_boxes_r_flip) > 0:
-                                    det_boxes_r_flip = forward_convert(det_boxes_r_flip, False)
-                                    det_boxes_r_flip[:, 0::2] *= (src_w / resized_w)
-                                    det_boxes_r_flip[:, 1::2] *= (src_h / resized_h)
+                                if self.args.flip_img:
+                                    det_boxes_r_flip, det_scores_r_flip, det_category_r_flip = \
+                                        sess.run(
+                                            [detection_boxes, detection_scores, detection_category],
+                                            feed_dict={img_plac: cv2.flip(img_resize, flipCode=1)[:, :, ::-1]}
+                                        )
+                                    if len(det_boxes_r_flip) > 0:
+                                        det_boxes_r_flip = forward_convert(det_boxes_r_flip, False)
+                                        det_boxes_r_flip[:, 0::2] *= (src_w / resized_w)
+                                        det_boxes_r_flip[:, 1::2] *= (src_h / resized_h)
 
-                                    for ii in range(len(det_boxes_r_flip)):
-                                        box_rotate = det_boxes_r_flip[ii]
-                                        box_rotate[0::2] = box_rotate[0::2] + ww_
-                                        box_rotate[1::2] = (src_h - box_rotate[1::2]) + hh_
-                                        box_res_rotate.append(box_rotate)
-                                        label_res_rotate.append(det_category_r_flip[ii])
-                                        score_res_rotate.append(det_scores_r_flip[ii])
+                                        for ii in range(len(det_boxes_r_flip)):
+                                            box_rotate = det_boxes_r_flip[ii]
+                                            box_rotate[0::2] = (src_w - box_rotate[0::2]) + ww_
+                                            box_rotate[1::2] = box_rotate[1::2] + hh_
+                                            box_res_rotate.append(box_rotate)
+                                            label_res_rotate.append(det_category_r_flip[ii])
+                                            score_res_rotate.append(det_scores_r_flip[ii])
+
+                                    det_boxes_r_flip, det_scores_r_flip, det_category_r_flip = \
+                                        sess.run(
+                                            [detection_boxes, detection_scores, detection_category],
+                                            feed_dict={img_plac: cv2.flip(img_resize, flipCode=0)[:, :, ::-1]}
+                                        )
+                                    if len(det_boxes_r_flip) > 0:
+                                        det_boxes_r_flip = forward_convert(det_boxes_r_flip, False)
+                                        det_boxes_r_flip[:, 0::2] *= (src_w / resized_w)
+                                        det_boxes_r_flip[:, 1::2] *= (src_h / resized_h)
+
+                                        for ii in range(len(det_boxes_r_flip)):
+                                            box_rotate = det_boxes_r_flip[ii]
+                                            box_rotate[0::2] = box_rotate[0::2] + ww_
+                                            box_rotate[1::2] = (src_h - box_rotate[1::2]) + hh_
+                                            box_res_rotate.append(box_rotate)
+                                            label_res_rotate.append(det_category_r_flip[ii])
+                                            score_res_rotate.append(det_scores_r_flip[ii])
 
                 box_res_rotate = np.array(box_res_rotate)
                 label_res_rotate = np.array(label_res_rotate)
