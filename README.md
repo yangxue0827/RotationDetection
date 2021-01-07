@@ -26,7 +26,7 @@ Techniques:
   - [ ] [GWD](): coming soon! 
   - [x] Mixed method: R<sup>3</sup>Det-DCL
 - [x] Loss: CE, [Focal Loss](https://arxiv.org/abs/1708.02002), [Smooth L1 Loss](https://arxiv.org/abs/1504.08083), [IoU-Smooth L1 Loss](https://arxiv.org/abs/1811.07126), [Modulated Loss](https://arxiv.org/abs/1911.08299)
-- [x] Others: [SWA](https://arxiv.org/pdf/2012.12645.pdf), exportPb
+- [x] [Others](./OTHERS.md): [SWA](https://arxiv.org/pdf/2012.12645.pdf), exportPb
 
 ![3](demo.gif)
 
