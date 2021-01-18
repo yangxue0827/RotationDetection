@@ -9,6 +9,7 @@ import numpy as np
 
 from libs.utils.coordinate_convert import forward_convert
 
+
 def view_bar(message, num, total):
     rate = num / total
     rate_num = int(rate * 40)
