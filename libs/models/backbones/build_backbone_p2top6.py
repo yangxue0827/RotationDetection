@@ -39,7 +39,8 @@ class BuildBackbone(object):
                                                                         is_training=self.is_training)
             return self.fpn_func.fpn(feature_dict, self.is_training)
 
-        elif self.base_network_name in ['resnet152_v1d', 'resnet101_v1d', 'resnet50_v1d']:
+        elif self.base_network_name in ['resnet152_v1d', 'resnet101_v1d', 'resnet50_v1d',
+                                        'resnet152_v1b', 'resnet101_v1b', 'resnet50_v1b', 'resnet34_v1b', 'resnet18_v1b']:
 
             feature_dict = resnet_gluoncv.ResNetGluonCVBackbone(self.cfgs).resnet_base(input_img_batch,
                                                                                        scope_name=self.base_network_name,

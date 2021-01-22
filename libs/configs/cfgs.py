@@ -5,54 +5,53 @@ import tensorflow as tf
 import math
 
 """
-RetinaNet-H + IoU-Smooth L1
-FLOPs: 484911740;    Trainable params: 33002916
-
 This is your result for task 1:
 
-mAP: 0.6699231893137383
-ap of each class:
-plane:0.8833785173522034,
-baseball-diamond:0.7627482529936743,
-bridge:0.44320593902405797,
-ground-track-field:0.6785841556477691,
-small-vehicle:0.6303299319074853,
-large-vehicle:0.5124927246071527,
-ship:0.7277748791449373,
-tennis-court:0.8980387801428189,
-basketball-court:0.79974279949969,
-storage-tank:0.7797862635611005,
-soccer-ball-field:0.5409846307060925,
-roundabout:0.632179992142947,
-harbor:0.5621019025063557,
-swimming-pool:0.6734955940136754,
-helicopter:0.5240034764561138
+    mAP: 0.7066194189913816
+    ap of each class:
+    plane:0.8905480010393588,
+    baseball-diamond:0.7845764249543027,
+    bridge:0.4415489914209597,
+    ground-track-field:0.6515721505439082,
+    small-vehicle:0.7509226622459368,
+    large-vehicle:0.7288453788151275,
+    ship:0.8604046905135039,
+    tennis-court:0.9082569687774237,
+    basketball-court:0.8141347275878138,
+    storage-tank:0.8253027715641935,
+    soccer-ball-field:0.5623560181901192,
+    roundabout:0.6100656068973895,
+    harbor:0.5648618127447264,
+    swimming-pool:0.6767393616949172,
+    helicopter:0.5291557178810407
 
 The submitted information is :
 
-Description: RetinaNet_DOTA_1x_20201225_45.9w
+Description: RetinaNet_DOTA_R3Det_2x_20191108_70.2w
 Username: SJTU-Det
 Institute: SJTU
 Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
 TeamMembers: yangxue
+
+
 """
 
 # ------------------------------------------------
-VERSION = 'RetinaNet_DOTA_1x_20201225'
+VERSION = 'RetinaNet_DOTA_R3Det_2x_20191108'
 NET_NAME = 'resnet50_v1d'  # 'MobilenetV2'
 
 # ---------------------------------------- System
 ROOT_PATH = os.path.abspath('../../')
 print(20*"++--")
 print(ROOT_PATH)
-GPU_GROUP = "2"
+GPU_GROUP = "0,1,2"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
 SHOW_TRAIN_INFO_INTE = 20
 SMRY_ITER = 200
-SAVE_WEIGHTS_INTE = 27000
+SAVE_WEIGHTS_INTE = 27000 * 2
 
 SUMMARY_PATH = ROOT_PATH + '/output/summary'
-TEST_SAVE_PATH = ROOT_PATH + '/utils/test_result'
+TEST_SAVE_PATH = ROOT_PATH + '/tools/test_result'
 
 if NET_NAME.startswith("resnet"):
     weights_name = NET_NAME
@@ -65,7 +64,7 @@ PRETRAINED_CKPT = ROOT_PATH + '/dataloader/pretrained_weights/' + weights_name +
 TRAINED_CKPT = os.path.join(ROOT_PATH, 'output/trained_weights')
 EVALUATE_DIR = ROOT_PATH + '/output/evaluate_result_pickle/'
 
-# ------------------------------------------ Train and Test
+# ------------------------------------------ Train and test
 RESTORE_FROM_RPN = False
 FIXED_BLOCKS = 1  # allow 0~3
 FREEZE_BLOCKS = [True, False, False, False, False]  # for gluoncv backbone
@@ -76,10 +75,8 @@ MUTILPY_BIAS_GRADIENT = 2.0  # if None, will not multipy
 GRADIENT_CLIPPING_BY_NORM = 10.0  # if None, will not clip
 
 CLS_WEIGHT = 1.0
-REG_WEIGHT = 1.0 / 5.0
-REG_LOSS_MODE = 1
-ALPHA = 1.0
-BETA = 1.0
+REG_WEIGHT = 1.0
+USE_IOU_FACTOR = False
 
 BATCH_SIZE = 1
 EPSILON = 1e-5
@@ -111,8 +108,10 @@ PROBABILITY = 0.01
 FINAL_CONV_BIAS_INITIALIZER = tf.constant_initializer(value=-math.log((1.0 - PROBABILITY) / PROBABILITY))
 WEIGHT_DECAY = 1e-4
 USE_GN = False
-FPN_CHANNEL = 256
 NUM_SUBNET_CONV = 4
+NUM_REFINE_STAGE = 1
+USE_RELU = False
+FPN_CHANNEL = 256
 FPN_MODE = 'fpn'
 
 # --------------------------------------------- Anchor
@@ -126,13 +125,15 @@ ANCHOR_SCALE_FACTORS = None
 USE_CENTER_OFFSET = True
 METHOD = 'H'
 USE_ANGLE_COND = False
-ANGLE_RANGE = 90  # or 180
+ANGLE_RANGE = 90
 
 # -------------------------------------------- Head
 SHARE_NET = True
 USE_P5 = True
 IOU_POSITIVE_THRESHOLD = 0.5
 IOU_NEGATIVE_THRESHOLD = 0.4
+REFINE_IOU_POSITIVE_THRESHOLD = [0.6, 0.7]
+REFINE_IOU_NEGATIVE_THRESHOLD = [0.5, 0.6]
 
 NMS = True
 NMS_IOU_THRESHOLD = 0.1

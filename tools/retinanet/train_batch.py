@@ -57,7 +57,8 @@ class TrainRetinaNet(Train):
                 start = i * cfgs.BATCH_SIZE
                 end = (i + 1) * cfgs.BATCH_SIZE
                 img = img_batch[start:end, :, :, :]
-                if cfgs.NET_NAME in ['resnet152_v1d', 'resnet101_v1d', 'resnet50_v1d']:
+                if cfgs.NET_NAME in ['resnet152_v1d', 'resnet101_v1d', 'resnet50_v1d',
+                                     'resnet152_v1b', 'resnet101_v1b', 'resnet50_v1b', 'resnet34_v1b', 'resnet18_v1b']:
                     img = img / tf.constant([cfgs.PIXEL_STD])
 
                 gtboxes_and_label_r = tf.py_func(backward_convert,

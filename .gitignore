@@ -108,6 +108,7 @@ ENV/
 *.meta
 events.*
 checkpoint
+*.params
 __pycache__/
 *.json
 *.zip
@@ -130,6 +131,8 @@ __pycache__/
 *r2cnn_gwd*
 *fcos*
 *centernet*
+*tensorpack*
+*.DS_Store*
 
 demo
 tools/*/demo.py

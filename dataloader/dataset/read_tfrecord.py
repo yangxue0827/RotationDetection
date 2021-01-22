@@ -82,7 +82,8 @@ class ReadTFRecord(object):
                                                                                            gtboxes_and_label=gtboxes_and_label,
                                                                                            target_shortside_len=shortside_len,
                                                                                            length_limitation=self.cfgs.IMG_MAX_LENGTH)
-        if self.cfgs.NET_NAME in ['resnet152_v1d', 'resnet101_v1d', 'resnet50_v1d']:
+        if self.cfgs.NET_NAME in ['resnet152_v1d', 'resnet101_v1d', 'resnet50_v1d',
+                                  'resnet152_v1b', 'resnet101_v1b', 'resnet50_v1b', 'resnet34_v1b', 'resnet18_v1b']:
             img = img / 255 - tf.constant([[self.cfgs.PIXEL_MEAN_]])
         else:
             img = img - tf.constant([[self.cfgs.PIXEL_MEAN]])  # sub pixel mean at last
@@ -104,7 +105,7 @@ class ReadTFRecord(object):
             raise ValueError('dataSet name must be in {}'.format(valid_dataset))
 
         if is_training:
-            pattern = os.path.join('../../dataloader/tfrecord', dataset_name + '_train*')
+            pattern = os.path.join('../../dataloader/tfrecord', dataset_name + '_*')
         else:
             pattern = os.path.join('../../dataloader/tfrecord', dataset_name + '_test*')
 
