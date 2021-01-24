@@ -103,7 +103,10 @@ def download_mxnet_weights(name, tag=None, root='../mxnet_weights'):
         ('75babab699e1c93f5da3c1ce4fd0092d1075f9a0', 'resnet152_v1c'),
         ('117a384ecf61490eb31ea147eb0e61e6d2b8a449', 'resnet50_v1d'),
         ('1b2b825feff86b0354642a4ab59f9b6e35e47338', 'resnet101_v1d'),
-        ('cddbc86ff24a5544f57242ded0acb14ef1fbd437', 'resnet152_v1d')
+        ('cddbc86ff24a5544f57242ded0acb14ef1fbd437', 'resnet152_v1d'),
+        ('25a187fa281ddc98afbcd0cc0f0646885b874b80', 'resnet50_v1s'),
+        ('bd93a83c05f709a803b1221aeff0b028e6eebb03', 'resnet101_v1s'),
+        ('cf74621d988ad06c6c6aa44f5597e5b600a966cc', 'resnet152_v1s')
     ]}
 
     apache_repo_url = 'https://apache-mxnet.s3-accelerate.dualstack.amazonaws.com/'
@@ -156,5 +159,5 @@ def download_mxnet_weights(name, tag=None, root='../mxnet_weights'):
 
 
 if __name__ == '__main__':
-    download_mxnet_weights('resnet%d_v%db' % (18, 1),
+    download_mxnet_weights('resnet%d_v%dd' % (50, 1),
                            tag=True)

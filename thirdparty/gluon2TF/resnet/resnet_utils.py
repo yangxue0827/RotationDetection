@@ -231,7 +231,7 @@ def get_resnet_v1_b_base(input_x, freeze_norm, scope="resnet50_v1b", bottleneck_
                     freeze=[True, False, False, False, False], is_training=True):
 
     assert len(bottleneck_nums) == len(base_channels), "bottleneck num should same as base_channels size"
-    assert len(freeze) == len(bottleneck_nums) +1, "should satisfy:: len(freeze) == len(bottleneck_nums) + 1"
+    assert len(freeze) == len(bottleneck_nums) + 1, "should satisfy:: len(freeze) == len(bottleneck_nums) + 1"
     feature_dict = {}
     with tf.variable_scope(scope):
         with slim.arg_scope(resnet_arg_scope(is_training=(not freeze[0]) and is_training,
@@ -336,6 +336,57 @@ def get_resnet_v1_d(input_x,
         logits = slim.fully_connected(net, num_outputs=num_cls, activation_fn=None, scope='logits')
         return logits
 
+
+def get_resnet_v1_s_base(input_x, freeze_norm, scope="resnet50_v1s", bottleneck_nums=[3, 4, 6, 3], base_channels=[64, 128, 256, 512],
+                    freeze=[True, False, False, False, False], is_training=True):
+
+    assert len(bottleneck_nums) == len(base_channels), "bottleneck num should same as base_channels size"
+    assert len(freeze) == len(bottleneck_nums) + 1, "should satisfy:: len(freeze) == len(bottleneck_nums) + 1"
+    feature_dict = {}
+    with tf.variable_scope(scope):
+        with slim.arg_scope(resnet_arg_scope(is_training=(not freeze[0]) and is_training,
+                                             freeze_norm=freeze_norm)):
+            net = stem_stack_3x3(net=input_x, input_channel=64, scope="C1")
+            feature_dict["C1"] = net
+            # print (net)
+        for i in range(2, len(bottleneck_nums)+2):
+            spatial_downsample = False if i == 2 else True
+            with slim.arg_scope(resnet_arg_scope(is_training=(not freeze[i-1]) and is_training,
+                                                 freeze_norm=freeze_norm)):
+                net = make_block(net=net, base_channel=base_channels[i-2],
+                                 bottleneck_nums=bottleneck_nums[i-2],
+                                 scope="C%d" % i,
+                                 avg_down=False, spatial_downsample=spatial_downsample)
+                feature_dict["C%d" % i] = net
+
+    return net, feature_dict
+
+
+def get_resnet_v1_s(input_x,
+                    scope="resnet50_v1s", bottleneck_nums=[3, 4, 6, 3],
+                    base_channels=[64, 128, 256, 512],
+                    freeze=[True, False, False, False, False],
+                    is_training=True, freeze_norm=False,
+                    num_cls=1000, dropout=False):
+
+    net, fet_dict = get_resnet_v1_s_base(input_x=input_x, scope=scope, bottleneck_nums=bottleneck_nums, base_channels=base_channels,
+                                         freeze=freeze, is_training=is_training, freeze_norm=freeze_norm)
+    with tf.variable_scope(scope):
+        # net shape : [B, H, W, C]
+        if DATA_FORMAT.strip() == "NCHW":
+            net = tf.reduce_mean(net, axis=[2, 3], name="global_avg_pooling",
+                                 keep_dims=True)  # [B, C, 1, 1]
+        elif DATA_FORMAT.strip() == "NHWC":
+            net = tf.reduce_mean(net, axis=[1, 2], name="global_avg_pooling",
+                                 keep_dims=True)  # [B, 1, 1, C]
+        else:
+            raise ValueError("Data Format Erro...")
+
+        net = slim.flatten(net, scope='flatten')
+        if dropout:
+            net = slim.dropout(net, keep_prob=0.5, is_training=is_training)
+        logits = slim.fully_connected(net, num_outputs=num_cls, activation_fn=None, scope='logits')
+        return logits
 
 
 

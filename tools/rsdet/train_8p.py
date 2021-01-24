@@ -131,7 +131,7 @@ class TrainRSDet(Train):
                                             boxes=outputs[0],
                                             scores=outputs[1],
                                             labels=outputs[2],
-                                            method=1)
+                                            method=2)
                                         tf.summary.image('Compare/final_detection_gpu:%d' % i, detections_in_img)
 
                                     loss_dict = outputs[-1]

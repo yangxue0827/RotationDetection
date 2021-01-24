@@ -5,7 +5,7 @@ from __future__ import absolute_import, print_function, division
 import numpy as np
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
-from resnet_utils import get_resnet_v1_d, get_resnet_v1_b
+from resnet_utils import get_resnet_v1_d, get_resnet_v1_b, get_resnet_v1_s
 from parse_mxnet_weights import read_mxnet_weights, check_mxnet_names, check_tf_vars
 import weights_map
 import os
@@ -17,7 +17,8 @@ BottleNeck_NUM_DICT = {
     'resnet101_v1b': [3, 4, 23, 3],
     'resnet50_v1d': [3, 4, 6, 3],
     'resnet101_v1d': [3, 4, 23, 3],
-    'resnet152_v1d': [3, 8, 36, 3]
+    'resnet152_v1d': [3, 8, 36, 3],
+    'resnet50_v1s': [3, 4, 6, 3],
 }
 
 BASE_CHANNELS_DICT = {
@@ -27,7 +28,8 @@ BASE_CHANNELS_DICT = {
     'resnet101_v1b': [64, 128, 256, 512],
     'resnet50_v1d': [64, 128, 256, 512],
     'resnet101_v1d': [64, 128, 256, 512],
-    'resnet152_v1d': [64, 128, 256, 512]
+    'resnet152_v1d': [64, 128, 256, 512],
+    'resnet50_v1s': [64, 128, 256, 512]
 }
 
 
@@ -72,6 +74,8 @@ def build_resnet(img_batch=None, scope='resnet50_v1d', is_training=True, freeze_
         get_resnet_fn = get_resnet_v1_b
     elif scope.endswith('d'):
         get_resnet_fn = get_resnet_v1_d
+    elif scope.endswith('s'):
+        get_resnet_fn = get_resnet_v1_s
 
     logits = get_resnet_fn(input_x=img_batch, scope=scope,
                            bottleneck_nums=BottleNeck_NUM_DICT[scope],

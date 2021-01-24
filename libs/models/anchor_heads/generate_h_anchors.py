@@ -146,7 +146,7 @@ def generate_anchors_pre(height, width, feat_stride, anchor_scales=(8, 16, 32),
 if __name__ == '__main__':
     anchors = generate_anchors_pre(64, 64, 8, anchor_scales=np.array([2 ** 0, 2 ** (1.0 / 3.0), 2 ** (2.0 / 3.0)]) * 8,
                                    anchor_ratios=(0.5, 1.0, 2.0), base_size=4)
-    print(anchors[:10])
+    print(anchors[:9])
 
     # x_c = (anchors[:, 2] - anchors[:, 0]) / 2
     # y_c = (anchors[:, 3] - anchors[:, 1]) / 2

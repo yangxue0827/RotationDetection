@@ -5,50 +5,27 @@ import tensorflow as tf
 import math
 
 """
-This is your result for task 1:
+FLOPs: 608417264;    Trainable params: 40668036
+cls : ship|| Recall: 0.9226384364820847 || Precison: 0.42626034612490593|| AP: 0.8724897298924824
+F1:0.8828628644599527 P:0.9043552519214346 R:0.8623778501628665
+mAP is : 0.8724897298924824
 
-    mAP: 0.7066194189913816
-    ap of each class:
-    plane:0.8905480010393588,
-    baseball-diamond:0.7845764249543027,
-    bridge:0.4415489914209597,
-    ground-track-field:0.6515721505439082,
-    small-vehicle:0.7509226622459368,
-    large-vehicle:0.7288453788151275,
-    ship:0.8604046905135039,
-    tennis-court:0.9082569687774237,
-    basketball-court:0.8141347275878138,
-    storage-tank:0.8253027715641935,
-    soccer-ball-field:0.5623560181901192,
-    roundabout:0.6100656068973895,
-    harbor:0.5648618127447264,
-    swimming-pool:0.6767393616949172,
-    helicopter:0.5291557178810407
-
-The submitted information is :
-
-Description: RetinaNet_DOTA_R3Det_2x_20191108_70.2w
-Username: SJTU-Det
-Institute: SJTU
-Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
-TeamMembers: yangxue
-
-
+87.24	78.51	77	65.8	53.38	31.12	12.8	3.38	0.61	0.04	40.99
 """
 
 # ------------------------------------------------
-VERSION = 'RetinaNet_DOTA_R3Det_2x_20191108'
+VERSION = 'RetinaNet_HRSC2016_R3Det_1x_20191108'
 NET_NAME = 'resnet50_v1d'  # 'MobilenetV2'
 
 # ---------------------------------------- System
 ROOT_PATH = os.path.abspath('../../')
 print(20*"++--")
 print(ROOT_PATH)
-GPU_GROUP = "0,1,2"
+GPU_GROUP = "0"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
 SHOW_TRAIN_INFO_INTE = 20
 SMRY_ITER = 200
-SAVE_WEIGHTS_INTE = 27000 * 2
+SAVE_WEIGHTS_INTE = 10000
 
 SUMMARY_PATH = ROOT_PATH + '/output/summary'
 TEST_SAVE_PATH = ROOT_PATH + '/tools/test_result'
@@ -62,13 +39,14 @@ else:
 
 PRETRAINED_CKPT = ROOT_PATH + '/dataloader/pretrained_weights/' + weights_name + '.ckpt'
 TRAINED_CKPT = os.path.join(ROOT_PATH, 'output/trained_weights')
-EVALUATE_DIR = ROOT_PATH + '/output/evaluate_result_pickle/'
+EVALUATE_R_DIR = ROOT_PATH + '/output/evaluate_result_pickle/'
 
 # ------------------------------------------ Train and test
 RESTORE_FROM_RPN = False
 FIXED_BLOCKS = 1  # allow 0~3
 FREEZE_BLOCKS = [True, False, False, False, False]  # for gluoncv backbone
 USE_07_METRIC = True
+EVAL_THRESHOLD = 0.5
 ADD_BOX_IN_TENSORBOARD = True
 
 MUTILPY_BIAS_GRADIENT = 2.0  # if None, will not multipy
@@ -87,17 +65,17 @@ MAX_ITERATION = SAVE_WEIGHTS_INTE*20
 WARM_SETP = int(1.0 / 4.0 * SAVE_WEIGHTS_INTE)
 
 # -------------------------------------------- Dataset
-DATASET_NAME = 'DOTA'  # 'pascal', 'coco'
+DATASET_NAME = 'HRSC2016'  # 'pascal', 'coco'
 PIXEL_MEAN = [123.68, 116.779, 103.939]  # R, G, B. In tf, channel is RGB. In openCV, channel is BGR
 PIXEL_MEAN_ = [0.485, 0.456, 0.406]
 PIXEL_STD = [0.229, 0.224, 0.225]  # R, G, B. In tf, channel is RGB. In openCV, channel is BGR
-IMG_SHORT_SIDE_LEN = 800
-IMG_MAX_LENGTH = 800
-CLASS_NUM = 15
+IMG_SHORT_SIDE_LEN = 512
+IMG_MAX_LENGTH = 512
+CLASS_NUM = 1
 
-IMG_ROTATE = False
-RGB2GRAY = False
-VERTICAL_FLIP = False
+IMG_ROTATE = True
+RGB2GRAY = True
+VERTICAL_FLIP = True
 HORIZONTAL_FLIP = True
 IMAGE_PYRAMID = False
 

@@ -152,23 +152,26 @@ class TestUCASAOD(object):
                         tmp_label_r = det_category_r_all[index]
                         tmp_score_r = det_scores_r_all[index]
 
-                        tmp_boxes_r_ = backward_convert(tmp_boxes_r, False)
+                        if self.args.multi_scale:
+                            tmp_boxes_r_ = backward_convert(tmp_boxes_r, False)
 
-                        # try:
-                        #     inx = nms_rotate.nms_rotate_cpu(boxes=np.array(tmp_boxes_r_),
-                        #                                     scores=np.array(tmp_score_r),
-                        #                                     iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
-                        #                                     max_output_size=5000)
-                        # except:
-                        tmp_boxes_r_ = np.array(tmp_boxes_r_)
-                        tmp = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
-                        tmp[:, 0:-1] = tmp_boxes_r_
-                        tmp[:, -1] = np.array(tmp_score_r)
-                        # Note: the IoU of two same rectangles is 0, which is calculated by rotate_gpu_nms
-                        jitter = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
-                        jitter[:, 0] += np.random.rand(tmp_boxes_r_.shape[0], ) / 1000
-                        inx = rotate_gpu_nms(np.array(tmp, np.float32) + np.array(jitter, np.float32),
-                                             float(self.cfgs.NMS_IOU_THRESHOLD), 0)
+                            # try:
+                            #     inx = nms_rotate.nms_rotate_cpu(boxes=np.array(tmp_boxes_r_),
+                            #                                     scores=np.array(tmp_score_r),
+                            #                                     iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
+                            #                                     max_output_size=5000)
+                            # except:
+                            tmp_boxes_r_ = np.array(tmp_boxes_r_)
+                            tmp = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
+                            tmp[:, 0:-1] = tmp_boxes_r_
+                            tmp[:, -1] = np.array(tmp_score_r)
+                            # Note: the IoU of two same rectangles is 0, which is calculated by rotate_gpu_nms
+                            jitter = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
+                            jitter[:, 0] += np.random.rand(tmp_boxes_r_.shape[0], ) / 1000
+                            inx = rotate_gpu_nms(np.array(tmp, np.float32) + np.array(jitter, np.float32),
+                                                 float(self.cfgs.NMS_IOU_THRESHOLD), 0)
+                        else:
+                            inx = np.arange(0, tmp_score_r.shape[0])
 
                         box_res_rotate_.extend(np.array(tmp_boxes_r)[inx])
                         score_res_rotate_.extend(np.array(tmp_score_r)[inx])

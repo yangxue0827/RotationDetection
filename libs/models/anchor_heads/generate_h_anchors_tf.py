@@ -134,7 +134,7 @@ def generate_anchors_pre(height, width, feat_stride, anchor_scales=(8, 16, 32),
     shift_x, shift_y = tf.meshgrid(shift_x, shift_y)
     shift_x = tf.reshape(shift_x, [-1, ])
     shift_y = tf.reshape(shift_y, [-1, ])
-    shifts = tf.transpose(tf.stack([shift_x, shift_y, shift_x, shift_x]))
+    shifts = tf.transpose(tf.stack([shift_x, shift_y, shift_x, shift_y]))
     K = tf.shape(shifts)[0]
     # width changes faster, so here it is H, W, C
     anchors = tf.cast(tf.reshape(anchors, [1, A, 4]), tf.float32) + tf.cast(tf.transpose(tf.reshape(shifts, [1, K, 4]), [1, 0, 2]), tf.float32)
@@ -148,7 +148,7 @@ if __name__ == '__main__':
                                    anchor_ratios=(0.5, 1.0, 2.0), base_size=4)
     with tf.Session() as sess:
         anchors = sess.run(anchors_tf)
-        print(anchors[:10])
+        print(anchors[:9])
         print(anchors.shape)
 
         # x_c = (anchors[:, 2] - anchors[:, 0]) / 2

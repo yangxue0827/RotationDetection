@@ -15,8 +15,8 @@ from resnet_utils import DEBUG
 import os
 
 
-MODEL_NAME = 'resnet50_v1b'
-Mxnet_Weights_PATH = '../mxnet_weights/resnet50_v1b-0ecdba34.params'
+MODEL_NAME = 'resnet50_v1d'
+Mxnet_Weights_PATH = '../mxnet_weights/resnet50_v1d-117a384e.params'
 
 
 def mxnet_process_img(path):

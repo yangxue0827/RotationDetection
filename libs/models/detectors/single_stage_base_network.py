@@ -128,10 +128,13 @@ class DetectionNetworkBase(object):
 
             return rpn_delta_boxes_list, rpn_scores_list, rpn_probs_list
 
-    def make_anchors(self, feature_pyramid):
+    def make_anchors(self, feature_pyramid, use_tf=False):
         with tf.variable_scope('make_anchors'):
             anchor = GenerateAnchors(self.cfgs, self.method)
-            anchor_list = anchor.generate_all_anchor(feature_pyramid)
+            if use_tf:
+                anchor_list = anchor.generate_all_anchor_tf(feature_pyramid)
+            else:
+                anchor_list = anchor.generate_all_anchor(feature_pyramid)
         return anchor_list
 
     def add_anchor_img_smry(self, img, anchors, labels, method):
