@@ -265,8 +265,8 @@ class ResNetGluonCVBackbone(object):
                                                scope="C%d" % i,
                                                avg_down=False, spatial_downsample=spatial_downsample)
                     else:
-                        net = self.make_block(net=net, base_channel=base_channels[i - 2],
-                                              bottleneck_nums=bottleneck_nums[i - 2],
+                        net = self.make_block(net=net, base_channel=base_channels[i-2],
+                                              bottleneck_nums=bottleneck_nums[i-2],
                                               scope="C%d" % i,
                                               avg_down=False, spatial_downsample=spatial_downsample)
                     feature_dict["C%d" % i] = net
@@ -290,10 +290,10 @@ class ResNetGluonCVBackbone(object):
                 with slim.arg_scope(self.resnet_arg_scope(is_training=((not freeze[i-1]) and is_training),
                                                           freeze_norm=freeze_norm)):
 
-                    net = self.make_block(net=net, base_channel=base_channels[i - 2],
-                                          bottleneck_nums=bottleneck_nums[i - 2],
+                    net = self.make_block(net=net, base_channel=base_channels[i-2],
+                                          bottleneck_nums=bottleneck_nums[i-2],
                                           scope="C%d" % i,
-                                          avg_down=False, spatial_downsample=spatial_downsample)
+                                          avg_down=True, spatial_downsample=spatial_downsample)
                     feature_dict["C%d" % i] = net
 
         return net, feature_dict
