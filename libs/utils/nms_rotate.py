@@ -99,6 +99,15 @@ def nms_rotate_cpu(boxes, scores, iou_threshold, max_output_size):
     return np.array(keep, np.int64)
 
 
+def rnms_gpu(det_boxes, iou_threshold, device_id):
+    if det_boxes.shape[0] == 0:
+        return np.array([], np.int64)
+    else:
+        keep = rotate_gpu_nms(det_boxes, iou_threshold, device_id)
+        keep = np.reshape(keep, [-1])
+        return np.array(keep, np.int64)
+
+
 def nms_rotate_gpu(boxes_list, scores, iou_threshold, device_id=0, max_output_size=100):
     # x_c, y_c, w, h, theta = tf.unstack(boxes_list, axis=1)
     # boxes_list = tf.transpose(tf.stack([x_c, y_c, w, h, theta]))
@@ -116,9 +125,9 @@ def nms_rotate_gpu(boxes_list, scores, iou_threshold, device_id=0, max_output_si
     # scores = tf.gather(scores, h_keep)
 
     det_tensor = tf.concat([boxes_list, tf.expand_dims(scores, axis=1)], axis=1)
-    pad_box = tf.convert_to_tensor(np.array([[10, 10, 10, 10, -90, 0.001]], np.float32))
-    det_tensor = tf.concat([det_tensor, pad_box], axis=0)
-    keep = tf.py_func(rotate_gpu_nms,
+    # pad_box = tf.convert_to_tensor(np.array([[10, 10, 10, 10, -90, 0.001]], np.float32))
+    # det_tensor = tf.concat([det_tensor, pad_box], axis=0)
+    keep = tf.py_func(rnms_gpu,
                       inp=[det_tensor, iou_threshold, device_id],
                       Tout=tf.int64)
     keep = tf.reshape(keep, [-1])
