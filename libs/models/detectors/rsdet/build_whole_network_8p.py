@@ -131,10 +131,10 @@ class DetectionNetworkRSDet(DetectionNetworkBase):
                 filtered_boxes = tf.reshape(filtered_boxes, [-1, 5])
 
                 nms_indices = nms_rotate.nms_rotate(decode_boxes=filtered_boxes,
-                                                    scores=filtered_scores,
+                                                    scores=tf.reshape(filtered_scores, [-1, ]),
                                                     iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
                                                     max_output_size=100 if is_training else 1000,
-                                                    use_gpu=False)
+                                                    use_gpu=True)
 
                 # filter indices based on NMS
                 indices = tf.gather(indices, nms_indices)

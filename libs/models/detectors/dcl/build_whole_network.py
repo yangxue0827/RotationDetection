@@ -167,7 +167,8 @@ class DetectionNetworkDCL(DetectionNetworkBase):
             scores, category, boxes_angle = self.postprocess_detctions(rpn_bbox_pred=rpn_box_pred,
                                                                        rpn_cls_prob=rpn_cls_prob,
                                                                        rpn_angle_prob=tf.sigmoid(rpn_angle_cls),
-                                                                       anchors=anchors)
+                                                                       anchors=anchors,
+                                                                       gpu_id=gpu_id)
             scores = tf.stop_gradient(scores)
             category = tf.stop_gradient(category)
             boxes_angle = tf.stop_gradient(boxes_angle)
@@ -177,7 +178,7 @@ class DetectionNetworkDCL(DetectionNetworkBase):
         else:
             return boxes_angle, scores, category
 
-    def postprocess_detctions(self, rpn_bbox_pred, rpn_cls_prob, rpn_angle_prob, anchors):
+    def postprocess_detctions(self, rpn_bbox_pred, rpn_cls_prob, rpn_angle_prob, anchors, gpu_id):
 
         # return_boxes_pred = []
         return_boxes_pred_angle = []
@@ -240,7 +241,8 @@ class DetectionNetworkDCL(DetectionNetworkBase):
                                                 scores=scores,
                                                 iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
                                                 max_output_size=100 if self.is_training else 1000,
-                                                use_gpu=False)
+                                                use_gpu=True,
+                                                gpu_id=gpu_id)
 
             # tmp_boxes_pred = tf.reshape(tf.gather(boxes_pred, nms_indices), [-1, 5])
             tmp_boxes_pred_angle = tf.reshape(tf.gather(boxes_pred_angle, nms_indices), [-1, 5])

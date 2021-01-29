@@ -1,55 +1,27 @@
-76# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from __future__ import division, print_function, absolute_import
 import os
 import tensorflow as tf
 import math
 
 """
-RSDet-8p
-
-This is your result for task 1:
-
-mAP: 0.6727423650267537
-ap of each class:
-plane:0.8839346472596076,
-baseball-diamond:0.7104926703230673,
-bridge:0.4330823738329618,
-ground-track-field:0.6508970563363848,
-small-vehicle:0.6849253155621244,
-large-vehicle:0.6102196316871491,
-ship:0.7961936701620749,
-tennis-court:0.8947516994949227,
-basketball-court:0.7455840121634438,
-storage-tank:0.7672332259150044,
-soccer-ball-field:0.5496680505639349,
-roundabout:0.6350320699137543,
-harbor:0.5842793618604702,
-swimming-pool:0.6505404500942658,
-helicopter:0.4943012402321392
-
-The submitted information is :
-
-Description: RetinaNet_DOTA_2x_20201128_162w
-Username: SJTU-Det
-Institute: SJTU
-Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
-TeamMembers: yangxue
-
+RSDet-5p
+FLOPs: 860451115;    Trainable params: 33002916
 """
 
 # ------------------------------------------------
-VERSION = 'RetinaNet_DOTA_2x_20201128'
+VERSION = 'RetinaNet_DOTA_2x_RSDet_5p_20210129'
 NET_NAME = 'resnet50_v1d'  # 'MobilenetV2'
 
 # ---------------------------------------- System
 ROOT_PATH = os.path.abspath('../../')
 print(20*"++--")
 print(ROOT_PATH)
-GPU_GROUP = "1,2,3"
+GPU_GROUP = "0,1,2"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
 SHOW_TRAIN_INFO_INTE = 20
 SMRY_ITER = 200
-SAVE_WEIGHTS_INTE = 27000 * 2
+SAVE_WEIGHTS_INTE = 20673 * 2
 
 SUMMARY_PATH = ROOT_PATH + '/output/summary'
 TEST_SAVE_PATH = ROOT_PATH + '/utils/test_result'
@@ -76,20 +48,21 @@ MUTILPY_BIAS_GRADIENT = 2.0  # if None, will not multipy
 GRADIENT_CLIPPING_BY_NORM = 10.0  # if None, will not clip
 
 CLS_WEIGHT = 1.0
-REG_WEIGHT = 1.0
+REG_WEIGHT = 1.0 / 5.0
+REG_LOSS_MODE = None
 ALPHA = 1.0
 BETA = 1.0
 
 BATCH_SIZE = 1
 EPSILON = 1e-5
 MOMENTUM = 0.9
-LR = 1e-3
-DECAY_STEP = [SAVE_WEIGHTS_INTE*18, SAVE_WEIGHTS_INTE*24, SAVE_WEIGHTS_INTE*30]
-MAX_ITERATION = SAVE_WEIGHTS_INTE*30
+LR = 5e-4
+DECAY_STEP = [SAVE_WEIGHTS_INTE*12, SAVE_WEIGHTS_INTE*16, SAVE_WEIGHTS_INTE*20]
+MAX_ITERATION = SAVE_WEIGHTS_INTE*20
 WARM_SETP = int(1.0 / 4.0 * SAVE_WEIGHTS_INTE)
 
 # -------------------------------------------- Dataset
-DATASET_NAME = 'DOTA'  # 'pascal', 'coco'
+DATASET_NAME = 'DOTATrain'  # 'pascal', 'coco'
 PIXEL_MEAN = [123.68, 116.779, 103.939]  # R, G, B. In tf, channel is RGB. In openCV, channel is BGR
 PIXEL_MEAN_ = [0.485, 0.456, 0.406]
 PIXEL_STD = [0.229, 0.224, 0.225]  # R, G, B. In tf, channel is RGB. In openCV, channel is BGR

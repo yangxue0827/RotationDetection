@@ -57,7 +57,7 @@ def iou_rotate_calculate1(boxes1, boxes2, use_gpu=True, gpu_id=0):
 
                     int_area = cv2.contourArea(order_pts)
 
-                    inter = int_area * 1.0 / (area1[i] + area2[j] - int_area)
+                    inter = int_area * 1.0 / (area1[i] + area2[j] - int_area + 1e-5)
                     temp_ious.append(inter)
                 else:
                     temp_ious.append(0.0)

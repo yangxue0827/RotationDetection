@@ -77,7 +77,8 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
         with tf.variable_scope('postprocess_detctions'):
             boxes, scores, category = self.postprocess_detctions(rpn_bbox_pred=rpn_box_pred,
                                                                  rpn_cls_prob=rpn_cls_prob,
-                                                                 anchors=anchors)
+                                                                 anchors=anchors,
+                                                                 gpu_id=gpu_id)
             boxes = tf.stop_gradient(boxes)
             scores = tf.stop_gradient(scores)
             category = tf.stop_gradient(category)
@@ -87,7 +88,7 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
         else:
             return boxes, scores, category
 
-    def postprocess_detctions(self, rpn_bbox_pred, rpn_cls_prob, anchors):
+    def postprocess_detctions(self, rpn_bbox_pred, rpn_cls_prob, anchors, gpu_id):
 
         return_boxes_pred = []
         return_scores = []
@@ -134,7 +135,8 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
                                                 scores=scores,
                                                 iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
                                                 max_output_size=100 if self.is_training else 1000,
-                                                use_gpu=False)
+                                                use_gpu=True,
+                                                gpu_id=gpu_id)
 
             tmp_boxes_pred = tf.reshape(tf.gather(boxes_pred, nms_indices), [-1, 5])
             tmp_scores = tf.reshape(tf.gather(scores, nms_indices), [-1, ])

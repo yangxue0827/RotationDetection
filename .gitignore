@@ -134,9 +134,6 @@ __pycache__/
 *tensorpack*
 *.DS_Store*
 
-demo
-tools/*/demo.py
-tools/*/demos/*
 tools/*/test_dota/*
 tools/*/test_mlt/*
 tools/*/test_ucas_aod/*

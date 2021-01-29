@@ -23,7 +23,7 @@ Techniques:
   - [x] [R<sup>3</sup>Det **(AAAI21)**](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow), [Pytorch code](https://github.com/SJTU-Thinklab-Det/r3det-on-mmdetection)
   - [x] [Circular Smooth Label (CSL, **ECCV20**)](https://arxiv.org/abs/2003.05597): [TF code](https://github.com/Thinklab-SJTU/CSL_RetinaNet_Tensorflow)
   - [x] [Densely Coded Label (DCL)](https://arxiv.org/abs/2011.09670): [TF code](https://github.com/Thinklab-SJTU/DCL_RetinaNet_Tensorflow)
-  - [ ] [GWD](): coming soon! 
+  - [ ] [GWD](https://arxiv.org/abs/2101.11952): coming soon! 
   - [x] Mixed method: R<sup>3</sup>Det-DCL
 - [x] Loss: CE, [Focal Loss](https://arxiv.org/abs/1708.02002), [Smooth L1 Loss](https://arxiv.org/abs/1504.08083), [IoU-Smooth L1 Loss](https://arxiv.org/abs/1811.07126), [Modulated Loss](https://arxiv.org/abs/1911.08299)
 - [x] [Others](./OTHERS.md): [SWA](https://arxiv.org/pdf/2012.12645.pdf), exportPb
@@ -46,9 +46,9 @@ More results and trained models are available in the [MODEL_ZOO.md](MODEL_ZOO.md
 | [RSDet](https://arxiv.org/pdf/1911.08299) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 67.27 | [Baidu Drive (6nt5)](https://pan.baidu.com/s/1-4iXqRMvCOIEtrMFwtXyew) | H | Reg. | modulated loss | - | × | [cfgs_res50_dota_rsdet_v2.py](./libs/configs/DOTA/rsdet/cfgs_res50_dota_rsdet_v2.py) |
 | [CSL](https://arxiv.org/abs/2003.05597) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 67.38 | [Baidu Drive (g3wt)](https://pan.baidu.com/s/1nrIs-oYA53qQzlPjqYkMJQ) | H | **Cls.: Gaussian (r=1, w=10)** | smooth L1 | 180 | x | [cfgs_res50_dota_v45.py](./libs/configs/DOTA/csl/cfgs_res50_dota_v45.py) |
 | [DCL](https://arxiv.org/abs/2011.09670) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 67.39 | [Baidu Drive (p9tu)](https://pan.baidu.com/s/1TZ9V0lTTQnMhiepxK1mdqg) | H | **Cls.: BCL (w=180/256)** | smooth L1 | 180 | × | [cfgs_res50_dota_dcl_v5.py](./libs/configs/DOTA/dcl/cfgs_res50_dota_dcl_v5.py) |
-| GWD | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 68.93 | coming soon! | H | Reg. | **gwd** | - | × | [cfgs_res50_dota_v10.py](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) |
-| GWD **+ [SWA](https://arxiv.org/pdf/2012.12645.pdf)** | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 69.92 | coming soon! | H | Reg. | gwd | - | × | [cfgs_res50_dota_v10.py](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) |
-| GWD improved | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 69.82 | coming soon! | H | Reg. | **gwd** | - | × | [cfgs_res50_dota_v17.py](./libs/configs/DOTA/gwd/cfgs_res50_dota_v17.py) |
+| [GWD](https://arxiv.org/abs/2101.11952) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 68.93 | [Baidu Drive (nb7w)](https://pan.baidu.com/s/1u74Uk0wQQT_8QWR9rYwgrw) | H | Reg. | **gwd** | 90 | × | [cfgs_res50_dota_v10.py](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) |
+| [GWD](https://arxiv.org/abs/2101.11952) **[+ SWA](https://arxiv.org/pdf/2012.12645.pdf)** | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 69.92 | [Baidu Drive (nb7w)](https://pan.baidu.com/s/1u74Uk0wQQT_8QWR9rYwgrw) | H | Reg. | gwd | 90 | × | [cfgs_res50_dota_v10.py](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) |
+| [GWD improved]() | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 69.82 | [Baidu Drive (w51h)](https://pan.baidu.com/s/15ukQf10rsVG2nMXA7KnsqA) | H | Reg. | **gwd** | 90 | × | [cfgs_res50_dota_v17.py](./libs/configs/DOTA/gwd/cfgs_res50_dota_v17.py) |
 | [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 70.66 | [Baidu Drive (30lt)](https://pan.baidu.com/s/143sGeLNjXzcpxi9GV7FVyA) | H->R | Reg. | smooth L1 | 90 | × | [cfgs_res50_dota_r3det_v1.py](./libs/configs/DOTA/r3det/cfgs_res50_dota_r3det_v1.py) |
 | **[R<sup>3</sup>Det-DCL](https://arxiv.org/abs/2011.09670)** | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 71.21 | [Baidu Drive (jueq)](https://pan.baidu.com/s/1XR31i3T-C5R16giBxQUNWw) | H->R | **Cls.: BCL (w=180/256)** | iou-smooth L1 | 90->180 | × | [cfgs_res50_dota_r3det_dcl_v1.py](./libs/configs/DOTA/r3det_dcl/cfgs_res50_dota_r3det_dcl_v1.py) |
 | [R<sup>2</sup>CNN (Faster-RCNN)](https://arxiv.org/abs/1706.09579) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 72.27 | [Baidu Drive (wt2b)](https://pan.baidu.com/s/1R_31U2jl7gj6OMvirURnsg) | H->R | Reg. | smooth L1 | 90 | × | [cfgs_res50_dota_v1.py](./libs/configs/DOTA/r2cnn/cfgs_res50_dota_v1.py) |
@@ -162,6 +162,13 @@ tensorboard --logdir=.
 If you find our code useful for your research, please consider cite.
 
 ```
+@article{yang2021rethinking,
+    title={Rethinking Rotated Object Detection with Gaussian Wasserstein Distance Loss},
+    author={Yang, Xue and Yan, Junchi and Qi, Ming and Wang, Wentao and Xiaopeng, Zhang and Qi, Tian },
+    journal={arXiv preprint arXiv:2101.11952},
+    year={2021}
+}
+
 @article{yang2020dense,
     title={Dense Label Encoding for Boundary Discontinuity Free Rotation Detection},
     author={Yang, Xue and Hou, Liping and Zhou, Yue and Wang, Wentao and Yan, Junchi},

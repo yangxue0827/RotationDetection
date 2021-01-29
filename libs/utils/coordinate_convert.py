@@ -65,7 +65,6 @@ def backward_convert(coordinate, with_label=True):
                 theta -= 90
 
             boxes.append([x, y, w, h, theta])
-
     return np.array(boxes, dtype=np.float32)
 
 

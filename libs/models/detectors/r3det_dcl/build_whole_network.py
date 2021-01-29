@@ -375,7 +375,7 @@ class DetectionNetworkR3DetDCL(DetectionNetworkBase):
                                                 scores=scores,
                                                 iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
                                                 max_output_size=100 if self.is_training else 1000,
-                                                use_gpu=False,
+                                                use_gpu=True,
                                                 gpu_id=gpu_id)
 
             # tmp_boxes_pred = tf.reshape(tf.gather(boxes_pred, nms_indices), [-1, 5])

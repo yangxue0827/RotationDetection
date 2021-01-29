@@ -250,7 +250,8 @@ class DetectionNetworkRefineRetinaNet(DetectionNetworkBase):
 
             boxes, scores, category = self.postprocess_detctions(refine_bbox_pred=box_pred,
                                                                  refine_cls_prob=cls_prob,
-                                                                 anchors=proposal)
+                                                                 anchors=proposal,
+                                                                 gpu_id=gpu_id)
             boxes = tf.stop_gradient(boxes)
             scores = tf.stop_gradient(scores)
             category = tf.stop_gradient(category)
@@ -260,7 +261,7 @@ class DetectionNetworkRefineRetinaNet(DetectionNetworkBase):
         else:
             return boxes, scores, category
 
-    def postprocess_detctions(self, refine_bbox_pred, refine_cls_prob, anchors):
+    def postprocess_detctions(self, refine_bbox_pred, refine_cls_prob, anchors, gpu_id):
 
         def filter_detections(boxes, scores):
             """
@@ -284,7 +285,8 @@ class DetectionNetworkRefineRetinaNet(DetectionNetworkBase):
                                                     scores=filtered_scores,
                                                     iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
                                                     max_output_size=100 if self.is_training else 1000,
-                                                    use_gpu=False)
+                                                    use_gpu=True,
+                                                    gpu_id=gpu_id)
 
                 # filter indices based on NMS
                 indices = tf.gather(indices, nms_indices)
