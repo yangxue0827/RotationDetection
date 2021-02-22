@@ -263,7 +263,7 @@ class TestDOTA(object):
         gpu_num = len(self.args.gpus.strip().split(','))
 
         nr_image = math.ceil(nr_records / gpu_num)
-        result_queue = Queue(500)
+        result_queue = Queue(5000)
         procs = []
 
         for i, gpu_id in enumerate(self.args.gpus.strip().split(',')):

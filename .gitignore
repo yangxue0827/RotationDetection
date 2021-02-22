@@ -133,6 +133,8 @@ __pycache__/
 *centernet*
 *tensorpack*
 *.DS_Store*
+*KL*
+*kl*
 
 tools/*/test_dota/*
 tools/*/test_mlt/*

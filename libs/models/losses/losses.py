@@ -4,6 +4,7 @@ from __future__ import division
 from __future__ import print_function
 
 import tensorflow as tf
+import numpy as np
 
 from libs.utils import bbox_transform
 from libs.utils.iou_rotate import iou_rotate_calculate2
@@ -65,6 +66,10 @@ class Loss(object):
             0.5 * sigma_squared * tf.pow(regression_diff, 2),
             regression_diff - 0.5 / sigma_squared
         )
+
+        # regression_loss = tf.reshape(regression_loss, [-1, 5])
+        # lx, ly, lh, lw, ltheta = tf.unstack(regression_loss, axis=-1)
+        # regression_loss = tf.transpose(tf.stack([lx*1., ly*1., lh*1., lw*1., ltheta*10.]))
 
         if weight is not None:
             regression_loss = tf.reduce_sum(regression_loss, axis=-1)

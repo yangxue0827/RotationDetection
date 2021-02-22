@@ -5,54 +5,60 @@ import tensorflow as tf
 import math
 
 """
-RSDet-8p 20 epoch
-FLOPs: 865678510;    Trainable params: 33148131
-This is your result for task 1:
+RetinaNet-H
 
-mAP: 0.6720081911437207
-ap of each class:
-plane:0.884237723275074,
-baseball-diamond:0.729444339641071,
-bridge:0.43210254062916365,
-ground-track-field:0.681519345646089,
-small-vehicle:0.7078486578377088,
-large-vehicle:0.5469995892993882,
-ship:0.7267624293020835,
-tennis-court:0.8949116521292252,
-basketball-court:0.787517553471782,
-storage-tank:0.7972219799903847,
-soccer-ball-field:0.5521436820074317,
-roundabout:0.6207868886053054,
-harbor:0.6099057077868252,
-swimming-pool:0.6401352757788455,
-helicopter:0.46858550175543046
+RetinaNet_HRSC2016_2x_20210210
+FLOPs: 836056773;    Trainable params: 32325246
+loss inside weight (10, 1, 1, 1, 1)
+cls : ship|| Recall: 0.9421824104234527 || Precison: 0.5565175565175565|| AP: 0.8456514504687931
+F1:0.8766417085284619 P:0.8598277212216131 R:0.8941368078175895
+mAP is : 0.8456514504687931
 
-The submitted information is :
+RetinaNet_HRSC2016_2x_20210210_v1
+FLOPs: 836056773;    Trainable params: 32325246
+loss inside weight (1, 10, 1, 1, 1)
+cls : ship|| Recall: 0.9421824104234527 || Precison: 0.5741935483870968|| AP: 0.8467487586603686
+F1:0.875045221879755 P:0.8636003172085647 R:0.8868078175895765
+mAP is : 0.8467487586603686
 
-Description: RetinaNet_DOTA_2x_20210128_70.2w
-Username: SJTU-Det
-Institute: SJTU
-Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
-TeamMembers: yangxue
+RetinaNet_HRSC2016_2x_20210210_v2
+FLOPs: 836056773;    Trainable params: 32325246
+loss inside weight (1, 1, 10, 1, 1)
+cls : ship|| Recall: 0.9283387622149837 || Precison: 0.32881453706374386|| AP: 0.8247113119468787
+F1:0.847128760476153 P:0.8286604361370716 R:0.8664495114006515
+mAP is : 0.8247113119468787
 
+RetinaNet_HRSC2016_2x_20210210_v3
+FLOPs: 836056773;    Trainable params: 32325246
+loss inside weight (1, 1, 1, 10, 1)
+cls : ship|| Recall: 0.9210097719869706 || Precison: 0.340765290750226|| AP: 0.8156900836170689
+F1:0.8434171150322974 P:0.836 R:0.8509771986970684
+mAP is : 0.8156900836170689
+
+RetinaNet_HRSC2016_2x_20210210_v4
+FLOPs: 836056773;    Trainable params: 32325246
+loss inside weight (1, 1, 1, 1, 10)
+cls : ship|| Recall: 0.9364820846905537 || Precison: 0.3406398104265403|| AP: 0.8193719796782251
+F1:0.8465813463432883 P:0.8351822503961965 R:0.8583061889250815
+mAP is : 0.8193719796782251
 """
 
 # ------------------------------------------------
-VERSION = 'RetinaNet_DOTA_2x_20210128'
+VERSION = 'RetinaNet_HRSC2016_2x_20210210_v4'
 NET_NAME = 'resnet50_v1d'  # 'MobilenetV2'
 
 # ---------------------------------------- System
 ROOT_PATH = os.path.abspath('../../')
 print(20*"++--")
 print(ROOT_PATH)
-GPU_GROUP = "1,2,3"
+GPU_GROUP = "0,1,2"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
 SHOW_TRAIN_INFO_INTE = 20
 SMRY_ITER = 200
-SAVE_WEIGHTS_INTE = 27000 * 2
+SAVE_WEIGHTS_INTE = 10000 * 2
 
 SUMMARY_PATH = ROOT_PATH + '/output/summary'
-TEST_SAVE_PATH = ROOT_PATH + '/utils/test_result'
+TEST_SAVE_PATH = ROOT_PATH + '/tools/test_result'
 
 if NET_NAME.startswith("resnet"):
     weights_name = NET_NAME
@@ -63,13 +69,14 @@ else:
 
 PRETRAINED_CKPT = ROOT_PATH + '/dataloader/pretrained_weights/' + weights_name + '.ckpt'
 TRAINED_CKPT = os.path.join(ROOT_PATH, 'output/trained_weights')
-EVALUATE_DIR = ROOT_PATH + '/output/evaluate_result_pickle/'
+EVALUATE_R_DIR = ROOT_PATH + '/output/evaluate_result_pickle/'
 
-# ------------------------------------------ Train and Test
+# ------------------------------------------ Train and test
 RESTORE_FROM_RPN = False
 FIXED_BLOCKS = 1  # allow 0~3
 FREEZE_BLOCKS = [True, False, False, False, False]  # for gluoncv backbone
 USE_07_METRIC = True
+EVAL_THRESHOLD = 0.5
 ADD_BOX_IN_TENSORBOARD = True
 
 MUTILPY_BIAS_GRADIENT = 2.0  # if None, will not multipy
@@ -77,6 +84,8 @@ GRADIENT_CLIPPING_BY_NORM = 10.0  # if None, will not clip
 
 CLS_WEIGHT = 1.0
 REG_WEIGHT = 1.0
+ANGLE_WEIGHT = 0.5
+REG_LOSS_MODE = None
 ALPHA = 1.0
 BETA = 1.0
 
@@ -89,17 +98,17 @@ MAX_ITERATION = SAVE_WEIGHTS_INTE*20
 WARM_SETP = int(1.0 / 4.0 * SAVE_WEIGHTS_INTE)
 
 # -------------------------------------------- Dataset
-DATASET_NAME = 'DOTA'  # 'pascal', 'coco'
+DATASET_NAME = 'HRSC2016'  # 'pascal', 'coco'
 PIXEL_MEAN = [123.68, 116.779, 103.939]  # R, G, B. In tf, channel is RGB. In openCV, channel is BGR
 PIXEL_MEAN_ = [0.485, 0.456, 0.406]
 PIXEL_STD = [0.229, 0.224, 0.225]  # R, G, B. In tf, channel is RGB. In openCV, channel is BGR
-IMG_SHORT_SIDE_LEN = 800
-IMG_MAX_LENGTH = 800
-CLASS_NUM = 15
+IMG_SHORT_SIDE_LEN = 512
+IMG_MAX_LENGTH = 512
+CLASS_NUM = 1
 
-IMG_ROTATE = False
-RGB2GRAY = False
-VERTICAL_FLIP = False
+IMG_ROTATE = True
+RGB2GRAY = True
+VERTICAL_FLIP = True
 HORIZONTAL_FLIP = True
 IMAGE_PYRAMID = False
 
@@ -125,7 +134,7 @@ ANCHOR_SCALE_FACTORS = None
 USE_CENTER_OFFSET = True
 METHOD = 'H'
 USE_ANGLE_COND = False
-ANGLE_RANGE = 90  # or 180
+ANGLE_RANGE = 90  # 90 or 180
 
 # -------------------------------------------- Head
 SHARE_NET = True
@@ -138,4 +147,5 @@ NMS_IOU_THRESHOLD = 0.1
 MAXIMUM_DETECTIONS = 100
 FILTERED_SCORE = 0.05
 VIS_SCORE = 0.4
+
 

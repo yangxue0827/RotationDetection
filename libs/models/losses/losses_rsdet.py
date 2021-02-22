@@ -38,8 +38,10 @@ class LossRSDet(Loss):
 
         loss2_1 = preds[:, 0] - targets[:, 0]
         loss2_2 = preds[:, 1] - targets[:, 1]
-        loss2_3 = preds[:, 2] - targets[:, 3] - tf.log(ratios)
-        loss2_4 = preds[:, 3] - targets[:, 2] + tf.log(ratios)
+        # loss2_3 = preds[:, 2] - targets[:, 3] - tf.log(ratios)
+        # loss2_4 = preds[:, 3] - targets[:, 2] + tf.log(ratios)
+        loss2_3 = preds[:, 2] - targets[:, 3] + tf.log(ratios)
+        loss2_4 = preds[:, 3] - targets[:, 2] - tf.log(ratios)
         loss2_5 = tf.minimum((preds[:, 4] - targets[:, 4] + 1.570796), (targets[:, 4] - preds[:, 4] + 1.570796))
 
         box_diff_2 = tf.stack([loss2_1, loss2_2, loss2_3, loss2_4, loss2_5], 1)

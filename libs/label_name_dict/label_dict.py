@@ -66,6 +66,11 @@ class LabelMap(object):
                 'back_ground': 0,
                 'text': 1
             }
+        elif self.cfgs.DATASET_NAME == 'MSRA-TD500':
+            name_label_map = {
+                'back_ground': 0,
+                'text': 1
+            }
         elif self.cfgs.DATASET_NAME == 'MLT':
             name_label_map = {
                 'back_ground': 0,
