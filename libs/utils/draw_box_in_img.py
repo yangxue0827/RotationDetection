@@ -11,6 +11,7 @@ import random
 from libs.label_name_dict.label_dict import LabelMap
 from utils.tools import get_dota_short_names
 from libs.utils.coordinate_convert import forward_convert
+from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
 
 
 class DrawBox(object):
@@ -213,8 +214,8 @@ class DrawBox(object):
 
     def draw_boxes_with_label_and_scores(self, img_array, boxes, labels, scores, method, head=None, is_csl=False, in_graph=True):
         if in_graph:
-            if self.cfgs.NET_NAME in ['resnet152_v1d', 'resnet101_v1d', 'resnet50_v1d',
-                                      'resnet152_v1b', 'resnet101_v1b', 'resnet50_v1b', 'resnet34_v1b', 'resnet18_v1b']:
+            pretrain_zoo = PretrainModelZoo()
+            if self.cfgs.NET_NAME in pretrain_zoo.pth_zoo or self.cfgs.NET_NAME in pretrain_zoo.mxnet_zoo:
                 img_array = (img_array * np.array(self.cfgs.PIXEL_STD) + np.array(self.cfgs.PIXEL_MEAN_)) * 255
             else:
                 img_array = img_array + np.array(self.cfgs.PIXEL_MEAN)

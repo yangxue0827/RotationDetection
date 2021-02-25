@@ -4,6 +4,8 @@ import os
 import tensorflow as tf
 import math
 
+from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
+
 """
 FLOPs: 608417264;    Trainable params: 40668036
 cls : ship|| Recall: 0.9226384364820847 || Precison: 0.42626034612490593|| AP: 0.8724897298924824
@@ -27,19 +29,13 @@ SHOW_TRAIN_INFO_INTE = 20
 SMRY_ITER = 200
 SAVE_WEIGHTS_INTE = 10000
 
-SUMMARY_PATH = ROOT_PATH + '/output/summary'
-TEST_SAVE_PATH = ROOT_PATH + '/tools/test_result'
+SUMMARY_PATH = os.path.join(ROOT_PATH, 'output/summary')
+TEST_SAVE_PATH = os.path.join(ROOT_PATH, 'tools/test_result')
 
-if NET_NAME.startswith("resnet"):
-    weights_name = NET_NAME
-elif NET_NAME.startswith("MobilenetV2"):
-    weights_name = "mobilenet/mobilenet_v2_1.0_224"
-else:
-    raise Exception('net name must in [resnet_v1_101, resnet_v1_50, MobilenetV2]')
-
-PRETRAINED_CKPT = ROOT_PATH + '/dataloader/pretrained_weights/' + weights_name + '.ckpt'
+pretrain_zoo = PretrainModelZoo()
+PRETRAINED_CKPT = pretrain_zoo.pretrain_weight_path(NET_NAME, ROOT_PATH)
 TRAINED_CKPT = os.path.join(ROOT_PATH, 'output/trained_weights')
-EVALUATE_R_DIR = ROOT_PATH + '/output/evaluate_result_pickle/'
+EVALUATE_R_DIR = os.path.join(ROOT_PATH, 'output/evaluate_result_pickle/')
 
 # ------------------------------------------ Train and test
 RESTORE_FROM_RPN = False

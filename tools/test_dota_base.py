@@ -20,6 +20,7 @@ from libs.utils.draw_box_in_img import DrawBox
 from libs.utils.coordinate_convert import forward_convert, backward_convert
 from libs.utils import nms_rotate
 from libs.utils.rotate_polygon_nms import rotate_gpu_nms
+from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
 
 
 def parse_args():
@@ -70,8 +71,8 @@ class TestDOTA(object):
         img_plac = tf.placeholder(dtype=tf.uint8, shape=[None, None, 3])  # is RGB. not BGR
         img_batch = tf.cast(img_plac, tf.float32)
 
-        if self.cfgs.NET_NAME in ['resnet152_v1d', 'resnet101_v1d', 'resnet50_v1d',
-                                  'resnet152_v1b', 'resnet101_v1b', 'resnet50_v1b', 'resnet34_v1b', 'resnet18_v1b']:
+        pretrain_zoo = PretrainModelZoo()
+        if self.cfgs.NET_NAME in pretrain_zoo.pth_zoo or self.cfgs.NET_NAME in pretrain_zoo.mxnet_zoo:
             img_batch = (img_batch / 255 - tf.constant(self.cfgs.PIXEL_MEAN_)) / tf.constant(self.cfgs.PIXEL_STD)
         else:
             img_batch = img_batch - tf.constant(self.cfgs.PIXEL_MEAN)

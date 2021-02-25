@@ -13,6 +13,7 @@ from tqdm import tqdm
 sys.path.append("../")
 
 from libs.label_name_dict.label_dict import LabelMap
+from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
 
 
 def parse_args():
@@ -60,8 +61,8 @@ class Test(object):
         img_plac = tf.placeholder(dtype=tf.uint8, shape=[None, None, 3])  # is RGB. not BGR
         img_batch = tf.cast(img_plac, tf.float32)
 
-        if self.cfgs.NET_NAME in ['resnet152_v1d', 'resnet101_v1d', 'resnet50_v1d',
-                                  'resnet152_v1b', 'resnet101_v1b', 'resnet50_v1b', 'resnet34_v1b', 'resnet18_v1b']:
+        pretrain_zoo = PretrainModelZoo()
+        if self.cfgs.NET_NAME in pretrain_zoo.pth_zoo or self.cfgs.NET_NAME in pretrain_zoo.mxnet_zoo:
             img_batch = (img_batch / 255 - tf.constant(self.cfgs.PIXEL_MEAN_)) / tf.constant(self.cfgs.PIXEL_STD)
         else:
             img_batch = img_batch - tf.constant(self.cfgs.PIXEL_MEAN)

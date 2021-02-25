@@ -113,6 +113,8 @@ __pycache__/
 *.json
 *.zip
 *.pb
+*.npy
+*.pth
 *.pbtxt
 *.tflite
 *info.txt
@@ -137,9 +139,11 @@ __pycache__/
 *kl*
 
 tools/*/test_dota/*
+tools/*/test_hrsc/*
 tools/*/test_mlt/*
 tools/*/test_ucas_aod/*
 tools/*/test_icdar2015/*
+tools/*/test_masra_td500/*
 tools/*/test_ohd_sjtu/*
 output/summary/*
 dataloader/tfrecord/*

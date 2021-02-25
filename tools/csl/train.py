@@ -17,6 +17,7 @@ from libs.models.detectors.csl import build_whole_network
 from libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
 from utils.smooth_label import angle_smooth_label
 from libs.utils.coordinate_convert import coordinate_present_convert
+from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
 
 os.environ["CUDA_VISIBLE_DEVICES"] = cfgs.GPU_GROUP
 
@@ -57,8 +58,8 @@ class TrainCSL(Train):
             inputs_list = []
             for i in range(num_gpu):
                 img = tf.expand_dims(img_batch[i], axis=0)
-                if cfgs.NET_NAME in ['resnet152_v1d', 'resnet101_v1d', 'resnet50_v1d',
-                                     'resnet152_v1b', 'resnet101_v1b', 'resnet50_v1b', 'resnet34_v1b', 'resnet18_v1b']:
+                pretrain_zoo = PretrainModelZoo()
+                if self.cfgs.NET_NAME in pretrain_zoo.pth_zoo or self.cfgs.NET_NAME in pretrain_zoo.mxnet_zoo:
                     img = img / tf.constant([cfgs.PIXEL_STD])
 
                 gtboxes_and_label_r = tf.py_func(backward_convert,

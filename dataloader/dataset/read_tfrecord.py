@@ -10,6 +10,7 @@ import sys
 sys.path.append('../../')
 
 from dataloader.dataset.image_augmentation import ImageAugmentation
+from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
 
 
 class ReadTFRecord(object):
@@ -82,8 +83,8 @@ class ReadTFRecord(object):
                                                                                            gtboxes_and_label=gtboxes_and_label,
                                                                                            target_shortside_len=shortside_len,
                                                                                            length_limitation=self.cfgs.IMG_MAX_LENGTH)
-        if self.cfgs.NET_NAME in ['resnet152_v1d', 'resnet101_v1d', 'resnet50_v1d',
-                                  'resnet152_v1b', 'resnet101_v1b', 'resnet50_v1b', 'resnet34_v1b', 'resnet18_v1b']:
+        pretrain_zoo = PretrainModelZoo()
+        if self.cfgs.NET_NAME in pretrain_zoo.pth_zoo or self.cfgs.NET_NAME in pretrain_zoo.mxnet_zoo:
             img = img / 255 - tf.constant([[self.cfgs.PIXEL_MEAN_]])
         else:
             img = img - tf.constant([[self.cfgs.PIXEL_MEAN]])  # sub pixel mean at last

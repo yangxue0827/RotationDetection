@@ -11,6 +11,7 @@ from libs.utils.show_box_in_tensor import DrawBoxTensor
 from libs.models.backbones.build_backbone_p2top6 import BuildBackbone
 from utils.box_ops import clip_boxes_to_img_boundaries
 from libs.utils import bbox_transform
+from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
 
 
 class DetectionNetworkBase(object):
@@ -28,6 +29,7 @@ class DetectionNetworkBase(object):
         self.losses_dict = {}
         self.drawer = DrawBoxTensor(cfgs)
         self.backbone = BuildBackbone(cfgs, is_training)
+        self.pretrain_zoo = PretrainModelZoo()
 
     def build_backbone(self, input_img_batch):
         return self.backbone.build_backbone(input_img_batch)
@@ -182,6 +184,8 @@ class DetectionNetworkBase(object):
                 restorer = tf.train.Saver()
             print("model restore from :", checkpoint_path)
         else:
+            if self.cfgs.NET_NAME in self.pretrain_zoo.pth_zoo:
+                return None, None
             checkpoint_path = self.cfgs.PRETRAINED_CKPT
             print("model restore from pretrained mode, path is :", checkpoint_path)
 
