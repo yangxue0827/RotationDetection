@@ -34,6 +34,7 @@ class SWA(object):
         print(weight_paths)
         average_weights = {}
         for wp in weight_paths:
+            print(wp)
             model_reader = pywrap_tensorflow.NewCheckpointReader(wp)
             var_dict = model_reader.get_variable_to_shape_map()
             for key in var_dict:
@@ -87,5 +88,6 @@ class SWA(object):
 
 
 if __name__ == '__main__':
+    os.environ["CUDA_VISIBLE_DEVICES"] = '4'
     swa = SWA(cfgs)
     swa.save_swa_weight()

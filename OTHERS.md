@@ -26,3 +26,15 @@ Usage:
                         -ms (multi-scale testing, optional)
                         -s (visualization, optional)
     ``` 
+    
+## Pyrotch Pretrain Weights Conversion via [MMdnn](https://github.com/Microsoft/MMdnn)
+Take resnet50 as an example:
+1. Step1: 
+    ```  
+    pip install mmdnn
+    mmdownload -f pytorch
+    mmdownload -f pytorch -n resnet50 -o ./
+    mmtoir -f pytorch -d resnet50 --inputShape 3,224,224 -n imagenet_resnet50.pth
+    mmtocode -f tensorflow --IRModelPath resnet50.pb --IRWeightPath resnet50.npy --dstModelPath tf_resnet50.py
+    ```
+2. Step2: Migrate the generated network structure script to [resnet_pytorch.py](./libs/models/backbones/resnet_pytorch.py), and make some modifications, including the freezing of bn and the first few blocks, the construction of feature_dict variables, etc.

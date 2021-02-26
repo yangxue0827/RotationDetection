@@ -26,7 +26,7 @@ Techniques:
   - [ ] [GWD](https://arxiv.org/abs/2101.11952): coming soon! 
   - [x] Mixed method: R<sup>3</sup>Det-DCL
 - [x] Loss: CE, [Focal Loss](https://arxiv.org/abs/1708.02002), [Smooth L1 Loss](https://arxiv.org/abs/1504.08083), [IoU-Smooth L1 Loss](https://arxiv.org/abs/1811.07126), [Modulated Loss](https://arxiv.org/abs/1911.08299)
-- [x] [Others](./OTHERS.md): [SWA](https://arxiv.org/pdf/2012.12645.pdf), exportPb
+- [x] [Others](./OTHERS.md): [SWA](https://arxiv.org/pdf/2012.12645.pdf), exportPb, [MMdnn](https://github.com/Microsoft/MMdnn)
 
 ![3](demo.gif)
 
@@ -65,10 +65,15 @@ More results and trained models are available in the [MODEL_ZOO.md](MODEL_ZOO.md
 
 ## Download Model
 ### Pretrain weights
-1. Please download [resnet50_v1](http://download.tensorflow.org/models/resnet_v1_50_2016_08_28.tar.gz), [resnet101_v1](http://download.tensorflow.org/models/resnet_v1_101_2016_08_28.tar.gz), [resnet152_v1](http://download.tensorflow.org/models/resnet_v1_152_2016_08_28.tar.gz), [efficientnet](https://github.com/tensorflow/tpu/tree/master/models/official/efficientnet), [mobilenet_v2](https://storage.googleapis.com/mobilenet_v2/checkpoints/mobilenet_v2_1.0_224.tgz), darknet53 ([Baidu Drive (1jg2)](https://pan.baidu.com/s/1p8V9aaivo9LNxa_OjXjUwA), [Google Drive](https://drive.google.com/drive/folders/1zyg1bvdmLxNRIXOflo_YmJjNJdpHX2lJ?usp=sharing)) pre-trained models on Imagenet, put them to $PATH_ROOT/dataloader/pretrained_weights.       
-2. **(Recommend in this repo)** Or you can choose to use better backbones (resnet_v1d, resnet_v1b), refer to [gluon2TF](./thirdparty/gluon2TF/README.md).    
+Download a pretrain weight you need from the following three options, and then put it to $PATH_ROOT/dataloader/pretrained_weights. 
+1. Tensorflow pretrain weights: [resnet50_v1](http://download.tensorflow.org/models/resnet_v1_50_2016_08_28.tar.gz), [resnet101_v1](http://download.tensorflow.org/models/resnet_v1_101_2016_08_28.tar.gz), [resnet152_v1](http://download.tensorflow.org/models/resnet_v1_152_2016_08_28.tar.gz), [efficientnet](https://github.com/tensorflow/tpu/tree/master/models/official/efficientnet), [mobilenet_v2](https://storage.googleapis.com/mobilenet_v2/checkpoints/mobilenet_v2_1.0_224.tgz), darknet53 ([Baidu Drive (1jg2)](https://pan.baidu.com/s/1p8V9aaivo9LNxa_OjXjUwA), [Google Drive](https://drive.google.com/drive/folders/1zyg1bvdmLxNRIXOflo_YmJjNJdpHX2lJ?usp=sharing)).      
+2. MxNet pretrain weights **(Recommend in this repo)**: resnet_v1d, resnet_v1b, refer to [gluon2TF](./thirdparty/gluon2TF/README.md).    
 * [Baidu Drive (5ht9)](https://pan.baidu.com/s/1GpqKg0dOaaWmwshvv1qWGg)          
 * [Google Drive](https://drive.google.com/drive/folders/1BM8ffn1WnsRRb5RcuAcyJAHX8NS2M1Gz?usp=sharing)      
+3. Pytorch pretrain weights, refer to [pretrain_zoo.py](./dataloader/pretrained_weights/pretrain_zoo.py) and [Others](./OTHERS.md).
+* [Baidu Drive (oofm)](https://pan.baidu.com/s/16nHwlkPsszBvzhMv4h2IwA)          
+* [Google Drive](https://drive.google.com/drive/folders/14Bx6TK4LVadTtzNFTQj293cKYk_5IurH?usp=sharing)      
+
 
 ### Trained weights
 1. Please download trained models by this project, then put them to $PATH_ROOT/output/pretained_weights.
@@ -182,18 +187,18 @@ If you find our code useful for your research, please consider cite.
     organization={Springer}
 }
 
-@article{yang2019r3det,
+@inproceedings{yang2021r3det,
     title={R3Det: Refined Single-Stage Detector with Feature Refinement for Rotating Object},
     author={Yang, Xue and Yan, Junchi and Feng, Ziming and He, Tao},
-    journal={arXiv preprint arXiv:1908.05612},
-    year={2019}
+    booktitle={Proceedings of the AAAI Conference on Artificial Intelligence (AAAI)},
+    year={2021}
 }
 
-@article{qian2019learning,
+@inproceedings{qian2021learning,
     title={Learning modulated loss for rotated object detection},
-    author={Qian, Wen and Yang, Xue and Peng, Silong and Guo, Yue and Yan, Chijun},
-    journal={arXiv preprint arXiv:1911.08299},
-    year={2019}
+    author={Qian, Wen and Yang, Xue and Peng, Silong and Yan, Junchi and Guo, Yue },
+    booktitle={Proceedings of the AAAI Conference on Artificial Intelligence (AAAI)},
+    year={2021}
 }
 
 @article{yang2020scrdet++,
