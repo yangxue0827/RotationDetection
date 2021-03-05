@@ -10,7 +10,7 @@ from libs.utils import bbox_transform
 from libs.utils.coordinate_convert import coordinate_present_convert
 
 
-class RefineAnchorSamplerR3DetDCL(AnchorSampler):
+class RefineAnchorSamplerR3DetDCL(Sampler):
 
     def refine_anchor_target_layer(self, gt_boxes_r, gt_encode_label, anchors, pos_threshold, neg_threshold, gpu_id=0):
 

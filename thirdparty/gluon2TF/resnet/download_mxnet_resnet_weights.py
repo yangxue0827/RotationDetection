@@ -92,6 +92,7 @@ def download(url, path=None, overwrite=False, sha1_hash=None):
 
 
 def download_mxnet_weights(name, tag=None, root='../mxnet_weights'):
+    # https://github.com/dmlc/gluon-cv/blob/master/gluoncv/model_zoo/model_store.py
     _model_sha1 = {name: checksum for checksum, name in [
         ('2d9d980c990442f826f20781ed039851e78dabe3', 'resnet18_v1b'),
         ('8e16b84814e84f64d897854003f049872991eaa6', 'resnet34_v1b'),
@@ -106,7 +107,9 @@ def download_mxnet_weights(name, tag=None, root='../mxnet_weights'):
         ('cddbc86ff24a5544f57242ded0acb14ef1fbd437', 'resnet152_v1d'),
         ('25a187fa281ddc98afbcd0cc0f0646885b874b80', 'resnet50_v1s'),
         ('bd93a83c05f709a803b1221aeff0b028e6eebb03', 'resnet101_v1s'),
-        ('cf74621d988ad06c6c6aa44f5597e5b600a966cc', 'resnet152_v1s')
+        ('cf74621d988ad06c6c6aa44f5597e5b600a966cc', 'resnet152_v1s'),
+        ('11c50114a0483e27e74dc4236904254ef05b634b', 'SE_ResNext101_64x4d'),
+        ('364590740605b6a2b95f5bb77436d781a817436f', 'resnest26'),
     ]}
 
     apache_repo_url = 'https://apache-mxnet.s3-accelerate.dualstack.amazonaws.com/'
@@ -159,5 +162,5 @@ def download_mxnet_weights(name, tag=None, root='../mxnet_weights'):
 
 
 if __name__ == '__main__':
-    download_mxnet_weights('resnet%d_v%dd' % (50, 1),
-                           tag=True)
+    # download_mxnet_weights('resnet%d_v%dd' % (50, 1), tag=True)
+    download_mxnet_weights('resnest26', tag=True)

@@ -8,7 +8,7 @@ import tensorflow.contrib.slim as slim
 from libs.models.detectors.single_stage_base_network import DetectionNetworkBase
 from libs.models.losses.losses_dcl import LossDCL
 from libs.utils import bbox_transform, nms_rotate
-from libs.models.samplers.retinanet.anchor_sampler_retinenet import AnchorSamplerRetinaNet
+from libs.models.samplers.r3det_dcl.anchor_sampler_retinenet import AnchorSamplerRetinaNet
 from libs.models.samplers.r3det_dcl.refine_anchor_sampler_r3det_dcl import RefineAnchorSamplerR3DetDCL
 from utils.densely_coded_label import get_code_len, angle_label_decode
 from libs.utils.coordinate_convert import coordinate_present_convert
@@ -135,7 +135,7 @@ class DetectionNetworkR3DetDCL(DetectionNetworkBase):
 
             return refine_delta_boxes_list, refine_scores_list, refine_probs_list, refine_angle_cls_list
 
-    def refine_feature_op(self, points, feature_map, name):
+    def refine_feature_op(self, points, feature_map):
 
         h, w = tf.cast(tf.shape(feature_map)[1], tf.int32), tf.cast(tf.shape(feature_map)[2], tf.int32)
 
@@ -271,8 +271,7 @@ class DetectionNetworkR3DetDCL(DetectionNetworkBase):
                 center_point = boxes_filter[:, :2] / stride
 
                 refine_feature_pyramid[level] = self.refine_feature_op(points=center_point,
-                                                                       feature_map=feature_pyramid[level],
-                                                                       name=level)
+                                                                       feature_map=feature_pyramid[level])
 
         refine_box_pred_list, refine_cls_score_list, refine_cls_prob_list, refine_angle_cls_list = self.refine_net(refine_feature_pyramid, 'refine_net')
 

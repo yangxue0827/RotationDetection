@@ -9,7 +9,8 @@ class ResNetPytorchBackbone(object):
     def __init__(self, cfgs):
         self.cfgs = cfgs
         self._weights_dict = {}
-        self.freeze_blocks_node_index = {'resnext50_32x4d': 356, 'resnet50': 356, 'resnext101_32x8d': 662}
+        self.freeze_blocks_node_index = {'resnext50_32x4d': 356, 'resnet50': 356, 'resnext101_32x8d': 662,
+                                         'resnet34': 243}
         self.is_training = False
         self.scope_name = 'resnet50'
 
@@ -25,12 +26,12 @@ class ResNetPytorchBackbone(object):
 
         return weights_dict
 
-    def resnext50_32x4d(self, input, weight_file=None):
+    def resnext50_32x4d(self, inputs, weight_file=None):
         feature_dict = {}
         self._weights_dict = self.load_weights(weight_file)
 
-        # input = tf.placeholder(tf.float32, shape=(None, 224, 224, 3), name='input')
-        node321_pad = tf.pad(input, paddings=[[0, 0], [3, 3], [3, 3], [0, 0]])
+        # inputs = tf.placeholder(tf.float32, shape=(None, 224, 224, 3), name='inputs')
+        node321_pad = tf.pad(inputs, paddings=[[0, 0], [3, 3], [3, 3], [0, 0]])
         node321 = self.convolution(node321_pad, group=1, strides=[2, 2], padding='VALID', name='node321')
         node322 = self.batch_normalization(node321, variance_epsilon=9.999999747378752e-06, name='node322')
         node323 = tf.nn.relu(node322, name='node323')
@@ -234,13 +235,13 @@ class ResNetPytorchBackbone(object):
         #                           use_bias=True)
         return feature_dict
 
-    def resnext101_32x8d(self, input, weight_file=None):
+    def resnext101_32x8d(self, inputs, weight_file=None):
         feature_dict = {}
         global _weights_dict
         self._weights_dict = self.load_weights(weight_file)
 
-        # input = tf.placeholder(tf.float32, shape=(None, 224, 224, 3), name='input')
-        node627_pad = tf.pad(input, paddings=[[0, 0], [3, 3], [3, 3], [0, 0]])
+        # inputs = tf.placeholder(tf.float32, shape=(None, 224, 224, 3), name='inputs')
+        node627_pad = tf.pad(inputs, paddings=[[0, 0], [3, 3], [3, 3], [0, 0]])
         node627 = self.convolution(node627_pad, group=1, strides=[2, 2], padding='VALID', name='node627')
         node628 = self.batch_normalization(node627, variance_epsilon=9.999999747378752e-06, name='node628')
         node629 = tf.nn.relu(node628, name='node629')
@@ -630,14 +631,190 @@ class ResNetPytorchBackbone(object):
         #                           bias_initializer=tf.constant_initializer(_weights_dict['node971']['bias']),
         #                           use_bias=True)
         return feature_dict
-    
-    def resnet50(self, input, weight_file=None):
+
+    def resnet34(self, inputs, weight_file=None):
         feature_dict = {}
         global _weights_dict
         self._weights_dict = self.load_weights(weight_file)
 
-        # input = tf.placeholder(tf.float32, shape=(None, 224, 224, 3), name='input')
-        node321_pad = tf.pad(input, paddings=[[0, 0], [3, 3], [3, 3], [0, 0]])
+        # inputs = tf.placeholder(tf.float32, shape=(None, 224, 224, 3), name='inputs')
+        node219_pad = tf.pad(inputs, paddings=[[0, 0], [3, 3], [3, 3], [0, 0]])
+        node219 = self.convolution(node219_pad, group=1, strides=[2, 2], padding='VALID', name='node219')
+        node220 = self.batch_normalization(node219, variance_epsilon=9.999999747378752e-06, name='node220')
+        node221 = tf.nn.relu(node220, name='node221')
+        node222_pad = tf.pad(node221, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]], constant_values=float('-Inf'))
+        node222 = tf.nn.max_pool(node222_pad, [1, 3, 3, 1], [1, 2, 2, 1], padding='VALID', name='node222')
+        feature_dict['C1'] = node222
+        node223_pad = tf.pad(node222, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node223 = self.convolution(node223_pad, group=1, strides=[1, 1], padding='VALID', name='node223')
+        node224 = self.batch_normalization(node223, variance_epsilon=9.999999747378752e-06, name='node224')
+        node225 = tf.nn.relu(node224, name='node225')
+        node226_pad = tf.pad(node225, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node226 = self.convolution(node226_pad, group=1, strides=[1, 1], padding='VALID', name='node226')
+        node227 = self.batch_normalization(node226, variance_epsilon=9.999999747378752e-06, name='node227')
+        node228 = node227 + node222
+        node229 = tf.nn.relu(node228, name='node229')
+        node230_pad = tf.pad(node229, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node230 = self.convolution(node230_pad, group=1, strides=[1, 1], padding='VALID', name='node230')
+        node231 = self.batch_normalization(node230, variance_epsilon=9.999999747378752e-06, name='node231')
+        node232 = tf.nn.relu(node231, name='node232')
+        node233_pad = tf.pad(node232, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node233 = self.convolution(node233_pad, group=1, strides=[1, 1], padding='VALID', name='node233')
+        node234 = self.batch_normalization(node233, variance_epsilon=9.999999747378752e-06, name='node234')
+        node235 = node234 + node229
+        node236 = tf.nn.relu(node235, name='node236')
+        node237_pad = tf.pad(node236, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node237 = self.convolution(node237_pad, group=1, strides=[1, 1], padding='VALID', name='node237')
+        node238 = self.batch_normalization(node237, variance_epsilon=9.999999747378752e-06, name='node238')
+        node239 = tf.nn.relu(node238, name='node239')
+        node240_pad = tf.pad(node239, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node240 = self.convolution(node240_pad, group=1, strides=[1, 1], padding='VALID', name='node240')
+        node241 = self.batch_normalization(node240, variance_epsilon=9.999999747378752e-06, name='node241')
+        node242 = node241 + node236
+        node243 = tf.nn.relu(node242, name='node243')
+        feature_dict['C1'] = node243
+        node244_pad = tf.pad(node243, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node244 = self.convolution(node244_pad, group=1, strides=[2, 2], padding='VALID', name='node244')
+        node249 = self.convolution(node243, group=1, strides=[2, 2], padding='VALID', name='node249')
+        node245 = self.batch_normalization(node244, variance_epsilon=9.999999747378752e-06, name='node245')
+        node250 = self.batch_normalization(node249, variance_epsilon=9.999999747378752e-06, name='node250')
+        node246 = tf.nn.relu(node245, name='node246')
+        node247_pad = tf.pad(node246, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node247 = self.convolution(node247_pad, group=1, strides=[1, 1], padding='VALID', name='node247')
+        node248 = self.batch_normalization(node247, variance_epsilon=9.999999747378752e-06, name='node248')
+        node251 = node248 + node250
+        node252 = tf.nn.relu(node251, name='node252')
+        node253_pad = tf.pad(node252, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node253 = self.convolution(node253_pad, group=1, strides=[1, 1], padding='VALID', name='node253')
+        node254 = self.batch_normalization(node253, variance_epsilon=9.999999747378752e-06, name='node254')
+        node255 = tf.nn.relu(node254, name='node255')
+        node256_pad = tf.pad(node255, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node256 = self.convolution(node256_pad, group=1, strides=[1, 1], padding='VALID', name='node256')
+        node257 = self.batch_normalization(node256, variance_epsilon=9.999999747378752e-06, name='node257')
+        node258 = node257 + node252
+        node259 = tf.nn.relu(node258, name='node259')
+        node260_pad = tf.pad(node259, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node260 = self.convolution(node260_pad, group=1, strides=[1, 1], padding='VALID', name='node260')
+        node261 = self.batch_normalization(node260, variance_epsilon=9.999999747378752e-06, name='node261')
+        node262 = tf.nn.relu(node261, name='node262')
+        node263_pad = tf.pad(node262, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node263 = self.convolution(node263_pad, group=1, strides=[1, 1], padding='VALID', name='node263')
+        node264 = self.batch_normalization(node263, variance_epsilon=9.999999747378752e-06, name='node264')
+        node265 = node264 + node259
+        node266 = tf.nn.relu(node265, name='node266')
+        node267_pad = tf.pad(node266, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node267 = self.convolution(node267_pad, group=1, strides=[1, 1], padding='VALID', name='node267')
+        node268 = self.batch_normalization(node267, variance_epsilon=9.999999747378752e-06, name='node268')
+        node269 = tf.nn.relu(node268, name='node269')
+        node270_pad = tf.pad(node269, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node270 = self.convolution(node270_pad, group=1, strides=[1, 1], padding='VALID', name='node270')
+        node271 = self.batch_normalization(node270, variance_epsilon=9.999999747378752e-06, name='node271')
+        node272 = node271 + node266
+        node273 = tf.nn.relu(node272, name='node273')
+        feature_dict['C3'] = node273
+        node274_pad = tf.pad(node273, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node274 = self.convolution(node274_pad, group=1, strides=[2, 2], padding='VALID', name='node274')
+        node279 = self.convolution(node273, group=1, strides=[2, 2], padding='VALID', name='node279')
+        node275 = self.batch_normalization(node274, variance_epsilon=9.999999747378752e-06, name='node275')
+        node280 = self.batch_normalization(node279, variance_epsilon=9.999999747378752e-06, name='node280')
+        node276 = tf.nn.relu(node275, name='node276')
+        node277_pad = tf.pad(node276, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node277 = self.convolution(node277_pad, group=1, strides=[1, 1], padding='VALID', name='node277')
+        node278 = self.batch_normalization(node277, variance_epsilon=9.999999747378752e-06, name='node278')
+        node281 = node278 + node280
+        node282 = tf.nn.relu(node281, name='node282')
+        node283_pad = tf.pad(node282, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node283 = self.convolution(node283_pad, group=1, strides=[1, 1], padding='VALID', name='node283')
+        node284 = self.batch_normalization(node283, variance_epsilon=9.999999747378752e-06, name='node284')
+        node285 = tf.nn.relu(node284, name='node285')
+        node286_pad = tf.pad(node285, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node286 = self.convolution(node286_pad, group=1, strides=[1, 1], padding='VALID', name='node286')
+        node287 = self.batch_normalization(node286, variance_epsilon=9.999999747378752e-06, name='node287')
+        node288 = node287 + node282
+        node289 = tf.nn.relu(node288, name='node289')
+        node290_pad = tf.pad(node289, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node290 = self.convolution(node290_pad, group=1, strides=[1, 1], padding='VALID', name='node290')
+        node291 = self.batch_normalization(node290, variance_epsilon=9.999999747378752e-06, name='node291')
+        node292 = tf.nn.relu(node291, name='node292')
+        node293_pad = tf.pad(node292, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node293 = self.convolution(node293_pad, group=1, strides=[1, 1], padding='VALID', name='node293')
+        node294 = self.batch_normalization(node293, variance_epsilon=9.999999747378752e-06, name='node294')
+        node295 = node294 + node289
+        node296 = tf.nn.relu(node295, name='node296')
+        node297_pad = tf.pad(node296, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node297 = self.convolution(node297_pad, group=1, strides=[1, 1], padding='VALID', name='node297')
+        node298 = self.batch_normalization(node297, variance_epsilon=9.999999747378752e-06, name='node298')
+        node299 = tf.nn.relu(node298, name='node299')
+        node300_pad = tf.pad(node299, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node300 = self.convolution(node300_pad, group=1, strides=[1, 1], padding='VALID', name='node300')
+        node301 = self.batch_normalization(node300, variance_epsilon=9.999999747378752e-06, name='node301')
+        node302 = node301 + node296
+        node303 = tf.nn.relu(node302, name='node303')
+        node304_pad = tf.pad(node303, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node304 = self.convolution(node304_pad, group=1, strides=[1, 1], padding='VALID', name='node304')
+        node305 = self.batch_normalization(node304, variance_epsilon=9.999999747378752e-06, name='node305')
+        node306 = tf.nn.relu(node305, name='node306')
+        node307_pad = tf.pad(node306, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node307 = self.convolution(node307_pad, group=1, strides=[1, 1], padding='VALID', name='node307')
+        node308 = self.batch_normalization(node307, variance_epsilon=9.999999747378752e-06, name='node308')
+        node309 = node308 + node303
+        node310 = tf.nn.relu(node309, name='node310')
+        node311_pad = tf.pad(node310, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node311 = self.convolution(node311_pad, group=1, strides=[1, 1], padding='VALID', name='node311')
+        node312 = self.batch_normalization(node311, variance_epsilon=9.999999747378752e-06, name='node312')
+        node313 = tf.nn.relu(node312, name='node313')
+        node314_pad = tf.pad(node313, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node314 = self.convolution(node314_pad, group=1, strides=[1, 1], padding='VALID', name='node314')
+        node315 = self.batch_normalization(node314, variance_epsilon=9.999999747378752e-06, name='node315')
+        node316 = node315 + node310
+        node317 = tf.nn.relu(node316, name='node317')
+        feature_dict['C4'] = node317
+        node318_pad = tf.pad(node317, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node318 = self.convolution(node318_pad, group=1, strides=[2, 2], padding='VALID', name='node318')
+        node323 = self.convolution(node317, group=1, strides=[2, 2], padding='VALID', name='node323')
+        node319 = self.batch_normalization(node318, variance_epsilon=9.999999747378752e-06, name='node319')
+        node324 = self.batch_normalization(node323, variance_epsilon=9.999999747378752e-06, name='node324')
+        node320 = tf.nn.relu(node319, name='node320')
+        node321_pad = tf.pad(node320, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node321 = self.convolution(node321_pad, group=1, strides=[1, 1], padding='VALID', name='node321')
+        node322 = self.batch_normalization(node321, variance_epsilon=9.999999747378752e-06, name='node322')
+        node325 = node322 + node324
+        node326 = tf.nn.relu(node325, name='node326')
+        node327_pad = tf.pad(node326, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node327 = self.convolution(node327_pad, group=1, strides=[1, 1], padding='VALID', name='node327')
+        node328 = self.batch_normalization(node327, variance_epsilon=9.999999747378752e-06, name='node328')
+        node329 = tf.nn.relu(node328, name='node329')
+        node330_pad = tf.pad(node329, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node330 = self.convolution(node330_pad, group=1, strides=[1, 1], padding='VALID', name='node330')
+        node331 = self.batch_normalization(node330, variance_epsilon=9.999999747378752e-06, name='node331')
+        node332 = node331 + node326
+        node333 = tf.nn.relu(node332, name='node333')
+        node334_pad = tf.pad(node333, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node334 = self.convolution(node334_pad, group=1, strides=[1, 1], padding='VALID', name='node334')
+        node335 = self.batch_normalization(node334, variance_epsilon=9.999999747378752e-06, name='node335')
+        node336 = tf.nn.relu(node335, name='node336')
+        node337_pad = tf.pad(node336, paddings=[[0, 0], [1, 1], [1, 1], [0, 0]])
+        node337 = self.convolution(node337_pad, group=1, strides=[1, 1], padding='VALID', name='node337')
+        node338 = self.batch_normalization(node337, variance_epsilon=9.999999747378752e-06, name='node338')
+        node339 = node338 + node333
+        node340 = tf.nn.relu(node339, name='node340')
+        feature_dict['C5'] = node340
+        # node341 = tf.nn.avg_pool(node340, [1, 7, 7, 1], [1, 1, 1, 1], padding='VALID', name='node341')
+        # node342 = tf.contrib.layers.flatten(node341)
+        # node343_flatten = tf.contrib.layers.flatten(node342)
+        # node343 = tf.layers.dense(node343_flatten, 1000,
+        #                           kernel_initializer=tf.constant_initializer(_weights_dict['node343']['weights']),
+        #                           bias_initializer=tf.constant_initializer(_weights_dict['node343']['bias']),
+        #                           use_bias=True)
+        return feature_dict
+    
+    def resnet50(self, inputs, weight_file=None):
+        feature_dict = {}
+        global _weights_dict
+        self._weights_dict = self.load_weights(weight_file)
+
+        # inputs = tf.placeholder(tf.float32, shape=(None, 224, 224, 3), name='inputs')
+        node321_pad = tf.pad(inputs, paddings=[[0, 0], [3, 3], [3, 3], [0, 0]])
         node321 = self.convolution(node321_pad, group=1, strides=[2, 2], padding='VALID', name='node321')
         node322 = self.batch_normalization(node321, variance_epsilon=9.999999747378752e-06, name='node322')
         node323 = tf.nn.relu(node322, name='node323')
@@ -841,13 +1018,13 @@ class ResNetPytorchBackbone(object):
         #                           use_bias=True)
         return feature_dict
 
-    def convolution(self, input, name, group, **kwargs):
+    def convolution(self, inputs, name, group, **kwargs):
         w = tf.Variable(self._weights_dict[name]['weights'], trainable=self.is_training and int(name[4:]) > self.freeze_blocks_node_index[self.scope_name], name=name + "_weight")
         if group == 1:
-            layer = tf.nn.convolution(input, w, name=name, **kwargs)
+            layer = tf.nn.convolution(inputs, w, name=name, **kwargs)
         else:
             weight_groups = tf.split(w, num_or_size_splits=group, axis=-1)
-            xs = tf.split(input, num_or_size_splits=group, axis=-1)
+            xs = tf.split(inputs, num_or_size_splits=group, axis=-1)
             convolved = [tf.nn.convolution(x, weight, name=name, **kwargs) for
                          (x, weight) in zip(xs, weight_groups)]
             layer = tf.concat(convolved, axis=-1)
@@ -857,12 +1034,12 @@ class ResNetPytorchBackbone(object):
             layer += b
         return layer
 
-    def batch_normalization(self, input, name, **kwargs):
+    def batch_normalization(self, inputs, name, **kwargs):
         mean = tf.Variable(self._weights_dict[name]['mean'], name=name + "_mean", trainable=False)
         variance = tf.Variable(self._weights_dict[name]['var'], name=name + "_var", trainable=False)
         offset = tf.Variable(self._weights_dict[name]['bias'], name=name + "_bias", trainable=False) if 'bias' in self._weights_dict[name] else None
         scale = tf.Variable(self._weights_dict[name]['scale'], name=name + "_scale", trainable=False) if 'scale' in self._weights_dict[name] else None
-        return tf.nn.batch_normalization(input, mean, variance, offset, scale, name=name, **kwargs)
+        return tf.nn.batch_normalization(inputs, mean, variance, offset, scale, name=name, **kwargs)
 
     def resnet_base(self, img_batch, scope_name, is_training=True):
         if not is_training:
@@ -875,6 +1052,8 @@ class ResNetPytorchBackbone(object):
                 feature_dict = self.resnext50_32x4d(img_batch, weight_file)
             elif self.cfgs.NET_NAME == 'resnext101_32x8d':
                 feature_dict = self.resnext101_32x8d(img_batch, weight_file)
+            elif self.cfgs.NET_NAME == 'resnet34':
+                feature_dict = self.resnet34(img_batch, weight_file)
             else:
                 feature_dict = self.resnet50(img_batch, weight_file)
 

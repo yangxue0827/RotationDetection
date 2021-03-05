@@ -28,7 +28,7 @@ Usage:
     ``` 
     
 ## Pyrotch Pretrain Weights Conversion via [MMdnn](https://github.com/Microsoft/MMdnn)
-Take resnet50 as an example:
+Take resnet50 as an example (torch 1.5.1, torchvision 0.6.1):
 1. Step1: 
     ```  
     pip install mmdnn

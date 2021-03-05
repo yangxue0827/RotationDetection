@@ -22,7 +22,7 @@ Techniques:
   - [x] [RSDet **(AAAI21)**](https://arxiv.org/abs/1911.08299): [TF code](https://github.com/Mrqianduoduo/RSDet-8P-4R)
   - [x] [R<sup>3</sup>Det **(AAAI21)**](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow), [Pytorch code](https://github.com/SJTU-Thinklab-Det/r3det-on-mmdetection)
   - [x] [Circular Smooth Label (CSL, **ECCV20**)](https://arxiv.org/abs/2003.05597): [TF code](https://github.com/Thinklab-SJTU/CSL_RetinaNet_Tensorflow)
-  - [x] [Densely Coded Label (DCL)](https://arxiv.org/abs/2011.09670): [TF code](https://github.com/Thinklab-SJTU/DCL_RetinaNet_Tensorflow)
+  - [x] [Densely Coded Label (DCL, **CVPR21**)](https://arxiv.org/abs/2011.09670): [TF code](https://github.com/Thinklab-SJTU/DCL_RetinaNet_Tensorflow)
   - [ ] [GWD](https://arxiv.org/abs/2101.11952): coming soon! 
   - [x] Mixed method: R<sup>3</sup>Det-DCL
 - [x] Loss: CE, [Focal Loss](https://arxiv.org/abs/1708.02002), [Smooth L1 Loss](https://arxiv.org/abs/1504.08083), [IoU-Smooth L1 Loss](https://arxiv.org/abs/1811.07126), [Modulated Loss](https://arxiv.org/abs/1911.08299)
@@ -50,7 +50,7 @@ More results and trained models are available in the [MODEL_ZOO.md](MODEL_ZOO.md
 | [GWD](https://arxiv.org/abs/2101.11952) **[+ SWA](https://arxiv.org/pdf/2012.12645.pdf)** | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 69.92 | [Baidu Drive (nb7w)](https://pan.baidu.com/s/1u74Uk0wQQT_8QWR9rYwgrw) | H | Reg. | gwd | 90 | × | [cfgs_res50_dota_v10.py](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) |
 | [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 70.66 | [Baidu Drive (30lt)](https://pan.baidu.com/s/143sGeLNjXzcpxi9GV7FVyA) | H->R | Reg. | smooth L1 | 90 | × | [cfgs_res50_dota_r3det_v1.py](./libs/configs/DOTA/r3det/cfgs_res50_dota_r3det_v1.py) |
 | **[R<sup>3</sup>Det-DCL](https://arxiv.org/abs/2011.09670)** | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 71.21 | [Baidu Drive (jueq)](https://pan.baidu.com/s/1XR31i3T-C5R16giBxQUNWw) | H->R | **Cls.: BCL (w=180/256)** | iou-smooth L1 | 90->180 | × | [cfgs_res50_dota_r3det_dcl_v1.py](./libs/configs/DOTA/r3det_dcl/cfgs_res50_dota_r3det_dcl_v1.py) |
-| **[R<sup>3</sup>Det-GWD](https://arxiv.org/abs/2101.11952)** | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 71.56 | [Baidu Drive ()]() | H->R | Reg. | **smooth L1->gwd** | 90 | × | [cfgs_res50_dota_r3det_gwd_v6.py](./libs/configs/DOTA/r3det_gwd/cfgs_res50_dota_r3det_gwd_v6.py) |
+| **[R<sup>3</sup>Det-GWD](https://arxiv.org/abs/2101.11952)** | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 71.56 | [Baidu Drive (8962)](https://pan.baidu.com/s/17_nhbq35YU7WLBvad3TasQ)) | H->R | Reg. | **smooth L1->gwd** | 90 | × | [cfgs_res50_dota_r3det_gwd_v6.py](./libs/configs/DOTA/r3det_gwd/cfgs_res50_dota_r3det_gwd_v6.py) |
 | [R<sup>2</sup>CNN (Faster-RCNN)](https://arxiv.org/abs/1706.09579) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 72.27 | [Baidu Drive (wt2b)](https://pan.baidu.com/s/1R_31U2jl7gj6OMvirURnsg) | H->R | Reg. | smooth L1 | 90 | × | [cfgs_res50_dota_v1.py](./libs/configs/DOTA/r2cnn/cfgs_res50_dota_v1.py) |
 
 ## My Development Environment
@@ -167,23 +167,24 @@ If you find our code useful for your research, please consider cite.
 ```
 @article{yang2021rethinking,
     title={Rethinking Rotated Object Detection with Gaussian Wasserstein Distance Loss},
-    author={Yang, Xue and Yan, Junchi and Qi, Ming and Wang, Wentao and Xiaopeng, Zhang and Qi, Tian },
+    author={Yang, Xue and Yan, Junchi and Qi, Ming and Wang, Wentao and Xiaopeng, Zhang and Qi, Tian},
     journal={arXiv preprint arXiv:2101.11952},
     year={2021}
 }
 
-@article{yang2020dense,
+@inproceedings{yang2020dense,
     title={Dense Label Encoding for Boundary Discontinuity Free Rotation Detection},
     author={Yang, Xue and Hou, Liping and Zhou, Yue and Wang, Wentao and Yan, Junchi},
-    journal={arXiv preprint arXiv:2011.09670},
-    year={2020}
+    journal={Proceedings of the IEEE Computer Vision and Pattern Recognition (CVPR)},
+    year={2021}
 }
 
-@article{yang2020arbitrary,
-    title={Arbitrary-Oriented Object Detection with Circular Smooth Label},
+@inproceedings{yang2020arbitrary,
+    title={Arbitrary-oriented object detection with circular smooth label},
     author={Yang, Xue and Yan, Junchi},
-    journal={European Conference on Computer Vision (ECCV)},
-    year={2020}
+    booktitle={European Conference on Computer Vision (ECCV)},
+    pages={677--694},
+    year={2020},
     organization={Springer}
 }
 

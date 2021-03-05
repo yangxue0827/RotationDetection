@@ -271,7 +271,7 @@ def voc_eval(detpath,
 
 def main():
 
-    detpath = r'../../tools/kl/test_dota/%s/dota_res/Task1_{:s}.txt' % cfgs.VERSION
+    detpath = r'../../tools/r3det_kl/test_dota/%s/dota_res/Task1_{:s}.txt' % cfgs.VERSION
     # change the directory to the path of val/labelTxt, if you want to do evaluation on the valset
     annopath = r'/data/dataset/DOTA/val/labelTxt/labelTxt/{:s}.txt'
     imagesetfile = r'../../dataloader/dataset/DOTA/val_set.txt'
