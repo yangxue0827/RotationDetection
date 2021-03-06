@@ -4,7 +4,7 @@
 
 ## Abstract
 This is a tensorflow-based rotation detection benchmark, also called UranusDet.     
-[YangXue](https://yangxue0827.github.io/) is the main maintainer of UranusDet, who is supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/) in Shanghai Jiao Tong University.
+UranusDet is written and maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
 
 **Papers and codes related to remote sensing/aerial image detection: [DOTA-DOAI](https://github.com/SJTU-Thinklab-Det/DOTA-DOAI).**      
 
