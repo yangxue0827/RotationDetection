@@ -141,10 +141,11 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
                                         Tout=[tf.float32])
                 boxes_pred = tf.reshape(boxes_pred, [-1, 5])
 
+            max_output_size = 4000 if 'DOTA' in self.cfgs.NET_NAME else 200
             nms_indices = nms_rotate.nms_rotate(decode_boxes=boxes_pred,
                                                 scores=scores,
                                                 iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
-                                                max_output_size=100 if self.is_training else 1000,
+                                                max_output_size=100 if self.is_training else max_output_size,
                                                 use_gpu=True,
                                                 gpu_id=gpu_id)
 

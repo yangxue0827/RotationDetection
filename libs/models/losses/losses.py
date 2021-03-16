@@ -69,7 +69,7 @@ class Loss(object):
 
         # regression_loss = tf.reshape(regression_loss, [-1, 5])
         # lx, ly, lh, lw, ltheta = tf.unstack(regression_loss, axis=-1)
-        # regression_loss = tf.transpose(tf.stack([lx*1., ly*1., lh*1., lw*1., ltheta*10.]))
+        # regression_loss = tf.transpose(tf.stack([lx*1., ly*1., lh*10., lw*1., ltheta*1.]))
 
         if weight is not None:
             regression_loss = tf.reduce_sum(regression_loss, axis=-1)

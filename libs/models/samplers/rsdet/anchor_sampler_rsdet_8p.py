@@ -1,9 +1,3 @@
-# --------------------------------------------------------
-# Faster R-CNN
-# Copyright (c) 2015 Microsoft
-# Licensed under The MIT License [see LICENSE for details]
-# Written by Ross Girshick and Xinlei Chen
-# --------------------------------------------------------
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -14,9 +8,10 @@ from libs.models.samplers.samper import Sampler
 from libs.utils.cython_utils.cython_bbox import bbox_overlaps
 from libs.utils.rbbox_overlaps import rbbx_overlaps
 from libs.utils import bbox_transform
+from utils.order_points import sort_corners
 
 
-class AnchorSamplerRetinaNet(Sampler):
+class AnchorSamplerRSDet(Sampler):
 
     def anchor_target_layer(self, gt_boxes_h, gt_boxes_r, anchors, gpu_id=0):
 
@@ -50,18 +45,22 @@ class AnchorSamplerRetinaNet(Sampler):
             # no annotations? then everything is background
             target_boxes = np.zeros((anchors.shape[0], gt_boxes_r.shape[1]))
 
-        if self.cfgs.METHOD == 'H':
-            x_c = (anchors[:, 2] + anchors[:, 0]) / 2
-            y_c = (anchors[:, 3] + anchors[:, 1]) / 2
-            h = anchors[:, 2] - anchors[:, 0] + 1
-            w = anchors[:, 3] - anchors[:, 1] + 1
-            theta = -90 * np.ones_like(x_c)
-            anchors = np.vstack([x_c, y_c, w, h, theta]).transpose()
+        # if self.cfgs.METHOD == 'H':
+        #     w = anchors[:, 2] - anchors[:, 0] + 1
+        #     h = anchors[:, 3] - anchors[:, 1] + 1
+        #     x1 = anchors[:, 0]
+        #     y1 = anchors[:, 1]
+        #     x2 = anchors[:, 2]
+        #     y2 = anchors[:, 1]
+        #     x3 = anchors[:, 2]
+        #     y3 = anchors[:, 3]
+        #     x4 = anchors[:, 0]
+        #     y4 = anchors[:, 3]
+        #     anchors = np.stack([x1, y1, x2, y2, x3, y3, x4, y4, w, h]).transpose()
+        #
+        # target_delta = bbox_transform.qbbox_transform(ex_rois=anchors, gt_rois=target_boxes)
 
-        target_delta = bbox_transform.rbbox_transform(ex_rois=anchors, gt_rois=target_boxes)
-
-        return np.array(labels, np.float32), np.array(target_delta, np.float32), \
-               np.array(anchor_states, np.float32), np.array(target_boxes, np.float32)
+        return np.array(labels, np.float32), np.array(anchor_states, np.float32), np.array(target_boxes, np.float32)
 
 
 

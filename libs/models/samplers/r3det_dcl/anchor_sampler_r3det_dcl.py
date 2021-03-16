@@ -1,9 +1,3 @@
-# --------------------------------------------------------
-# Faster R-CNN
-# Copyright (c) 2015 Microsoft
-# Licensed under The MIT License [see LICENSE for details]
-# Written by Ross Girshick and Xinlei Chen
-# --------------------------------------------------------
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -14,10 +8,9 @@ from libs.models.samplers.samper import Sampler
 from libs.utils.cython_utils.cython_bbox import bbox_overlaps
 from libs.utils.rbbox_overlaps import rbbx_overlaps
 from libs.utils import bbox_transform
-from libs.utils.coordinate_convert import coordinate_present_convert
 
 
-class AnchorSamplerRetinaNet(Sampler):
+class AnchorSamplerR3DetDCL(Sampler):
 
     def anchor_target_layer(self, gt_boxes_h, gt_boxes_r, anchors, gpu_id=0):
 
@@ -59,15 +52,10 @@ class AnchorSamplerRetinaNet(Sampler):
             theta = -90 * np.ones_like(x_c)
             anchors = np.vstack([x_c, y_c, w, h, theta]).transpose()
 
-        ratios = (anchors[:, 2] / anchors[:, 3]).reshape(-1)
-
-        if self.cfgs.ANGLE_RANGE == 180:
-            anchors = coordinate_present_convert(anchors, mode=-1)
-            target_boxes = coordinate_present_convert(target_boxes, mode=-1)
         target_delta = bbox_transform.rbbox_transform(ex_rois=anchors, gt_rois=target_boxes)
 
         return np.array(labels, np.float32), np.array(target_delta, np.float32), \
-               np.array(anchor_states, np.float32), np.array(target_boxes, np.float32), np.array(ratios, np.float32)
+               np.array(anchor_states, np.float32), np.array(target_boxes, np.float32)
 
 
 

@@ -88,6 +88,6 @@ class SWA(object):
 
 
 if __name__ == '__main__':
-    os.environ["CUDA_VISIBLE_DEVICES"] = '4'
+    os.environ["CUDA_VISIBLE_DEVICES"] = '0'
     swa = SWA(cfgs)
     swa.save_swa_weight()

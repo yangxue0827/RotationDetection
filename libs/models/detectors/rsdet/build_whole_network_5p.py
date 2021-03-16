@@ -8,14 +8,14 @@ from libs.models.detectors.single_stage_base_network import DetectionNetworkBase
 from libs.models.losses.losses_rsdet import LossRSDet
 from libs.utils import bbox_transform, nms_rotate
 from libs.utils.coordinate_convert import coordinate_present_convert
-from libs.models.samplers.rsdet.anchor_sampler_retinenet_5p import AnchorSamplerRetinaNet
+from libs.models.samplers.rsdet.anchor_sampler_rsdet_5p import AnchorSamplerRSDet
 
 
 class DetectionNetworkRSDet(DetectionNetworkBase):
 
     def __init__(self, cfgs, is_training):
         super(DetectionNetworkRSDet, self).__init__(cfgs, is_training)
-        self.anchor_sampler_retinenet = AnchorSamplerRetinaNet(cfgs)
+        self.anchor_sampler_rsdet = AnchorSamplerRSDet(cfgs)
         self.losses = LossRSDet(self.cfgs)
 
     def build_whole_detection_network(self, input_img_batch, gtboxes_batch_h=None, gtboxes_batch_r=None, gpu_id=0):
@@ -48,7 +48,7 @@ class DetectionNetworkRSDet(DetectionNetworkBase):
         if self.is_training:
             with tf.variable_scope('build_loss'):
                 labels, target_delta, anchor_states, target_boxes, ratios = tf.py_func(
-                    func=self.anchor_sampler_retinenet.anchor_target_layer,
+                    func=self.anchor_sampler_rsdet.anchor_target_layer,
                     inp=[gtboxes_batch_h,
                          gtboxes_batch_r, anchors, gpu_id],
                     Tout=[tf.float32, tf.float32, tf.float32,
@@ -134,10 +134,11 @@ class DetectionNetworkRSDet(DetectionNetworkBase):
                                         Tout=[tf.float32])
                 boxes_pred = tf.reshape(boxes_pred, [-1, 5])
 
+            max_output_size = 4000 if 'DOTA' in self.cfgs.NET_NAME else 200
             nms_indices = nms_rotate.nms_rotate(decode_boxes=boxes_pred,
                                                 scores=scores,
                                                 iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
-                                                max_output_size=100 if self.is_training else 1000,
+                                                max_output_size=100 if self.is_training else max_output_size,
                                                 use_gpu=True,
                                                 gpu_id=gpu_id)
 

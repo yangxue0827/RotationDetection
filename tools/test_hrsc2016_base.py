@@ -100,6 +100,10 @@ class TestHRSC2016(object):
             imgs = os.listdir(img_dir)
             pbar = tqdm(imgs)
             for a_img_name in pbar:
+
+                # if '1546' not in a_img_name:
+                #     continue
+
                 a_img_name = a_img_name.split(image_ext)[0]
 
                 raw_img = cv2.imread(os.path.join(img_dir,

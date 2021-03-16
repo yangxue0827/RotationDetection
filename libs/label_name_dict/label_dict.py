@@ -132,6 +132,13 @@ class LabelMap(object):
                 'basketball-court': 14,
                 'baseball-diamond': 15
             }
+            if self.cfgs.DATASET_NAME == 'DOTA1.5':
+                name_label_map['container-crane'] = 16
+            if self.cfgs.DATASET_NAME == 'DOTA2.0':
+                name_label_map['container-crane'] = 16
+                name_label_map['airport'] = 17
+                name_label_map['helipad'] = 18
+
         elif self.cfgs.DATASET_NAME == 'coco':
             name_label_map = self.coco_name2abel()
         elif self.cfgs.DATASET_NAME == 'pascal':

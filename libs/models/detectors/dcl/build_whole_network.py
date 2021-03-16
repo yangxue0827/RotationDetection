@@ -17,7 +17,7 @@ class DetectionNetworkDCL(DetectionNetworkBase):
 
     def __init__(self, cfgs, is_training):
         super(DetectionNetworkDCL, self).__init__(cfgs, is_training)
-        self.anchor_sampler_csl = AnchorSamplerDCL(cfgs)
+        self.anchor_sampler_dcl = AnchorSamplerDCL(cfgs)
         self.losses = LossDCL(self.cfgs)
         self.coding_len = get_code_len(int(cfgs.ANGLE_RANGE / cfgs.OMEGA), mode=cfgs.ANGLE_MODE)
 
@@ -131,7 +131,7 @@ class DetectionNetworkDCL(DetectionNetworkBase):
         if self.is_training:
             with tf.variable_scope('build_loss'):
                 labels, target_delta, anchor_states, target_boxes, target_encode_label = tf.py_func(
-                    func=self.anchor_sampler_csl.anchor_target_layer,
+                    func=self.anchor_sampler_dcl.anchor_target_layer,
                     inp=[gtboxes_batch_h, gtboxes_batch_r,
                          gt_encode_label, anchors, gpu_id],
                     Tout=[tf.float32, tf.float32, tf.float32,
@@ -237,10 +237,11 @@ class DetectionNetworkDCL(DetectionNetworkBase):
                                               Tout=[tf.float32])
                 boxes_pred_angle = tf.reshape(boxes_pred_angle, [-1, 5])
 
-            nms_indices = nms_rotate.nms_rotate(decode_boxes=boxes_pred_angle,
+            max_output_size = 4000 if 'DOTA' in self.cfgs.NET_NAME else 200
+            nms_indices = nms_rotate.nms_rotate(decode_boxes=boxes_pred,
                                                 scores=scores,
                                                 iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
-                                                max_output_size=100 if self.is_training else 1000,
+                                                max_output_size=100 if self.is_training else max_output_size,
                                                 use_gpu=True,
                                                 gpu_id=gpu_id)
 

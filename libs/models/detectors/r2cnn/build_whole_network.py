@@ -209,10 +209,11 @@ class DetectionNetworkR2CNN(DetectionNetworkBase):
                     raise NotImplementedError("soft NMS for rotate has not implemented")
 
                 else:
+                    max_output_size = 4000 if 'DOTA' in self.cfgs.NET_NAME else 200
                     keep = nms_rotate.nms_rotate(decode_boxes=tmp_decoded_boxes,
                                                  scores=tmp_score,
                                                  iou_threshold=self.cfgs.FAST_RCNN_NMS_IOU_THRESHOLD,
-                                                 max_output_size=self.cfgs.FAST_RCNN_NMS_MAX_BOXES_PER_CLASS,
+                                                 max_output_size=100 if self.is_training else max_output_size,
                                                  use_gpu=self.cfgs.ROTATE_NMS_USE_GPU,
                                                  gpu_id=gpu_id)
 

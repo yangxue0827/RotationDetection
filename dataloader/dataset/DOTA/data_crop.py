@@ -127,8 +127,9 @@ class_list = ['plane', 'baseball-diamond', 'bridge', 'ground-track-field',
               'small-vehicle', 'large-vehicle', 'ship',
               'tennis-court', 'basketball-court',
               'storage-tank', 'soccer-ball-field',
-              'roundabout', 'harbor',
-              'swimming-pool', 'helicopter', 'container-crane']
+              'roundabout', 'harbor', 'swimming-pool', 'helicopter',
+              'container-crane',
+              'airport', 'helipad']
 
 
 def format_label(txt_list):
@@ -136,6 +137,8 @@ def format_label(txt_list):
     for i in txt_list:
         if len(i.split(' ')) < 9:
             continue
+        if 'turntable' in i:
+            i = i.replace('turntable', 'roundabout')
         format_data.append(
             [float(xy) for xy in i.split(' ')[:8]] + [class_list.index(i.split(' ')[8])]
         )
@@ -147,7 +150,7 @@ def format_label(txt_list):
 
 
 def clip_image(file_idx, image, boxes_all, width, height, stride_w, stride_h):
-    min_pixel = 5
+    min_pixel = 2
     print(file_idx)
     boxes_all_5 = backward_convert(boxes_all[:, :8], False)
     print(boxes_all[np.logical_or(boxes_all_5[:, 2] <= min_pixel, boxes_all_5[:, 3] <= min_pixel), :])
@@ -202,11 +205,11 @@ def clip_image(file_idx, image, boxes_all, width, height, stride_w, stride_h):
 
 
 print('class_list', len(class_list))
-raw_data = '/data/dataset/DOTA/val/'
+raw_data = '/data/dataset/DOTA2.0/train/'
 raw_images_dir = os.path.join(raw_data, 'images', 'images')
-raw_label_dir = os.path.join(raw_data, 'labelTxt', 'labelTxt')
+raw_label_dir = os.path.join(raw_data, 'labelTxt-v2.0', 'labelTxt')
 
-save_dir = '/data/dataset/DOTA1.0/trainval/'
+save_dir = '/data/dataset/DOTA2.0/crop/train/'
 
 images = [i for i in os.listdir(raw_images_dir) if 'png' in i]
 labels = [i for i in os.listdir(raw_label_dir) if 'txt' in i]

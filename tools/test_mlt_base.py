@@ -91,6 +91,10 @@ class TestMLT(object):
                 restorer.restore(sess, restore_ckpt)
                 print('restore model %d ...' % gpu_id)
             for a_img in images:
+
+                # if '01401' not in a_img:
+                #     continue
+
                 raw_img = cv2.imread(a_img)
                 raw_h, raw_w = raw_img.shape[0], raw_img.shape[1]
 

@@ -356,10 +356,11 @@ class DetectionNetworkSCRDet(DetectionNetworkBase):
                                                                  img_shape=img_shape)
 
                 # 3. NMS
+                max_output_size = 4000 if 'DOTA' in self.cfgs.NET_NAME else 200
                 keep = tf.image.non_max_suppression(
                     boxes=tmp_decoded_boxes,
                     scores=tmp_score,
-                    max_output_size=self.cfgs.FAST_RCNN_NMS_MAX_BOXES_PER_CLASS,
+                    max_output_size=100 if self.is_training else max_output_size,
                     iou_threshold=self.cfgs.FAST_RCNN_H_NMS_IOU_THRESHOLD)
 
                 perclass_boxes = tf.gather(tmp_decoded_boxes, keep)

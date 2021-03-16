@@ -37,7 +37,7 @@ def quad2rbox_tf(boxes):
     _ws = tf.expand_dims(dist_tf(points[:, 0], points[:, 1]), axis=1)
     _hs = tf.expand_dims(dist_tf(points[:, 1], points[:, 2]), axis=1)
     _thetas = tf.expand_dims(tf.atan2(-(points[:, 1, 0]-points[:, 0, 0]), points[:, 1, 1]-points[:, 0, 1]), axis=1)
-    odd = (tf.mod((_thetas // (-np.pi * 0.5)), 2) == 0)
+    odd = tf.equal(tf.mod((_thetas // (-np.pi * 0.5)), 2), 0)
     ws = tf.where(odd, _hs, _ws)
     hs = tf.where(odd, _ws, _hs)
     thetas = tf.mod(_thetas, -np.pi * 0.5)

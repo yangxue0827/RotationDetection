@@ -7,7 +7,7 @@ import math
 from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
 
 """
-RetinaNet-H
+RetinaNet-H + 90
 This is your result for task 1:
 
     mAP: 0.6572506703256068

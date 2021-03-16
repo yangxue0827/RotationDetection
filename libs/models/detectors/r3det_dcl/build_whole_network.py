@@ -8,7 +8,7 @@ import tensorflow.contrib.slim as slim
 from libs.models.detectors.single_stage_base_network import DetectionNetworkBase
 from libs.models.losses.losses_dcl import LossDCL
 from libs.utils import bbox_transform, nms_rotate
-from libs.models.samplers.r3det_dcl.anchor_sampler_retinenet import AnchorSamplerRetinaNet
+from libs.models.samplers.r3det_dcl.anchor_sampler_r3det_dcl import AnchorSamplerR3DetDCL
 from libs.models.samplers.r3det_dcl.refine_anchor_sampler_r3det_dcl import RefineAnchorSamplerR3DetDCL
 from utils.densely_coded_label import get_code_len, angle_label_decode
 from libs.utils.coordinate_convert import coordinate_present_convert
@@ -18,7 +18,7 @@ class DetectionNetworkR3DetDCL(DetectionNetworkBase):
 
     def __init__(self, cfgs, is_training):
         super(DetectionNetworkR3DetDCL, self).__init__(cfgs, is_training)
-        self.anchor_sampler_retinenet = AnchorSamplerRetinaNet(cfgs)
+        self.anchor_sampler_retinenet = AnchorSamplerR3DetDCL(cfgs)
         self.refine_anchor_sampler_r3det_dcl = RefineAnchorSamplerR3DetDCL(cfgs)
         self.losses = LossDCL(self.cfgs)
         self.coding_len = get_code_len(int(cfgs.ANGLE_RANGE / cfgs.OMEGA), mode=cfgs.ANGLE_MODE)
@@ -370,10 +370,11 @@ class DetectionNetworkR3DetDCL(DetectionNetworkBase):
                                                      Tout=[tf.float32])
                 refine_boxes_pred_angle = tf.reshape(refine_boxes_pred_angle, [-1, 5])
 
+            max_output_size = 4000 if 'DOTA' in self.cfgs.NET_NAME else 200
             nms_indices = nms_rotate.nms_rotate(decode_boxes=refine_boxes_pred_angle,
                                                 scores=scores,
                                                 iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
-                                                max_output_size=100 if self.is_training else 1000,
+                                                max_output_size=100 if self.is_training else max_output_size,
                                                 use_gpu=True,
                                                 gpu_id=gpu_id)
 

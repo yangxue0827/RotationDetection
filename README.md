@@ -37,31 +37,43 @@ Techniques:
 
 More results and trained models are available in the [MODEL_ZOO.md](MODEL_ZOO.md).
 
-### DOTA1.0 (Task1)
-| Model |  Neck  |    Backbone    |    Training/test dataset    |    mAP   | Model Link | Anchor | Angle Pred. | Reg. Loss| Angle Range | Data Augmentation | Configs |      
-|:------------:|:------------:|:------------:|:------------:|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:---------:|:---------:|:---------:|    
-| [RetinaNet-H](https://arxiv.org/abs/1908.05612) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 64.17 | [Baidu Drive (j5l0)](https://pan.baidu.com/s/1Qh_LE6QeGsOBYqMzjAESsA) | H | Reg. | smooth L1 | **180** | × | [cfgs_res50_dota_v15.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v15.py) |
-| [RetinaNet-H](https://arxiv.org/abs/1908.05612) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 65.73 | [Baidu Drive (jum2)](https://pan.baidu.com/s/19-hEtCGxLfYuluTATQJpdg) | H | Reg. | smooth L1 | **90** | × | [cfgs_res50_dota_v4.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v4.py) |
-| [IoU-Smooth L1](https://arxiv.org/abs/1811.07126) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 66.99 | [Baidu Drive (bc83)](https://pan.baidu.com/s/19lyx6WvThr61xrbpkC9nQg) | H | Reg. | **iou-smooth L1** | 90 | × | [cfgs_res50_dota_v5.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v5.py) |
-| [RSDet](https://arxiv.org/pdf/1911.08299) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 67.27 | [Baidu Drive (6nt5)](https://pan.baidu.com/s/1-4iXqRMvCOIEtrMFwtXyew) | H | Reg. | modulated loss | - | × | [cfgs_res50_dota_rsdet_v2.py](./libs/configs/DOTA/rsdet/cfgs_res50_dota_rsdet_v2.py) |
-| [CSL](https://arxiv.org/abs/2003.05597) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 67.38 | [Baidu Drive (g3wt)](https://pan.baidu.com/s/1nrIs-oYA53qQzlPjqYkMJQ) | H | **Cls.: Gaussian (r=1, w=10)** | smooth L1 | 180 | x | [cfgs_res50_dota_v45.py](./libs/configs/DOTA/csl/cfgs_res50_dota_v45.py) |
-| [DCL](https://arxiv.org/abs/2011.09670) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 67.39 | [Baidu Drive (p9tu)](https://pan.baidu.com/s/1TZ9V0lTTQnMhiepxK1mdqg) | H | **Cls.: BCL (w=180/256)** | smooth L1 | 180 | × | [cfgs_res50_dota_dcl_v5.py](./libs/configs/DOTA/dcl/cfgs_res50_dota_dcl_v5.py) |
-| [GWD](https://arxiv.org/abs/2101.11952) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 68.93 | [Baidu Drive (nb7w)](https://pan.baidu.com/s/1u74Uk0wQQT_8QWR9rYwgrw) | H | Reg. | **gwd** | 90 | × | [cfgs_res50_dota_v10.py](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) |
-| [GWD](https://arxiv.org/abs/2101.11952) **[+ SWA](https://arxiv.org/pdf/2012.12645.pdf)** | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 69.92 | [Baidu Drive (nb7w)](https://pan.baidu.com/s/1u74Uk0wQQT_8QWR9rYwgrw) | H | Reg. | gwd | 90 | × | [cfgs_res50_dota_v10.py](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) |
-| [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 70.66 | [Baidu Drive (30lt)](https://pan.baidu.com/s/143sGeLNjXzcpxi9GV7FVyA) | H->R | Reg. | smooth L1 | 90 | × | [cfgs_res50_dota_r3det_v1.py](./libs/configs/DOTA/r3det/cfgs_res50_dota_r3det_v1.py) |
-| **[R<sup>3</sup>Det-DCL](https://arxiv.org/abs/2011.09670)** | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 71.21 | [Baidu Drive (jueq)](https://pan.baidu.com/s/1XR31i3T-C5R16giBxQUNWw) | H->R | **Cls.: BCL (w=180/256)** | iou-smooth L1 | 90->180 | × | [cfgs_res50_dota_r3det_dcl_v1.py](./libs/configs/DOTA/r3det_dcl/cfgs_res50_dota_r3det_dcl_v1.py) |
-| **[R<sup>3</sup>Det-GWD](https://arxiv.org/abs/2101.11952)** | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 71.56 | [Baidu Drive (8962)](https://pan.baidu.com/s/17_nhbq35YU7WLBvad3TasQ) | H->R | Reg. | **smooth L1->gwd** | 90 | × | [cfgs_res50_dota_r3det_gwd_v6.py](./libs/configs/DOTA/r3det_gwd/cfgs_res50_dota_r3det_gwd_v6.py) |
-| [R<sup>2</sup>CNN (Faster-RCNN)](https://arxiv.org/abs/1706.09579) | FPN | ResNet50_v1d 600->800 | DOTA1.0 trainval/test | 72.27 | [Baidu Drive (wt2b)](https://pan.baidu.com/s/1R_31U2jl7gj6OMvirURnsg) | H->R | Reg. | smooth L1 | 90 | × | [cfgs_res50_dota_v1.py](./libs/configs/DOTA/r2cnn/cfgs_res50_dota_v1.py) |
+### DOTA (Task1)
+Base setting: 
+
+|   Backbone  |  Neck  |  Training/test dataset  | Data Augmentation | Epoch |      
+|:-----------:|:------:|:-----------------------:|:-----------------:|:-----:|
+| ResNet50_v1d 600->800 | FPN | trainval/test | × | **13 is enough for baseline (default is 20)** |
+
+| Model |    DOTA1.0   | Model |   DOTA1.5   | Model |   DOTA2.0   | Model | Anchor | Angle Pred. | Reg. Loss| Angle Range | Configs |      
+|:------------:|:-----------:|:----------:|:-----------:|:----------:|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:---------:|:---------:|    
+| [RetinaNet-H](https://arxiv.org/abs/1908.05612) | 64.17 | [Baidu Drive (j5l0)](https://pan.baidu.com/s/1Qh_LE6QeGsOBYqMzjAESsA) | - | - |  |  | H | Reg. | smooth L1 | **180**  | [cfgs_res50_dota_v15.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v15.py) |
+| [RetinaNet-H](https://arxiv.org/abs/1908.05612) | 65.73 | [Baidu Drive (jum2)](https://pan.baidu.com/s/19-hEtCGxLfYuluTATQJpdg) | 58.87 | [Baidu Drive (lld0)](https://pan.baidu.com/s/15pqhPVJ6XzvIMLjVZh6aDw) |  |  | H | Reg. | smooth L1 | **90**  | [dota1.0](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v4.py),[dota1.5](./libs/configs/DOTA1.5/retinanet/cfgs_res50_dota1.5_v4.py) |
+| [IoU-Smooth L1](https://arxiv.org/abs/1811.07126) | 66.99 | [Baidu Drive (bc83)](https://pan.baidu.com/s/19lyx6WvThr61xrbpkC9nQg) |||  |  | H | Reg. | **iou-smooth L1** | 90  | [cfgs_res50_dota_v5.py](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v5.py) |
+| [RSDet](https://arxiv.org/pdf/1911.08299) | 67.27 | [Baidu Drive (6nt5)](https://pan.baidu.com/s/1-4iXqRMvCOIEtrMFwtXyew) |||  |  | H | Reg. | modulated loss | -  | [cfgs_res50_dota_rsdet_v2.py](./libs/configs/DOTA/rsdet/cfgs_res50_dota_rsdet_v2.py) |
+| [CSL](https://arxiv.org/abs/2003.05597) | 67.38 | [Baidu Drive (g3wt)](https://pan.baidu.com/s/1nrIs-oYA53qQzlPjqYkMJQ) |||  |  | H | **Cls.: Gaussian (r=1, w=10)** | smooth L1 | 180 | [cfgs_res50_dota_v45.py](./libs/configs/DOTA/csl/cfgs_res50_dota_v45.py) |
+| [DCL](https://arxiv.org/abs/2011.09670) | 67.39 | [Baidu Drive (p9tu)](https://pan.baidu.com/s/1TZ9V0lTTQnMhiepxK1mdqg) |||  |  | H | **Cls.: BCL (w=180/256)** | smooth L1 | 180  | [cfgs_res50_dota_dcl_v5.py](./libs/configs/DOTA/dcl/cfgs_res50_dota_dcl_v5.py) |
+| [GWD](https://arxiv.org/abs/2101.11952) | 68.93 | [Baidu Drive (nb7w)](https://pan.baidu.com/s/1u74Uk0wQQT_8QWR9rYwgrw) |||  |  | H | Reg. | **gwd** | 90  | [cfgs_res50_dota_v10.py](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) |
+| [GWD](https://arxiv.org/abs/2101.11952) **[+ SWA](https://arxiv.org/pdf/2012.12645.pdf)**   | 69.92 | [Baidu Drive (nb7w)](https://pan.baidu.com/s/1u74Uk0wQQT_8QWR9rYwgrw) |||  |  | H | Reg. | gwd | 90  | [cfgs_res50_dota_v10.py](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) |
+| [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | 70.66 | [Baidu Drive (30lt)](https://pan.baidu.com/s/143sGeLNjXzcpxi9GV7FVyA) |||  |  | H->R | Reg. | smooth L1 | 90  | [cfgs_res50_dota_r3det_v1.py](./libs/configs/DOTA/r3det/cfgs_res50_dota_r3det_v1.py) |
+| **[R<sup>3</sup>Det-DCL](https://arxiv.org/abs/2011.09670)** | 71.21 | [Baidu Drive (jueq)](https://pan.baidu.com/s/1XR31i3T-C5R16giBxQUNWw) |||  |  | H->R | **Cls.: BCL (w=180/256)** | iou-smooth L1 | 90->180  | [cfgs_res50_dota_r3det_dcl_v1.py](./libs/configs/DOTA/r3det_dcl/cfgs_res50_dota_r3det_dcl_v1.py) |
+| **[R<sup>3</sup>Det-GWD](https://arxiv.org/abs/2101.11952)** | 71.56 | [Baidu Drive (8962)](https://pan.baidu.com/s/17_nhbq35YU7WLBvad3TasQ) |||  |  | H->R | Reg. | **smooth L1->gwd** | 90  | [cfgs_res50_dota_r3det_gwd_v6.py](./libs/configs/DOTA/r3det_gwd/cfgs_res50_dota_r3det_gwd_v6.py) |
+| [R<sup>2</sup>CNN (Faster-RCNN)](https://arxiv.org/abs/1706.09579) | 72.27 | [Baidu Drive (wt2b)](https://pan.baidu.com/s/1R_31U2jl7gj6OMvirURnsg) |||  |  | H->R | Reg. | smooth L1 | 90  | [cfgs_res50_dota_v1.py](./libs/configs/DOTA/r2cnn/cfgs_res50_dota_v1.py) |
+
+**Note:**    
+- Single GPU training: [SAVE_WEIGHTS_INTE](./libs/configs/cfgs.py) = iter_epoch * 1 (DOTA1.0: iter_epoch=27000, DOTA1.5: iter_epoch=32000, DOTA2.0: iter_epoch=40000)
+- Multi-GPU training: [SAVE_WEIGHTS_INTE](./libs/configs/cfgs.py) = iter_epoch * 2
 
 ## My Development Environment
 **docker images: docker pull yangxue2docker/yx-tf-det:tensorflow1.13.1-cuda10-gpu-py3**      
 1. python3.5 (anaconda recommend)               
 2. cuda 10.0                     
-3. [opencv(cv2)](https://pypi.org/project/opencv-python/)       
+3. opencv-python 4.1.1.26         
 4. [tfplot 0.2.0](https://github.com/wookayin/tensorflow-plot) (optional)            
 5. tensorflow-gpu 1.13
 6. tqdm 4.54.0
 7. Shapely 1.7.1
+
+**Note: For 30xx series graphics cards, I recommend this [blog](https://blog.csdn.net/qq_35635340/article/details/110138215) to install tf1.*.**
 
 ## Download Model
 ### Pretrain weights

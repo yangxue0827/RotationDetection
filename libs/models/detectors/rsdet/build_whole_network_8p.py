@@ -9,14 +9,14 @@ from libs.models.detectors.single_stage_base_network import DetectionNetworkBase
 from libs.models.losses.losses_rsdet import LossRSDet
 from libs.utils import bbox_transform, nms_rotate
 from libs.utils.coordinate_convert import backward_convert
-from libs.models.samplers.rsdet.anchor_sampler_retinenet_8p import AnchorSamplerRetinaNet
+from libs.models.samplers.rsdet.anchor_sampler_rsdet_8p import AnchorSamplerRSDet
 
 
 class DetectionNetworkRSDet(DetectionNetworkBase):
 
     def __init__(self, cfgs, is_training):
         super(DetectionNetworkRSDet, self).__init__(cfgs, is_training)
-        self.anchor_sampler_retinenet = AnchorSamplerRetinaNet(cfgs)
+        self.anchor_sampler_rsdet = AnchorSamplerRSDet(cfgs)
         self.losses = LossRSDet(self.cfgs)
 
     def rpn_reg_net(self, inputs, scope_list, reuse_flag, level):
@@ -82,7 +82,7 @@ class DetectionNetworkRSDet(DetectionNetworkBase):
         if self.is_training:
             with tf.variable_scope('build_loss'):
                 labels, anchor_states, target_boxes = tf.py_func(
-                    func=self.anchor_sampler_retinenet.anchor_target_layer,
+                    func=self.anchor_sampler_rsdet.anchor_target_layer,
                     inp=[gtboxes_batch_h, gtboxes_batch_r, anchors, gpu_id],
                     Tout=[tf.float32, tf.float32, tf.float32])
 
@@ -130,10 +130,11 @@ class DetectionNetworkRSDet(DetectionNetworkBase):
                                             Tout=[tf.float32])
                 filtered_boxes = tf.reshape(filtered_boxes, [-1, 5])
 
+                max_output_size = 4000 if 'DOTA' in self.cfgs.NET_NAME else 200
                 nms_indices = nms_rotate.nms_rotate(decode_boxes=filtered_boxes,
                                                     scores=tf.reshape(filtered_scores, [-1, ]),
                                                     iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
-                                                    max_output_size=100 if is_training else 1000,
+                                                    max_output_size=100 if is_training else max_output_size,
                                                     use_gpu=True)
 
                 # filter indices based on NMS

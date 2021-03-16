@@ -10,10 +10,22 @@ from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
 RetinaNet-H
 FLOPs: 472715443;    Trainable params: 32325246
 
+RetinaNet_HRSC2016_1x_20201211
+loss inside weight (1, 1, 1, 1, 1)
+cls : ship|| Recall: 0.8819218241042345 || Precison: 0.4902670891806247|| AP: 0.7419664333268665
+F1:0.8144528322882278 P:0.803486529318542 R:0.8257328990228013
+mAP is : 0.7419664333268665
+
+RetinaNet_HRSC2016_1x_20201211_v1
+loss inside weight (1, 10, 1, 1, 1)
+
+
+RetinaNet_HRSC2016_1x_20201211_v2
+loss inside weight (1, 10, 1, 1, 1)
 """
 
 # ------------------------------------------------
-VERSION = 'RetinaNet_HRSC2016_1x_20201211'
+VERSION = 'RetinaNet_HRSC2016_1x_20201211_v1'
 NET_NAME = 'resnet50_v1d'  # 'MobilenetV2'
 
 # ---------------------------------------- System
