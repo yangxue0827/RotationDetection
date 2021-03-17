@@ -261,7 +261,7 @@ class DetectionNetworkBase(object):
 
                 if self.is_training:
                     if not self.cfgs.CUDA8:
-                        # Note: for cuda 9
+                        # Note: for > cuda 9
                         level_i_rois = tf.stop_gradient(level_i_rois)
                         level_i_labels = tf.gather(labels, level_i_indices)
 
@@ -277,7 +277,7 @@ class DetectionNetworkBase(object):
 
                         level_i_targets = tf.gather(bbox_targets, level_i_indices)
                         level_i_targets = tf.stop_gradient(tf.concat([level_i_targets,
-                                                                      tf.zeros(shape=(1, 4 * (self.cfgs.CLASS_NUM + 1)),
+                                                                      tf.zeros(shape=(1, 5 * (self.cfgs.CLASS_NUM + 1)),
                                                                                dtype=tf.float32)], axis=0))
 
                     return level_i_rois, level_i_labels, level_i_targets

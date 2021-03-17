@@ -16,14 +16,14 @@ for filename in os.listdir(input_dir):
         os.makedirs(output_path)
 
     cap = cv2.VideoCapture(input_dir+filename)
-    c=0
+    c = 0
     rval=cap.isOpened()
     while rval:
         # get a frame
         rval, frame = cap.read()
         if rval:
             cv2.imwrite(output_path+'/'+str(c) + '.jpg',frame) 
-            c=c+1
+            c += 1
             print(c)
             cv2.waitKey(1)
         else:
