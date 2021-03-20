@@ -40,7 +40,10 @@ def get_dota_short_names(label):
         'ground-track-field': 'GTF',
         'bridge': 'BR',
         'basketball-court': 'BC',
-        'baseball-diamond': 'BD'
+        'baseball-diamond': 'BD',
+        'container-crane': 'CC',
+        'airport': 'AP',
+        'helipad': 'HP'
     }
 
     return DOTA_SHORT_NAMES[label]
