@@ -66,7 +66,7 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
                 labels = tf.reshape(labels, [-1, self.cfgs.CLASS_NUM])
                 target_delta = tf.reshape(target_delta, [-1, 5])
                 anchor_states = tf.reshape(anchor_states, [-1, ])
-                target_boxes = tf.reshape(target_boxes, [-1, 5])
+                target_boxes = tf.reshape(target_boxes, [-1, 6])
 
                 cls_loss = self.losses.focal_loss(labels, tf.reshape(rpn_cls_score, [-1, self.cfgs.CLASS_NUM]), anchor_states)
 

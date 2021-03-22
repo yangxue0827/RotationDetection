@@ -136,7 +136,7 @@ class DrawBox(object):
             draw_obj.line(xy=[(rect[3][0], rect[3][1]), (rect[0][0], rect[0][1])],
                           fill=color,
                           width=width)
-        else:
+        elif method == 2:
             draw_obj.line(xy=[(box[0], box[1]), (box[2], box[3])],
                           fill=color,
                           width=width)
@@ -149,6 +149,8 @@ class DrawBox(object):
             draw_obj.line(xy=[(box[6], box[7]), (box[0], box[1])],
                           fill=color,
                           width=width)
+        else:
+            pass
 
     def only_draw_scores(self, draw_obj, box, score, color):
 
@@ -219,6 +221,8 @@ class DrawBox(object):
                 img_array = (img_array * np.array(self.cfgs.PIXEL_STD) + np.array(self.cfgs.PIXEL_MEAN_)) * 255
             else:
                 img_array = img_array + np.array(self.cfgs.PIXEL_MEAN)
+        if method == 3:
+            img_array = self.draw_boxes_ellipse(img_array, boxes, labels)
         img_array.astype(np.float32)
         boxes = boxes.astype(np.float32)
         labels = labels.astype(np.int32)
@@ -251,6 +255,18 @@ class DrawBox(object):
         out_img_obj = Image.blend(raw_img_obj, img_obj, alpha=0.7)
 
         return np.array(out_img_obj)
+
+    def draw_boxes_ellipse(self, img_array, boxes, labels):
+        labels = labels.astype(np.int32)
+        for box, a_label in zip(boxes, labels):
+            if box[2] < box[3]:
+                box[4] += 90
+            img_array = cv2.ellipse(img_array, center=(box[0], box[1]),
+                                    axes=(max(box[2], box[3]), min(box[2], box[3])),
+                                    angle=box[4], startAngle=0, endAngle=360,
+                                    color=(255, 0, 0),
+                                    thickness=3, lineType=-1)
+        return img_array
 
 
 

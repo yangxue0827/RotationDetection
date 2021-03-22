@@ -235,7 +235,9 @@ class EVAL(object):
                                             test_imgid_list=test_imgid_list,
                                             cls_name=cls,
                                             annopath=test_annotation_path,
-                                            use_07_metric=self.cfgs.USE_07_METRIC)
+                                            use_07_metric=self.cfgs.USE_07_METRIC,
+                                            ovthresh=self.cfgs.EVAL_THRESHOLD)
+
       AP_list += [AP]
       print("cls : {}|| Recall: {} || Precison: {}|| AP: {}".format(cls, recall[-1], precision[-1], AP))
       # plt.plot(recall, precision, label=cls, color=color_list[index])

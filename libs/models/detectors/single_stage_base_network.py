@@ -133,7 +133,7 @@ class DetectionNetworkBase(object):
     def make_anchors(self, feature_pyramid, use_tf=False):
         with tf.variable_scope('make_anchors'):
             anchor = GenerateAnchors(self.cfgs, self.method)
-            if use_tf:
+            if use_tf and self.method == 'H':
                 anchor_list = anchor.generate_all_anchor_tf(feature_pyramid)
             else:
                 anchor_list = anchor.generate_all_anchor(feature_pyramid)
