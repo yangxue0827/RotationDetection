@@ -42,7 +42,7 @@ Base setting:
 
 |   Backbone  |  Neck  |  Training/test dataset  | Data Augmentation | Epoch |      
 |:-----------:|:------:|:-----------------------:|:-----------------:|:-----:|
-| ResNet50_v1d 600->800 | FPN | trainval/test | × | **13 (multi-gpu) or 17 (single gpu) is enough for baseline (default is 20)** |
+| ResNet50_v1d 600->800 | FPN | trainval/test | × | **13 (single gpu) or 17 (multi-gpu) is enough for baseline (default is 20)** |
 
 | Model |    DOTA1.0   | Model |   DOTA1.5   | Model |   DOTA2.0   | Model | Anchor | Angle Pred. | Reg. Loss| Angle Range | Configs |      
 |:------------:|:-----------:|:----------:|:-----------:|:----------:|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:---------:|:---------:|    

@@ -96,3 +96,11 @@ class LossCSL(Loss):
 
         return tf.reduce_sum(focal_cross_entropy_loss) / normalizer
 
+    def angle_loss(self, labels, pred, objectness):
+        outside_mask = tf.stop_gradient(tf.to_float(tf.greater(objectness, 0)))
+
+        per_entry_cross_ent = - labels * tf.log(tf.sigmoid(pred) + 1e-5) \
+                              - (1 - labels) * tf.log(1 - tf.sigmoid(pred) + 1e-5)
+        per_entry_cross_ent = tf.reduce_mean(per_entry_cross_ent, axis=1) * outside_mask
+        return tf.reduce_mean(per_entry_cross_ent)
+

@@ -12,7 +12,7 @@ import numpy as np
 sys.path.append("../../")
 
 from tools.train_base import Train
-from libs.configs import cfgs
+from libs.configs_v2 import cfgs
 from libs.models.detectors.r3det import build_whole_network
 from libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
 from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo

@@ -165,6 +165,35 @@ class LabelMap(object):
                 'train': 19,
                 'tvmonitor': 20
             }
+        elif self.cfgs.DATASET_NAME.startswith('DIOR'):
+            name_label_map = {
+                'back_ground': 0,
+                'airplane': 1,
+                'airport': 2,
+                'baseballfield': 3,
+                'basketballcourt': 4,
+                'bridge': 5,
+                'chimney': 6,
+                'dam': 7,
+                'Expressway-Service-area': 8,
+                'Expressway-toll-station': 9,
+                'golffield': 10,
+                'groundtrackfield': 11,
+                'harbor': 12,
+                'overpass': 13,
+                'ship': 14,
+                'stadium': 15,
+                'storagetank': 16,
+                'tenniscourt': 17,
+                'trainstation': 18,
+                'vehicle': 19,
+                'windmill': 20,
+                'swimmingpool': 21,
+                'soccerballfield': 22,
+                'volleyballcourt': 23,
+                'roundabout': 24,
+                'container-crane': 25
+            }
         elif self.cfgs.DATASET_NAME == 'bdd100k':
             name_label_map = {
                 'back_ground': 0,

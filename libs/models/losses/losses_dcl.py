@@ -7,10 +7,10 @@ import tensorflow as tf
 import numpy as np
 
 from utils.densely_coded_label import angle_label_decode
-from libs.models.losses.losses import Loss
+from libs.models.losses.losses_csl import LossCSL
 
 
-class LossDCL(Loss):
+class LossDCL(LossCSL):
 
     def angle_cls_period_focal_loss(self, labels, pred, anchor_state, target_boxes, alpha=None, gamma=2.0,
                                     decimal_weight=False, aspect_ratio_threshold=1.5):

@@ -65,8 +65,7 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
                                                                   target_boxes, anchors)
                 elif self.cfgs.REG_LOSS_MODE == 1:
                     reg_loss = self.losses.iou_smooth_l1_loss_exp(target_delta, rpn_box_pred, anchor_states,
-                                                                  target_boxes, anchors, alpha=self.cfgs.ALPHA,
-                                                                  beta=self.cfgs.BETA)
+                                                                  target_boxes, anchors)
                 else:
                     reg_loss = self.losses.smooth_l1_loss(target_delta, rpn_box_pred, anchor_states)
 

@@ -178,7 +178,7 @@ class Train(object):
         summary_op = tf.summary.merge_all()
 
         restorer, restore_ckpt = deter.get_restorer()
-        saver = tf.train.Saver(max_to_keep=20)
+        saver = tf.train.Saver(max_to_keep=15)
 
         init_op = tf.group(
             tf.global_variables_initializer(),

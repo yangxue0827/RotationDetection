@@ -131,12 +131,16 @@ __pycache__/
 *gwd*
 *r3det_gwd*
 *r2cnn_gwd*
+*r2cnn_dcl*
+*r2cnn_csl*
 *fcos*
 *centernet*
 *tensorpack*
 *.DS_Store*
 *KL*
 *kl*
+*configs_v2*
+*README_v2.md*
 
 tools/*/test_dota/*
 tools/*/test_hrsc/*

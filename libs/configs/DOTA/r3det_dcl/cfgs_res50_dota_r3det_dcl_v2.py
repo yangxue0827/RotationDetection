@@ -1,10 +1,49 @@
 # -*- coding: utf-8 -*-
 from __future__ import division, print_function, absolute_import
-import os
-import tensorflow as tf
-import math
 
+import numpy as np
+
+from libs.configs._base_.models.retinanet_r50_fpn import *
+from libs.configs._base_.datasets.dota_detection import *
+from libs.configs._base_.schedules.schedule_1x import *
 from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
+
+# schedule
+BATCH_SIZE = 1  # r3det only support 1
+GPU_GROUP = '0,1,2,3'
+NUM_GPU = len(GPU_GROUP.strip().split(','))
+SAVE_WEIGHTS_INTE = 20673 * 2
+DECAY_STEP = np.array(DECAY_EPOCH, np.int32) * SAVE_WEIGHTS_INTE
+MAX_ITERATION = SAVE_WEIGHTS_INTE * MAX_EPOCH
+WARM_SETP = int(WARM_EPOCH * SAVE_WEIGHTS_INTE)
+
+# dataset
+DATASET_NAME = 'DOTATrain'
+
+# model
+pretrain_zoo = PretrainModelZoo()
+PRETRAINED_CKPT = pretrain_zoo.pretrain_weight_path(NET_NAME, ROOT_PATH)
+TRAINED_CKPT = os.path.join(ROOT_PATH, 'output/trained_weights')
+
+# bbox head
+NUM_REFINE_STAGE = 1
+ANGLE_RANGE = 180
+
+# sample
+REFINE_IOU_POSITIVE_THRESHOLD = [0.6, 0.7]
+REFINE_IOU_NEGATIVE_THRESHOLD = [0.5, 0.6]
+
+# loss
+CLS_WEIGHT = 1.0
+REG_WEIGHT = 1.0
+ANGLE_WEIGHT = 0.5
+USE_IOU_FACTOR = True
+
+# DCL
+OMEGA = 180 / 256.  
+ANGLE_MODE = 0  # {0: BCL, 1: GCL}
+
+VERSION = 'RetinaNet_DOTA_R3Det_DCL_B_2x_20210223'
 
 """
 FLOPs: 1263438247;    Trainable params: 37785791
@@ -20,108 +59,4 @@ FLOPs: 1263438247;    Trainable params: 37785791
 '0.55': {'large-vehicle': 0.7353325878233784, 'harbor': 0.5211198528185972, 'plane': 0.8920862580585238, 'ground-track-field': 0.5407270672368901, 'mAP': 0.6488794667587067, 'basketball-court': 0.6559907006712523, 'storage-tank': 0.8355968791557072, 'soccer-ball-field': 0.6331860913730375, 'bridge': 0.36452763420441847, 'tennis-court': 0.8948645271848791, 'swimming-pool': 0.48934987486682935, 'small-vehicle': 0.5689992754728247, 'helicopter': 0.44766518942643774, 'ship': 0.8307465564549673, 'roundabout': 0.6261539298351151, 'baseball-diamond': 0.6968455767977416},
 '0.65': {'large-vehicle': 0.6371479000855508, 'harbor': 0.31643099043398193, 'plane': 0.7939268425531657, 'ground-track-field': 0.5114564007421151, 'mAP': 0.557123523549265, 'basketball-court': 0.6254975167185005, 'storage-tank': 0.7777523498576263, 'soccer-ball-field': 0.5886586452762923, 'bridge': 0.22325398132542526, 'tennis-court': 0.8945475599023408, 'swimming-pool': 0.332120590973761, 'small-vehicle': 0.4495199055994137, 'helicopter': 0.2900912432210142, 'ship': 0.7227802850337782, 'roundabout': 0.5632017300383333, 'baseball-diamond': 0.6304669114776771}}
 """
-
-# ------------------------------------------------
-VERSION = 'RetinaNet_DOTA_R3Det_DCL_B_2x_20210223'
-NET_NAME = 'resnet50_v1d'  # 'MobilenetV2'
-
-# ---------------------------------------- System
-ROOT_PATH = os.path.abspath('../../')
-print(20*"++--")
-print(ROOT_PATH)
-GPU_GROUP = "0,1,2,3"
-NUM_GPU = len(GPU_GROUP.strip().split(','))
-SHOW_TRAIN_INFO_INTE = 20
-SMRY_ITER = 200
-SAVE_WEIGHTS_INTE = 20673 * 2
-
-SUMMARY_PATH = os.path.join(ROOT_PATH, 'output/summary')
-TEST_SAVE_PATH = os.path.join(ROOT_PATH, 'tools/test_result')
-
-pretrain_zoo = PretrainModelZoo()
-PRETRAINED_CKPT = pretrain_zoo.pretrain_weight_path(NET_NAME, ROOT_PATH)
-TRAINED_CKPT = os.path.join(ROOT_PATH, 'output/trained_weights')
-EVALUATE_R_DIR = os.path.join(ROOT_PATH, 'output/evaluate_result_pickle/')
-
-# ------------------------------------------ Train and test
-RESTORE_FROM_RPN = False
-FIXED_BLOCKS = 1  # allow 0~3
-FREEZE_BLOCKS = [True, False, False, False, False]  # for gluoncv backbone
-USE_07_METRIC = True
-ADD_BOX_IN_TENSORBOARD = True
-
-MUTILPY_BIAS_GRADIENT = 2.0  # if None, will not multipy
-GRADIENT_CLIPPING_BY_NORM = 10.0  # if None, will not clip
-
-CLS_WEIGHT = 1.0
-REG_WEIGHT = 1.0
-ANGLE_WEIGHT = 0.5
-USE_IOU_FACTOR = True
-REG_LOSS_MODE = None
-ALPHA = 1.0
-BETA = 1.0
-
-BATCH_SIZE = 1
-EPSILON = 1e-5
-MOMENTUM = 0.9
-LR = 5e-4
-DECAY_STEP = [SAVE_WEIGHTS_INTE*12, SAVE_WEIGHTS_INTE*16, SAVE_WEIGHTS_INTE*20]
-MAX_ITERATION = SAVE_WEIGHTS_INTE*20
-WARM_SETP = int(1.0 / 4.0 * SAVE_WEIGHTS_INTE)
-
-# -------------------------------------------- Dataset
-DATASET_NAME = 'DOTATrain'  # 'pascal', 'coco'
-PIXEL_MEAN = [123.68, 116.779, 103.939]  # R, G, B. In tf, channel is RGB. In openCV, channel is BGR
-PIXEL_MEAN_ = [0.485, 0.456, 0.406]
-PIXEL_STD = [0.229, 0.224, 0.225]  # R, G, B. In tf, channel is RGB. In openCV, channel is BGR
-IMG_SHORT_SIDE_LEN = 800
-IMG_MAX_LENGTH = 800
-CLASS_NUM = 15
-OMEGA = 180 / 256.
-ANGLE_MODE = 0
-
-IMG_ROTATE = False
-RGB2GRAY = False
-VERTICAL_FLIP = False
-HORIZONTAL_FLIP = True
-IMAGE_PYRAMID = False
-
-# --------------------------------------------- Network
-SUBNETS_WEIGHTS_INITIALIZER = tf.random_normal_initializer(mean=0.0, stddev=0.01, seed=None)
-SUBNETS_BIAS_INITIALIZER = tf.constant_initializer(value=0.0)
-PROBABILITY = 0.01
-FINAL_CONV_BIAS_INITIALIZER = tf.constant_initializer(value=-math.log((1.0 - PROBABILITY) / PROBABILITY))
-WEIGHT_DECAY = 1e-4
-USE_GN = False
-FPN_CHANNEL = 256
-NUM_SUBNET_CONV = 4
-FPN_MODE = 'fpn'
-
-# --------------------------------------------- Anchor
-LEVEL = ['P3', 'P4', 'P5', 'P6', 'P7']
-BASE_ANCHOR_SIZE_LIST = [32, 64, 128, 256, 512]
-ANCHOR_STRIDE = [8, 16, 32, 64, 128]
-ANCHOR_SCALES = [2 ** 0, 2 ** (1.0 / 3.0), 2 ** (2.0 / 3.0)]
-ANCHOR_RATIOS = [1, 1 / 2, 2., 1 / 3., 3., 5., 1 / 5.]
-ANCHOR_ANGLES = [-90, -75, -60, -45, -30, -15]
-ANCHOR_SCALE_FACTORS = None
-USE_CENTER_OFFSET = True
-METHOD = 'H'
-USE_ANGLE_COND = False
-ANGLE_RANGE = 180  # 90 or 180
-
-# -------------------------------------------- Head
-SHARE_NET = True
-USE_P5 = True
-IOU_POSITIVE_THRESHOLD = 0.5
-IOU_NEGATIVE_THRESHOLD = 0.4
-REFINE_IOU_POSITIVE_THRESHOLD = [0.6, 0.7]
-REFINE_IOU_NEGATIVE_THRESHOLD = [0.5, 0.6]
-
-NMS = True
-NMS_IOU_THRESHOLD = 0.1
-MAXIMUM_DETECTIONS = 100
-FILTERED_SCORE = 0.05
-VIS_SCORE = 0.4
-
 

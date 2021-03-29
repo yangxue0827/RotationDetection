@@ -34,6 +34,7 @@ class TrainRetinaNet(Train):
             tf.summary.scalar('lr', lr)
 
             optimizer = tf.train.MomentumOptimizer(lr, momentum=cfgs.MOMENTUM)
+            # optimizer = tf.train.experimental.enable_mixed_precision_graph_rewrite(optimizer)
             retinanet = build_whole_network_batch.DetectionNetworkRetinaNet(cfgs=self.cfgs,
                                                                             is_training=True)
 
