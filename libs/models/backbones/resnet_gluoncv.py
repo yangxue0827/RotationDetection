@@ -285,7 +285,7 @@ class ResNetGluonCVBackbone(object):
                 net = self.stem_stack_3x3(net=input_x, input_channel=32, scope="C1")
                 feature_dict["C1"] = net
                 # print (net)
-            for i in range(2, len(bottleneck_nums)+2):
+            for i in range(2, len(bottleneck_nums)+(2 if self.cfgs.FPN_MODE != 'scrdet' else 1)):
                 spatial_downsample = False if i == 2 else True  # do not downsample in C2
                 with slim.arg_scope(self.resnet_arg_scope(is_training=((not freeze[i-1]) and is_training),
                                                           freeze_norm=freeze_norm)):
