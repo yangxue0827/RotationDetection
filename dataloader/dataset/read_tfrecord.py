@@ -95,9 +95,8 @@ class ReadTFRecord(object):
         :return:
         img_name_batch: shape(1, 1)
         img_batch: shape:(1, new_imgH, new_imgW, C)
-        gtboxes_and_label_batch: shape(1, Num_Of_objects, 5] .each row is [x1, y1, x2, y2, label]
+        gtboxes_and_label_batch: shape(1, Num_Of_objects, 9] .each row is [x1, y1,..., x4, y4, label]
         '''
-        # assert batch_size == 1, "we only support batch_size is 1.We may support large batch_size in the future"
 
         valid_dataset= ['DOTA1.5', 'ICDAR2015', 'pascal', 'coco', 'bdd100k', 'DOTA', 'DOTA800', 'DOTA600', 'MLT',
                         'HRSC2016', 'UCAS-AOD', 'OHD-SJTU', 'OHD-SJTU-600', 'OHD-SJTU-ALL-600', 'DOTATrain', 'SSDD++',

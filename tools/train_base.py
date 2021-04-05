@@ -23,6 +23,10 @@ class Train(object):
         self.drawer = DrawBoxTensor(cfgs)
 
     def stats_graph(self, graph):
+        """
+        :param graph:
+        :return: Flops (may be wrong) and params
+        """
         flops = tf.profiler.profile(graph, options=tf.profiler.ProfileOptionBuilder.float_operation())
         params = tf.profiler.profile(graph, options=tf.profiler.ProfileOptionBuilder.trainable_variables_parameter())
         print('FLOPs: {};    Trainable params: {}'.format(flops.total_float_ops, params.total_parameters))

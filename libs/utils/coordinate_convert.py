@@ -107,7 +107,7 @@ def coordinate_present_convert(coords, mode=1, shift=True):
     """
     :param coords: shape [-1, 5]
     :param mode: -1 convert coords range to [-90, 90), 1 convert coords range to [-90, 0)
-    :param shift: [-90, 90) --> [-180, 0)
+    :param shift: [-90, 90) --> [-180, 0)  important for CSL and DCL
     :return: shape [-1, 5]
     """
     # angle range from [-90, 0) to [-180, 0)

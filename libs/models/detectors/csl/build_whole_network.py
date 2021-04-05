@@ -234,7 +234,7 @@ class DetectionNetworkCSL(DetectionNetworkBase):
                 boxes_pred_angle = tf.reshape(boxes_pred_angle, [-1, 5])
 
             max_output_size = 4000 if 'DOTA' in self.cfgs.NET_NAME else 200
-            nms_indices = nms_rotate.nms_rotate(decode_boxes=boxes_pred,
+            nms_indices = nms_rotate.nms_rotate(decode_boxes=boxes_pred_angle,
                                                 scores=scores,
                                                 iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
                                                 max_output_size=100 if self.is_training else max_output_size,
