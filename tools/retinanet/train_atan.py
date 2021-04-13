@@ -13,14 +13,13 @@ sys.path.append("../../")
 
 from tools.train_base import Train
 from libs.configs import cfgs
-from libs.models.detectors.r3det import build_whole_network
+from libs.models.detectors.retinanet import build_whole_network_atan
 from libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
 from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
-
 os.environ["CUDA_VISIBLE_DEVICES"] = cfgs.GPU_GROUP
 
 
-class TrainR3Det(Train):
+class TrainRetinaNet(Train):
 
     def get_gtboxes_and_label(self, gtboxes_and_label_h, gtboxes_and_label_r, num_objects):
         return gtboxes_and_label_h[:int(num_objects), :].astype(np.float32), \
@@ -35,8 +34,8 @@ class TrainR3Det(Train):
             tf.summary.scalar('lr', lr)
 
             optimizer = tf.train.MomentumOptimizer(lr, momentum=cfgs.MOMENTUM)
-            r3det = build_whole_network.DetectionNetworkR3Det(cfgs=self.cfgs,
-                                                              is_training=True)
+            retinanet = build_whole_network_atan.DetectionNetworkRetinaNet(cfgs=self.cfgs,
+                                                                           is_training=True)
 
             with tf.name_scope('get_batch'):
                 if cfgs.IMAGE_PYRAMID:
@@ -110,10 +109,10 @@ class TrainR3Det(Train):
                                                                         target_height=tf.cast(img_shape[0], tf.int32),
                                                                         target_width=tf.cast(img_shape[1], tf.int32))
 
-                                    outputs = r3det.build_whole_detection_network(input_img_batch=img,
-                                                                                  gtboxes_batch_h=gtboxes_and_label_h,
-                                                                                  gtboxes_batch_r=gtboxes_and_label_r,
-                                                                                  gpu_id=i)
+                                    outputs = retinanet.build_whole_detection_network(input_img_batch=img,
+                                                                                      gtboxes_batch_h=gtboxes_and_label_h,
+                                                                                      gtboxes_batch_r=gtboxes_and_label_r,
+                                                                                      gpu_id=i)
                                     gtboxes_in_img_h = self.drawer.draw_boxes_with_categories(img_batch=img,
                                                                                               boxes=gtboxes_and_label_h[
                                                                                                     :, :-1],
@@ -152,9 +151,9 @@ class TrainR3Det(Train):
                             if cfgs.GRADIENT_CLIPPING_BY_NORM is not None:
                                 grads = slim.learning.clip_gradient_norms(grads, cfgs.GRADIENT_CLIPPING_BY_NORM)
                             tower_grads.append(grads)
-            self.log_printer(r3det, optimizer, global_step, tower_grads, total_loss_dict, num_gpu, graph)
+            self.log_printer(retinanet, optimizer, global_step, tower_grads, total_loss_dict, num_gpu, graph)
 
 if __name__ == '__main__':
 
-    trainer = TrainR3Det(cfgs)
+    trainer = TrainRetinaNet(cfgs)
     trainer.main()
