@@ -103,6 +103,7 @@ def rnms_gpu(det_boxes, iou_threshold, device_id):
     if det_boxes.shape[0] == 0:
         return np.array([], np.int64)
     else:
+        assert det_boxes.shape[1] == 6, 'shape of det_boxes is not 6, {}'.format(det_boxes)
         keep = rotate_gpu_nms(det_boxes, iou_threshold, device_id)
         keep = np.reshape(keep, [-1])
         return np.array(keep, np.int64)
