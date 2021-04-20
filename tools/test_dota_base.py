@@ -100,7 +100,7 @@ class TestDOTA(object):
 
             for img_path in images:
 
-                # if 'P0015' not in img_path:
+                # if 'P0006' not in img_path:
                 #     continue
 
                 img = cv2.imread(img_path)

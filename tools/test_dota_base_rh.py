@@ -266,12 +266,14 @@ class TestDOTA(object):
                 threshold_r = {'roundabout': 0.1, 'tennis-court': 0.3, 'swimming-pool': 0.1, 'storage-tank': 0.2,
                                'soccer-ball-field': 0.3, 'small-vehicle': 0.2, 'ship': 0.2, 'plane': 0.3,
                                'large-vehicle': 0.1, 'helicopter': 0.2, 'harbor': 0.0001, 'ground-track-field': 0.3,
-                               'bridge': 0.0001, 'basketball-court': 0.3, 'baseball-diamond': 0.3}
+                               'bridge': 0.0001, 'basketball-court': 0.3, 'baseball-diamond': 0.3,
+                               'container-crane': 0.05, 'airport': 0.1, 'helipad': 0.1}
 
                 threshold_h = {'roundabout': 0.35, 'tennis-court': 0.35, 'swimming-pool': 0.4, 'storage-tank': 0.3,
                                'soccer-ball-field': 0.3, 'small-vehicle': 0.4, 'ship': 0.35, 'plane': 0.35,
                                'large-vehicle': 0.4, 'helicopter': 0.4, 'harbor': 0.3, 'ground-track-field': 0.4,
-                               'bridge': 0.3, 'basketball-court': 0.4, 'baseball-diamond': 0.3}
+                               'bridge': 0.3, 'basketball-court': 0.4, 'baseball-diamond': 0.3,
+                               'container-crane': 0.3, 'airport': 0.2, 'helipad': 0.2}
 
                 for sub_class in range(1, self.cfgs.CLASS_NUM + 1):
                     index = np.where(label_res_rotate == sub_class)[0]
