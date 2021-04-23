@@ -143,16 +143,7 @@ class DetectionNetworkDCL(DetectionNetworkBase):
                     self.add_anchor_img_smry(input_img_batch, anchors, anchor_states, 1)
 
                 cls_loss = self.losses.focal_loss(labels, rpn_cls_score, anchor_states)
-
-                if self.cfgs.REG_LOSS_MODE == 0:
-                    reg_loss = self.losses.iou_smooth_l1_loss_log(target_delta, rpn_box_pred, anchor_states,
-                                                                  target_boxes, anchors)
-                elif self.cfgs.REG_LOSS_MODE == 1:
-                    reg_loss = self.losses.iou_smooth_l1_loss_exp(target_delta, rpn_box_pred, anchor_states,
-                                                                  target_boxes, anchors, alpha=self.cfgs.ALPHA,
-                                                                  beta=self.cfgs.BETA)
-                else:
-                    reg_loss = self.losses.smooth_l1_loss(target_delta, rpn_box_pred, anchor_states)
+                reg_loss = self.losses.smooth_l1_loss(target_delta, rpn_box_pred, anchor_states)
 
                 angle_cls_loss = self.losses.angle_cls_period_focal_loss(target_encode_label, rpn_angle_cls,
                                                                          anchor_states, target_boxes,

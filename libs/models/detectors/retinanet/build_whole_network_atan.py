@@ -36,6 +36,7 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
             if self.cfgs.USE_GN:
                 rpn_conv2d_3x3 = tf.contrib.layers.group_norm(rpn_conv2d_3x3)
                 rpn_conv2d_3x3 = tf.nn.relu(rpn_conv2d_3x3)
+
         rpn_delta_boxes = slim.conv2d(rpn_conv2d_3x3,
                                       num_outputs=4 * self.num_anchors_per_location,
                                       kernel_size=[3, 3],
@@ -47,7 +48,7 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
                                       trainable=self.is_training,
                                       reuse=reuse_flag)
 
-        rpn_delta_sin = slim.conv2d(rpn_conv2d_3x3,
+        rpn_angle_sin = slim.conv2d(rpn_conv2d_3x3,
                                     num_outputs=self.num_anchors_per_location,
                                     kernel_size=[3, 3],
                                     stride=1,
@@ -58,7 +59,7 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
                                     trainable=self.is_training,
                                     reuse=reuse_flag)
 
-        rpn_delta_cos = slim.conv2d(rpn_conv2d_3x3,
+        rpn_angle_cos = slim.conv2d(rpn_conv2d_3x3,
                                     num_outputs=self.num_anchors_per_location,
                                     kernel_size=[3, 3],
                                     stride=1,
@@ -71,18 +72,18 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
 
         if self.cfgs.ANGLE_RANGE == 180:
             # [-90, 90]   sin in [-1, 1]  cos in [0, 1]
-            # rpn_delta_sin = 2 * (rpn_delta_sin - 0.5)
+            # rpn_angle_sin = 2 * (rpn_angle_sin - 0.5)
             # [-90, 90]   sin in [-1, 1]  cos in [-1, 1]
-            rpn_delta_sin, rpn_delta_cos = 2 * (rpn_delta_sin - 0.5), 2 * (rpn_delta_cos - 0.5)  # better
+            rpn_angle_sin, rpn_angle_cos = 2 * (rpn_angle_sin - 0.5), 2 * (rpn_angle_cos - 0.5)  # better
         else:
             # [-90, 0]   sin in [-1, 0]   cos in [0, 1]
-            rpn_delta_sin *= -1
+            rpn_angle_sin *= -1
 
         rpn_delta_boxes = tf.reshape(rpn_delta_boxes, [-1, 4], name='rpn_{}_regression_reshape'.format(level))
-        rpn_delta_sin = tf.reshape(rpn_delta_sin, [-1, 1], name='rpn_{}_sin_reshape'.format(level))
-        rpn_delta_cos = tf.reshape(rpn_delta_cos, [-1, 1], name='rpn_{}_cos_reshape'.format(level))
+        rpn_angle_sin = tf.reshape(rpn_angle_sin, [-1, 1], name='rpn_{}_sin_reshape'.format(level))
+        rpn_angle_cos = tf.reshape(rpn_angle_cos, [-1, 1], name='rpn_{}_cos_reshape'.format(level))
 
-        rpn_delta_boxes = tf.concat([rpn_delta_boxes, rpn_delta_sin, rpn_delta_cos], axis=-1)
+        rpn_delta_boxes = tf.concat([rpn_delta_boxes, rpn_angle_sin, rpn_angle_cos], axis=-1)
 
         return rpn_delta_boxes
 

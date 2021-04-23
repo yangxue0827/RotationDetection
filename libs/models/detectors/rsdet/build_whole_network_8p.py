@@ -135,7 +135,7 @@ class DetectionNetworkRSDet(DetectionNetworkBase):
                                                     scores=tf.reshape(filtered_scores, [-1, ]),
                                                     iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
                                                     max_output_size=100 if is_training else max_output_size,
-                                                    use_gpu=True)
+                                                    use_gpu=not is_training)
 
                 # filter indices based on NMS
                 indices = tf.gather(indices, nms_indices)
