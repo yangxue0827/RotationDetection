@@ -141,6 +141,7 @@ __pycache__/
 *kl*
 *configs_v2*
 *README_v2.md*
+*ridet*
 
 tools/*/test_dota/*
 tools/*/test_hrsc/*

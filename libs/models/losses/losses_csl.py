@@ -104,3 +104,46 @@ class LossCSL(Loss):
         per_entry_cross_ent = tf.reduce_mean(per_entry_cross_ent, axis=1) * outside_mask
         return tf.reduce_mean(per_entry_cross_ent)
 
+    def delta_angle_loss(self, encode_label, target_boxes, preds, anchor_state, sigma=3.0, weight=None):
+        sigma_squared = sigma ** 2
+        indices = tf.reshape(tf.where(tf.equal(anchor_state, 1)), [-1, ])
+        preds = tf.gather(preds, indices)
+        target_boxes = tf.gather(target_boxes, indices)
+        encode_label = tf.gather(encode_label, indices)
+
+        angle_decode = tf.cast(tf.argmax(encode_label, axis=1), tf.float32)
+        angle_decode = (tf.reshape(angle_decode, [-1, ]) * -1 - 0.5) * self.cfgs.OMEGA
+
+        gt_angle = tf.reshape(target_boxes[:, -2], [-1, ])
+
+        # compute smooth L1 loss
+        # f(x) = 0.5 * (sigma * x)^2          if |x| < 1 / sigma / sigma
+        #        |x| - 0.5 / sigma / sigma    otherwise
+        targets = (gt_angle - angle_decode) * (3.1415926 / 180)
+        regression_diff = preds - targets
+        regression_diff = tf.abs(regression_diff)
+
+        regression_loss = tf.where(
+            tf.less(regression_diff, 1.0 / sigma_squared),
+            0.5 * sigma_squared * tf.pow(regression_diff, 2),
+            regression_diff - 0.5 / sigma_squared
+        )
+
+        # regression_loss = tf.reshape(regression_loss, [-1, 5])
+        # lx, ly, lh, lw, ltheta = tf.unstack(regression_loss, axis=-1)
+        # regression_loss = tf.transpose(tf.stack([lx*1., ly*1., lh*10., lw*1., ltheta*1.]))
+
+        if weight is not None:
+            regression_loss = tf.reduce_sum(regression_loss, axis=-1)
+            weight = tf.gather(weight, indices)
+            regression_loss *= weight
+
+        normalizer = tf.stop_gradient(tf.where(tf.equal(anchor_state, 1)))
+        normalizer = tf.cast(tf.shape(normalizer)[0], tf.float32)
+        normalizer = tf.maximum(1.0, normalizer)
+
+        # normalizer = tf.stop_gradient(tf.cast(tf.equal(anchor_state, 1), tf.float32))
+        # normalizer = tf.maximum(tf.reduce_sum(normalizer), 1)
+
+        return tf.reduce_sum(regression_loss) / normalizer
+

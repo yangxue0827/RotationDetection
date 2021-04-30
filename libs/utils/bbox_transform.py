@@ -197,3 +197,46 @@ def qbbox_transform_inv(boxes, deltas, scale_factors=None):
     # pred_theta = dtheta * 180 / np.pi + boxes[:, 4]
 
     return tf.transpose(tf.stack([pred_x_1, pred_y_1, pred_x_2, pred_y_2, pred_x_3, pred_y_3, pred_x_4, pred_y_4]))
+
+
+def qbbox_transform_inv_(boxes, deltas, scale_factors=None):
+    dx1 = deltas[:, 0]
+    dy1 = deltas[:, 1]
+    dx2 = deltas[:, 2]
+    dy2 = deltas[:, 3]
+    dx3 = deltas[:, 4]
+    dy3 = deltas[:, 5]
+    dx4 = deltas[:, 6]
+    dy4 = deltas[:, 7]
+
+    w= boxes[:, 2] - boxes[:, 0] + 1
+    h= boxes[:, 3] - boxes[:, 1] + 1
+
+    x1=boxes[:, 0]
+    y1=boxes[:, 1]
+    x2=boxes[:, 0]
+    y2=boxes[:, 1]+h
+    x3=boxes[:, 0]+w
+    y3=boxes[:, 1]+h
+    x4=boxes[:, 0]+w
+    y4=boxes[:, 1]
+
+    # if scale_factors:
+    #     dx /= scale_factors[0]
+    #     dy /= scale_factors[1]
+    #     dw /= scale_factors[2]
+    #     dh /= scale_factors[3]
+    #     dtheta /= scale_factors[4]
+
+    pred_x_1 = dx1 * w + x1
+    pred_y_1 = dy1 * h + y1
+    pred_x_2 = dx2 * w + x2
+    pred_y_2 = dy2 * h + y2
+    pred_x_3 = dx3 * w + x3
+    pred_y_3 = dy3 * h + y3
+    pred_x_4 = dx4 * w + x4
+    pred_y_4 = dy4 * h + y4
+
+    # pred_theta = dtheta * 180 / np.pi + boxes[:, 4]
+
+    return tf.transpose(tf.stack([pred_x_1, pred_y_1,pred_x_2, pred_y_2,pred_x_3, pred_y_3,pred_x_4, pred_y_4]))

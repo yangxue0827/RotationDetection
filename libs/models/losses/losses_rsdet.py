@@ -76,7 +76,7 @@ class LossRSDet(Loss):
             anchors = tf.transpose(tf.stack([x_c, y_c, w, h]))
 
         preds = bbox_transform.qbbox_transform_inv(boxes=anchors, deltas=preds)
-        # targets=bbox_transform.rbbox_transform_inv_1(boxes=anchors, deltas=targets)
+
         targets = tf.py_func(func=re_order,
                              inp=[targets],
                              Tout=[tf.float32])

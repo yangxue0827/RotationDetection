@@ -192,7 +192,9 @@ class LabelMap(object):
                 'soccerballfield': 22,
                 'volleyballcourt': 23,
                 'roundabout': 24,
-                'container-crane': 25
+                'container-crane': 25,
+                'helipad': 26,
+                'rugbyfield': 27
             }
         elif self.cfgs.DATASET_NAME == 'bdd100k':
             name_label_map = {

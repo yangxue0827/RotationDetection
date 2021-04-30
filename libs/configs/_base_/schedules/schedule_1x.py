@@ -16,7 +16,7 @@ MOMENTUM = 0.9
 LR = 5e-4
 WEIGHT_DECAY = 1e-4
 DECAY_EPOCH = [12, 16, 20]
-MAX_EPOCH = 17
+MAX_EPOCH = 13
 WARM_EPOCH = 1.0 / 4.0
 
 MUTILPY_BIAS_GRADIENT = 2.0  # if None, will not multipy
