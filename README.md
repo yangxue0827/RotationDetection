@@ -116,7 +116,7 @@ Download a pretrain weight you need from the following three options, and then p
     (2) Modify parameters (such as CLASS_NUM, DATASET_NAME, VERSION, etc.) in $PATH_ROOT/libs/configs/#DATASET/#DETECTOR/cfgs_xxx.py
     (3) Copy $PATH_ROOT/libs/configs/#DATASET/#DETECTOR/cfgs_xxx.py to $PATH_ROOT/libs/configs/cfgs.py
     (4) Add category information in $PATH_ROOT/libs/label_name_dict/label_dict.py     
-    (5) Add data_name to $PATH_ROOT/data/io/read_tfrecord.py  
+    (5) Add data_name to $PATH_ROOT/dataloader/dataset/read_tfrecord.py  
     ```     
 
 2. Make tfrecord       
