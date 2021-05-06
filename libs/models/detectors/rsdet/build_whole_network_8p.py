@@ -102,7 +102,8 @@ class DetectionNetworkRSDet(DetectionNetworkBase):
         with tf.variable_scope('postprocess_detctions'):
             boxes, scores, category = self.postprocess_detctions(rpn_bbox_pred=rpn_box_pred,
                                                                  rpn_cls_prob=rpn_cls_prob,
-                                                                 anchors=anchors)
+                                                                 anchors=anchors,
+                                                                 gpu_id=gpu_id)
             boxes = tf.stop_gradient(boxes)
             scores = tf.stop_gradient(scores)
             category = tf.stop_gradient(category)
@@ -112,9 +113,9 @@ class DetectionNetworkRSDet(DetectionNetworkBase):
         else:
             return boxes, scores, category
 
-    def postprocess_detctions(self, rpn_bbox_pred, rpn_cls_prob, anchors):
+    def postprocess_detctions(self, rpn_bbox_pred, rpn_cls_prob, anchors, gpu_id):
 
-        def filter_detections(boxes, scores, is_training):
+        def filter_detections(boxes, scores, is_training, gpu_id):
 
             if is_training:
                 indices = tf.reshape(tf.where(tf.greater(scores, self.cfgs.VIS_SCORE)), [-1, ])
@@ -135,7 +136,8 @@ class DetectionNetworkRSDet(DetectionNetworkBase):
                                                     scores=tf.reshape(filtered_scores, [-1, ]),
                                                     iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
                                                     max_output_size=100 if is_training else max_output_size,
-                                                    use_gpu=not is_training)
+                                                    use_gpu=not is_training,
+                                                    gpu_id=gpu_id)
 
                 # filter indices based on NMS
                 indices = tf.gather(indices, nms_indices)
@@ -157,7 +159,7 @@ class DetectionNetworkRSDet(DetectionNetworkBase):
         return_scores = []
         return_labels = []
         for j in range(0, self.cfgs.CLASS_NUM):
-            indices = filter_detections(boxes_pred, rpn_cls_prob[:, j], self.is_training)
+            indices = filter_detections(boxes_pred, rpn_cls_prob[:, j], self.is_training, gpu_id)
             tmp_boxes_pred = tf.reshape(tf.gather(boxes_pred, indices), [-1, 8])
             tmp_scores = tf.reshape(tf.gather(rpn_cls_prob[:, j], indices), [-1, ])
 
