@@ -12,14 +12,14 @@ from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
 BATCH_SIZE = 1
 GPU_GROUP = "0,1,2"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
-SAVE_WEIGHTS_INTE = 32000 * 2
+SAVE_WEIGHTS_INTE = 40000 * 2
 DECAY_STEP = np.array(DECAY_EPOCH, np.int32) * SAVE_WEIGHTS_INTE
 MAX_ITERATION = SAVE_WEIGHTS_INTE * MAX_EPOCH
 WARM_SETP = int(WARM_EPOCH * SAVE_WEIGHTS_INTE)
 
 # dataset
-DATASET_NAME = 'DOTA1.5'
-CLASS_NUM = 16
+DATASET_NAME = 'DOTA2.0'
+CLASS_NUM = 18
 
 # model
 # backbone
@@ -35,21 +35,41 @@ CLS_WEIGHT = 1.0
 REG_WEIGHT = 1.0 / 5.0
 REG_LOSS_MODE = None
 
-VERSION = 'RetinaNet_DOTA1.5_2x_20210503'
+VERSION = 'RetinaNet_DOTA2.0_2x_20210504'
 
 """
 retinanet-180
-FLOPs: 862193566;    Trainable params: 33051321
+FLOPs: 865678480;    Trainable params: 33148131
+
 This is your evaluation result for task 1:
 
-mAP: 0.39067994750968604
-ap of each class: plane:0.6971214547040069, baseball-diamond:0.6718743603828817, bridge:0.2070197253659081, ground-track-field:0.40821796977456143, small-vehicle:0.19107489374332567, large-vehicle:0.23599989376588054, ship:0.31153479348200586, tennis-court:0.57307407579501, basketball-court:0.5579505327740116, storage-tank:0.46645234537021335, soccer-ball-field:0.3431638970348647, roundabout:0.46736744088552895, harbor:0.2873997032766335, swimming-pool:0.32567754830545365, helicopter:0.5029979563247304, container-crane:0.003952569169960474
+    mAP: 0.43069494957862986
+    ap of each class:
+    plane:0.7511935607921781,
+    baseball-diamond:0.47014450290932247,
+    bridge:0.337831596208814,
+    ground-track-field:0.5641908529585304,
+    small-vehicle:0.3357549886530301,
+    large-vehicle:0.3149136163232269,
+    ship:0.4352201923571177,
+    tennis-court:0.719417829945509,
+    basketball-court:0.5321146014976036,
+    storage-tank:0.49831325441562196,
+    soccer-ball-field:0.40461147028865235,
+    roundabout:0.49565498483846526,
+    harbor:0.3477528948290374,
+    swimming-pool:0.49707150306239245,
+    helicopter:0.4399022806906489,
+    container-crane:0.10935441370223979,
+    airport:0.4230066364666493,
+    helipad:0.07605991247629705
+
 The submitted information is :
 
-Description: RetinaNet_DOTA1.5_2x_20210503_83.2w
-Username: DetectionTeamCSU
-Institute: CSU
-Emailadress: yangxue@csu.edu.cn
+Description: RetinaNet_DOTA2.0_2x_20210504_104w
+Username: sjtu-deter
+Institute: SJTU
+Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
 TeamMembers: yangxue
 """
 

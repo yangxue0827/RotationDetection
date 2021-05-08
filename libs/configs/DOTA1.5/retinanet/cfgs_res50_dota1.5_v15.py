@@ -42,14 +42,31 @@ retinanet-180
 FLOPs: 862193566;    Trainable params: 33051321
 This is your evaluation result for task 1:
 
-mAP: 0.39067994750968604
-ap of each class: plane:0.6971214547040069, baseball-diamond:0.6718743603828817, bridge:0.2070197253659081, ground-track-field:0.40821796977456143, small-vehicle:0.19107489374332567, large-vehicle:0.23599989376588054, ship:0.31153479348200586, tennis-court:0.57307407579501, basketball-court:0.5579505327740116, storage-tank:0.46645234537021335, soccer-ball-field:0.3431638970348647, roundabout:0.46736744088552895, harbor:0.2873997032766335, swimming-pool:0.32567754830545365, helicopter:0.5029979563247304, container-crane:0.003952569169960474
+    mAP: 0.5610401956363628
+    ap of each class:
+    plane:0.7875460889719075,
+    baseball-diamond:0.7387149439907101,
+    bridge:0.37805634835169255,
+    ground-track-field:0.6027540626851335,
+    small-vehicle:0.39196873401154814,
+    large-vehicle:0.44856173941511396,
+    ship:0.6361687880707679,
+    tennis-court:0.8540536580109865,
+    basketball-court:0.7361866563787661,
+    storage-tank:0.5859551738959604,
+    soccer-ball-field:0.4861815416240239,
+    roundabout:0.6460535463270851,
+    harbor:0.4854161897067069,
+    swimming-pool:0.6303611675387102,
+    helicopter:0.4669898500543662,
+    container-crane:0.10167464114832536
+
 The submitted information is :
 
 Description: RetinaNet_DOTA1.5_2x_20210503_83.2w
-Username: DetectionTeamCSU
-Institute: CSU
-Emailadress: yangxue@csu.edu.cn
-TeamMembers: yangxue
+Username: AICyber
+Institute: IECAS
+Emailadress: yangxue16@mails.ucas.ac.cn
+TeamMembers: Yang Xue; Yang Jirui
 """
 
