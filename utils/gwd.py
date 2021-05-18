@@ -331,31 +331,31 @@ def sigma(a, w, h):
 if __name__ == '__main__':
     from utils.gaussian_wasserstein_distance import get_element1, get_element4
 
-    boxes1 = np.array([
-                       [50, 50, 5, 12, -10]], np.float32)
-
-    boxes2 = np.array([
-                       [50, 50, 5, 12, -35]], np.float32)
-
-    # boxes1 = np.array([    # pred
-    #     [50, 50, 10, 70, -35],     # 90 <--> 180
-    #     [50, 50, 70, 10, -90.5],   # 90   PoA + EoE
-    #     [50, 50, 70, 10, -90.5],   # 180  PoA
-    #     [50, 50, 40, 40, -35],     # 180  w=h
-    # ], np.float32)
+    # boxes1 = np.array([
+    #                    [50, 50, 5, 12, -10]], np.float32)
     #
-    # boxes2 = np.array([    # gt
-    #     [50, 50, 70, 10, 55],
-    #     [50, 50, 10, 70, -0.5],
-    #     [50, 50, 70, 10, 89.5],
-    #     [50, 50, 40, 40, 55],
-    # ], np.float32)
+    # boxes2 = np.array([
+    #                    [50, 50, 5, 12, -35]], np.float32)
 
-    # [ 0.0010376  -0.00025177 -0.00024414  0.        ]
+    boxes1 = np.array([    # prediction box
+        [50, 50, 10, 70, -35],     # 90 <--> 180
+        [50, 50, 70, 10, -90.5],   # 90   PoA + EoE
+        [50, 50, 70, 10, -90.5],   # 180  PoA
+        [50, 50, 40, 40, -35],     # 180  w=h
+    ], np.float32)
 
-    print(iou_rotate_calculate2(boxes1, boxes2).reshape(-1,))
-    print(diou_rotate_calculate(boxes1, boxes2).reshape(-1,))
-    print(gaussian_wasserstein_distance(boxes1, boxes2))
+    boxes2 = np.array([    # ground truth
+        [50, 50, 70, 10, 55],
+        [50, 50, 10, 70, -0.5],
+        [50, 50, 70, 10, 89.5],
+        [50, 50, 40, 40, 55],
+    ], np.float32)
+
+    print(iou_rotate_calculate2(boxes1, boxes2).reshape(-1,))  # [0.9999996 0.9999998 0.9999998 1.       ]
+    print(diou_rotate_calculate(boxes1, boxes2).reshape(-1,))  # [0.9999997  0.99999994 0.99999994 1.        ]
+    print(gaussian_wasserstein_distance(boxes1, boxes2))     # [6.1035156e-05 3.1062821e-04 3.1062821e-04 0.0000000e+00]
+
+
     # tmp = np.maximum(np.log(gaussian_wasserstein_distance(boxes1, boxes2)+1e-3), 0)
     # print(np.log(gaussian_wasserstein_distance(boxes1, boxes2)))
     # print(tmp/(1+tmp))

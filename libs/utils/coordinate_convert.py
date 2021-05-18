@@ -41,7 +41,7 @@ def backward_convert(coordinate, with_label=True):
     if with_label:
         for rect in coordinate:
             box = np.int0(rect[:-1])
-            box = box.reshape([4, 2])
+            box = box.reshape([-1, 2])
             rect1 = cv2.minAreaRect(box)
 
             x, y, w, h, theta = rect1[0][0], rect1[0][1], rect1[1][0], rect1[1][1], rect1[2]
@@ -55,7 +55,7 @@ def backward_convert(coordinate, with_label=True):
     else:
         for rect in coordinate:
             box = np.int0(rect)
-            box = box.reshape([4, 2])
+            box = box.reshape([-1, 2])
             rect1 = cv2.minAreaRect(box)
 
             x, y, w, h, theta = rect1[0][0], rect1[0][1], rect1[1][0], rect1[1][1], rect1[2]

@@ -137,18 +137,11 @@ class DrawBox(object):
                           fill=color,
                           width=width)
         elif method == 2:
-            draw_obj.line(xy=[(box[0], box[1]), (box[2], box[3])],
-                          fill=color,
-                          width=width)
-            draw_obj.line(xy=[(box[2], box[3]), (box[4], box[5])],
-                          fill=color,
-                          width=width)
-            draw_obj.line(xy=[(box[4], box[5]), (box[6], box[7])],
-                          fill=color,
-                          width=width)
-            draw_obj.line(xy=[(box[6], box[7]), (box[0], box[1])],
-                          fill=color,
-                          width=width)
+            for ii in range(box.shape[0] // 2):
+                draw_obj.line(xy=[(box[(2*ii)%box.shape[0]], box[(2*ii+1)%box.shape[0]]),
+                                  (box[(2*ii+2)%box.shape[0]], box[(2*ii+3)%box.shape[0]])],
+                              fill=color,
+                              width=width)
         else:
             pass
 
@@ -221,7 +214,7 @@ class DrawBox(object):
                 img_array = (img_array * np.array(self.cfgs.PIXEL_STD) + np.array(self.cfgs.PIXEL_MEAN_)) * 255
             else:
                 img_array = img_array + np.array(self.cfgs.PIXEL_MEAN)
-        if method == 3:
+        if method == 7:
             img_array = self.draw_boxes_ellipse(img_array, boxes, labels)
         img_array.astype(np.float32)
         boxes = boxes.astype(np.float32)
