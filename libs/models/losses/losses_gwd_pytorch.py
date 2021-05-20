@@ -1,28 +1,37 @@
+# --------------------------------------------------------
+# gwd pytorch version
+# Licensed under The Apache-2.0 License [see LICENSE for details]
+# Written by Yue Zhou and Xue Yang
+# --------------------------------------------------------
+
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
 import numpy as np
 
+
 def trace(A):
     return A.diagonal(dim1=-2, dim2=-1).sum(-1)
 
+
 def sqrt_newton_schulz_autograd(A, numIters, dtype):
-  batchSize = A.data.shape[0]
-  dim = A.data.shape[1]
-  # print(batchSize, dim)
-  normA = A.mul(A).sum(dim=1).sum(dim=1).sqrt()
-  Y = A.div(normA.view(batchSize, 1, 1).expand_as(A));
-  I = Variable(torch.eye(dim,dim).view(1, dim, dim).
-               repeat(batchSize,1,1).type(dtype),requires_grad=False)
-  Z = Variable(torch.eye(dim,dim).view(1, dim, dim).
-               repeat(batchSize,1,1).type(dtype),requires_grad=False)
-  
-  for i in range(numIters):
-    T = 0.5*(3.0*I - Z.bmm(Y))
-    Y = Y.bmm(T)
-    Z = T.bmm(Z)
-  sA = Y*torch.sqrt(normA).view(batchSize, 1, 1).expand_as(A)
-  return sA
+    batchSize = A.data.shape[0]
+    dim = A.data.shape[1]
+    # print(batchSize, dim)
+    normA = A.mul(A).sum(dim=1).sum(dim=1).sqrt()
+    Y = A.div(normA.view(batchSize, 1, 1).expand_as(A));
+    I = Variable(torch.eye(dim, dim).view(1, dim, dim).
+                 repeat(batchSize, 1, 1).type(dtype), requires_grad=False)
+    Z = Variable(torch.eye(dim, dim).view(1, dim, dim).
+                 repeat(batchSize, 1, 1).type(dtype), requires_grad=False)
+
+    for i in range(numIters):
+        T = 0.5 * (3.0 * I - Z.bmm(Y))
+        Y = Y.bmm(T)
+        Z = T.bmm(Z)
+    sA = Y * torch.sqrt(normA).view(batchSize, 1, 1).expand_as(A)
+    return sA
+
 
 def wasserstein_distance_sigma(sigma1, sigma2):
     print('a1:',torch.matmul(sigma1, sigma1) + torch.matmul(sigma2,sigma2))
@@ -34,21 +43,14 @@ def wasserstein_distance_sigma(sigma1, sigma2):
 
     return wasserstein_distance_item2
 
+
 # @weighted_loss
 def gwd_loss(pred, target, weight, eps=1e-6):
-    """IoU loss.
+    """gwd loss.
 
-    Computing the IoU loss between a set of predicted bboxes and target bboxes.
-    The loss is calculated as negative log of IoU.
+    Computing the gwd loss between a set of predicted bboxes and target bboxes.
 
-    Args:
-        pred (Tensor): Predicted bboxes of format (xc, yc, w, h, a),
-            shape (n, 5).
-        target (Tensor): Corresponding gt bboxes, shape (n, 5).
-        eps (float): Eps to avoid log(0).
-
-    Return:
-        Tensor: Loss tensor.
+    The weight of the gwd loss (pytorch version) is more appropriate between 5-10 (for reference only)
     """
     mask = (weight > 0).detach()
     pred = pred[mask]

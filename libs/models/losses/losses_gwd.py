@@ -1,3 +1,9 @@
+# --------------------------------------------------------
+# gwd tensorflow version
+# Licensed under The Apache-2.0 License [see LICENSE for details]
+# Written by and Xue Yang
+# --------------------------------------------------------
+
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 from __future__ import division

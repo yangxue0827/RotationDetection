@@ -140,6 +140,7 @@ __pycache__/
 *configs_v2*
 *README_v2.md*
 *ridet*
+*arbitrary_shaped*
 
 tools/*/test_dota/*
 tools/*/test_hrsc/*
