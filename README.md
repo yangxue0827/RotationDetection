@@ -153,6 +153,12 @@ Download a pretrain weight you need from the following three options, and then p
                         --gpus=0,1,2,3,4,5,6,7  
                         -ms (multi-scale testing, optional)
                         -s (visualization, optional)
+    
+    or (Recommend in this repo)
+    
+    python test_dota_sota.py --test_dir='/PATH/TO/IMAGES/'  
+                             --gpus=0,1,2,3,4,5,6,7  
+                             -s (visualization, optional)
     ``` 
 
     **Notice: In order to set the breakpoint conveniently, the read and write mode of the file is' a+'. If the model of the same #VERSION needs to be tested again, the original test results need to be deleted.**
