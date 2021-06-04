@@ -7,6 +7,8 @@ import math
 
 def gaussian_label(label, num_class, u=0, sig=4.0):
     x = np.array(range(math.floor(-num_class/2), math.ceil(num_class/2), 1))
+    if num_class % 2 != 0:
+        x = x[:-1]
     y_sig = np.exp(-(x - u) ** 2 / (2 * sig ** 2))
     return np.concatenate([y_sig[math.ceil(num_class/2)-label:],
                            y_sig[:math.ceil(num_class/2)-label]], axis=0)
@@ -82,11 +84,29 @@ if __name__ == '__main__':
     # angle_label = np.array([-89.9, -45.2, -0.3, -1.9])
     # smooth_label = angle_smooth_label(angle_label)
     # y_sig = triangle_label(30, 180, raduius=8)
-    y_sig = gaussian_label(3, 180, sig=0.1)
-    # y_sig = pulse_label(30, 180)
-    # y_sig = triangle_label(0, 90)
-    x = np.array(range(0, 180, 1))
-    plt.plot(x, y_sig, "r-", linewidth=2)
-    plt.grid(True)
-    plt.show()
-    print(y_sig)
+    y_sig = gaussian_label(3, 180, sig=6)
+    # y_sig = pulse_label(40, 180)
+    # y_sig = triangle_label(3, 180, raduius=1)
+    # x = np.array(range(0, 180, 1))
+    # plt.plot(x, y_sig, "r-", linewidth=2)
+    # plt.grid(True)
+    # plt.show()
+    # print(y_sig)
+    # print(y_sig.shape)
+
+    import tensorflow as tf
+
+    y_sig = tf.convert_to_tensor(y_sig, tf.float32)
+    y_sig_dct = tf.signal.dct(tf.reshape(y_sig, [-1, 180]),
+                              type=3, n=8, axis=-1)
+    y_sig_idct = tf.signal.idct(tf.reshape(y_sig_dct, [-1, 8]),
+                                type=3, n=180, axis=-1)
+    with tf.Session() as sess:
+        y_sig_, y_sig_dct_, y_sig_idct_ = sess.run([y_sig, y_sig_dct, y_sig_idct])
+        print(y_sig_)
+        print(np.argmax(y_sig_, axis=-1))
+        print(y_sig_dct_)
+        print(y_sig_idct_)
+        print(np.argmax(y_sig_idct_, axis=-1))
+
+

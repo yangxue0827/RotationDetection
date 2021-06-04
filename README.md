@@ -6,15 +6,15 @@
 This is a tensorflow-based rotation detection benchmark, also called UranusDet.     
 UranusDet is written and maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
 
-**Papers and codes related to remote sensing/aerial image detection: [DOTA-DOAI](https://github.com/SJTU-Thinklab-Det/DOTA-DOAI).**      
+**Papers and codes related to remote sensing/aerial image detection: [DOTA-DOAI](https://github.com/SJTU-Thinklab-Det/DOTA-DOAI) <img src="https://img.shields.io/github/stars/SJTU-Thinklab-Det/DOTA-DOAI?style=social" />.**      
 
 Techniques:
-- [x] Dataset: DOTA, HRSC2016, ICDAR2015, ICDAR2017 MLT, MSRA-TD500, UCAS-AOD, FDDB, OHD-SJTU, SSDD++
+- [x] Dataset: DOTA, HRSC2016, ICDAR2015, ICDAR2017 MLT, MSRA-TD500, UCAS-AOD, FDDB, OHD-SJTU, SSDD++, Total-Text
 - [x] Baackbone: [ResNet](https://arxiv.org/abs/1512.03385), [MobileNetV2](https://arxiv.org/abs/1801.04381), [EfficientNet](https://arxiv.org/abs/1905.11946), [DarkNet53](https://arxiv.org/abs/1506.02640)
 - [x] Neck: [FPN](https://arxiv.org/abs/1708.02002), [BiFPN](https://arxiv.org/abs/1911.09070)
 - [x] Detectors: 
   - [x] [R<sup>2</sup>CNN (Faster-RCNN-H)](https://arxiv.org/abs/1706.09579): [TF code](https://github.com/DetectionTeamUCAS/R2CNN_Faster-RCNN_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/R2CNN_Faster-RCNN_Tensorflow?style=social" />
-  - [ ] [RRPN (Faster-RCNN-R)](https://arxiv.org/pdf/1703.01086): [TF code](https://github.com/DetectionTeamUCAS/RRPN_Faster-RCNN_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/RRPN_Faster-RCNN_Tensorflow?style=social" />
+  - [x] [RRPN (Faster-RCNN-R)](https://arxiv.org/pdf/1703.01086): [TF code](https://github.com/DetectionTeamUCAS/RRPN_Faster-RCNN_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/RRPN_Faster-RCNN_Tensorflow?style=social" />
   - [x] [SCRDet **(ICCV19)**](https://arxiv.org/abs/1811.07126): [R<sup>2</sup>CNN++](https://github.com/DetectionTeamUCAS/R2CNN-Plus-Plus_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/R2CNN-Plus-Plus_Tensorflow?style=social" />, [IoU-Smooth L1 Loss](https://github.com/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation)
   - [x] [RetinaNet-H, RetinaNet-R](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation?style=social" />
   - [x] [RefineRetinaNet (CascadeRetinaNet)](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/yangxue0827/RotationDetection) <img src="https://img.shields.io/github/stars/Thinklab-SJTU/R3Det_Tensorflow?style=social" />
@@ -24,8 +24,9 @@ Techniques:
   - [x] [Circular Smooth Label (CSL, **ECCV20**)](https://arxiv.org/abs/2003.05597): [TF code](https://github.com/Thinklab-SJTU/CSL_RetinaNet_Tensorflow) <img src="https://img.shields.io/github/stars/Thinklab-SJTU/CSL_RetinaNet_Tensorflow?style=social" />
   - [x] [Densely Coded Label (DCL, **CVPR21**)](https://arxiv.org/abs/2011.09670): [TF code](https://github.com/Thinklab-SJTU/DCL_RetinaNet_Tensorflow) <img src="https://img.shields.io/github/stars/Thinklab-SJTU/DCL_RetinaNet_Tensorflow?style=social" />
   - [x] [GWD](https://arxiv.org/abs/2101.11952): [TF code](https://github.com/yangxue0827/RotationDetection) <img src="https://img.shields.io/github/stars/yangxue0827/RotationDetection?style=social" />
+  - [ ] [KLD](https://arxiv.org/abs/2106.01883): [TF code](https://github.com/yangxue0827/RotationDetection) <img src="https://img.shields.io/github/stars/yangxue0827/RotationDetection?style=social" />
   - [ ] [RIDet](https://arxiv.org/abs/2103.11636): [Pytorch code](https://github.com/ming71/RIDet) <img src="https://img.shields.io/github/stars/ming71/RIDet?style=social" />
-  - [x] Mixed method: R<sup>3</sup>Det-DCL, R<sup>3</sup>Det-GWD
+  - [x] Mixed method: R<sup>3</sup>Det-DCL, R<sup>3</sup>Det-GWD, R<sup>3</sup>Det-KLD
 - [x] Loss: CE, [Focal Loss](https://arxiv.org/abs/1708.02002), [Smooth L1 Loss](https://arxiv.org/abs/1504.08083), [IoU-Smooth L1 Loss](https://arxiv.org/abs/1811.07126), [Modulated Loss](https://arxiv.org/abs/1911.08299)
 - [x] [Others](./OTHERS.md): [SWA](https://arxiv.org/pdf/2012.12645.pdf), exportPb, [MMdnn](https://github.com/Microsoft/MMdnn)
 
@@ -57,11 +58,11 @@ Base setting:
 | [DCL](https://arxiv.org/abs/2011.09670) | 67.39 | [Baidu Drive (p9tu)](https://pan.baidu.com/s/1TZ9V0lTTQnMhiepxK1mdqg) | 59.38 | [Baidu Drive (wb1q)](https://pan.baidu.com/s/1xyJaKFVP01HSrClXZUFuCg) | 45.46 | [Baidu Drive (qjjs)](https://pan.baidu.com/s/1suf9EEiKmW621_d5hoNRFQ) | H | **Cls.: BCL (w=180/256)** | smooth L1 | [-90,90)  | [dota1.0,](./libs/configs/DOTA/dcl/cfgs_res50_dota_dcl_v5.py) [dota1.5,](./libs/configs/DOTA1.5/dcl/cfgs_res50_dota1.5_dcl_v5.py) [dota2.0](./libs/configs/DOTA2.0/dcl/cfgs_res50_dota2.0_dcl_v5.py) |
 | [GWD](https://arxiv.org/abs/2101.11952) | 68.93 | [Baidu Drive (0w51)](https://pan.baidu.com/s/15YZfe6W-n04zcI49-55EqA) | 60.03 | [Baidu Drive (4p2r)](https://pan.baidu.com/s/1t8TqnMOASalTeM1zq9w4HA) | 46.65 | [Baidu Drive (9kwq)](https://pan.baidu.com/s/1k3PhaaZMypw9vpunD9SU9Q) | H | Reg. (∆⍬) | **gwd** | [-90,0)  | [dota1.0,](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) [dota1.5,](./libs/configs/DOTA1.5/gwd/cfgs_res50_dota1.5_v11.py) [dota2.0](./libs/configs/DOTA2.0/gwd/cfgs_res50_dota2.0_v11.py) |
 | [GWD](https://arxiv.org/abs/2101.11952) **[+ SWA](https://arxiv.org/pdf/2012.12645.pdf)**   | 69.92 | [Baidu Drive (qi7o)](https://pan.baidu.com/s/1Ih4KNWc7s7Sve80MLQX5Pg) | 60.60 | [Baidu Drive (ah0b)](https://pan.baidu.com/s/1YVrpHwL22GD7-XsH0A6nww) | 47.63 | [Baidu Drive (u0gu)](https://pan.baidu.com/s/1nThTwrSQXIKVuMXg-Z2rTw) | H | Reg. (∆⍬) | gwd | [-90,0)  | [dota1.0,](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) [dota1.5,](./libs/configs/DOTA1.5/gwd/cfgs_res50_dota1.5_v11.py) [dota2.0](./libs/configs/DOTA2.0/gwd/cfgs_res50_dota2.0_v11.py) |
-| new work | 71.28 | [Baidu Drive ()]() | 62.50 | [Baidu Drive ()]() | 47.69 | [Baidu Drive ()]() | H | Reg. (∆⍬) |  | [-90,0) |  |
+| [KLD](https://arxiv.org/abs/2106.01883) | 71.28 | [Baidu Drive (ob8f)](https://pan.baidu.com/s/1-bz5AhzxU5vfOAenG6VZZg) | 62.50 | [Baidu Drive (hpsr)](https://pan.baidu.com/s/1iBDlHCPqFTsGTbeRKiYspg) | 47.69 | [Baidu Drive (wh45)](https://pan.baidu.com/s/1KnfGhNOdH183ia2wvSvMHQ) | H | Reg. (∆⍬) | **kld** | [-90,0) |  |
 | [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | 70.66 | [Baidu Drive (30lt)](https://pan.baidu.com/s/143sGeLNjXzcpxi9GV7FVyA) | 62.91 | [Baidu Drive (rdc6)](https://pan.baidu.com/s/1H9VLJyEHR5Y2Yvnvb2TGDg) | 48.43 | [Baidu Drive (k9bo)](https://pan.baidu.com/s/1HQXJLH17-h9-sofO4Yj6LQ) | H->R | Reg. (∆⍬) | smooth L1 | [-90,0)  | [dota1.0,](./libs/configs/DOTA/r3det/cfgs_res50_dota_r3det_v1.py) [dota1.5,](./libs/configs/DOTA1.5/r3det/cfgs_res50_dota1.5_r3det_v1.py) [dota2.0](./libs/configs/DOTA2.0/r3det/cfgs_res50_dota2.0_r3det_v1.py) |
 | **[R<sup>3</sup>Det-DCL](https://arxiv.org/abs/2011.09670)** | 71.21 | [Baidu Drive (jueq)](https://pan.baidu.com/s/1XR31i3T-C5R16giBxQUNWw) | 61.98 | [Baidu Drive (cjqm)](https://pan.baidu.com/s/1jfB1aVxFg1pFvsB171TX0g) | 48.71 | [Baidu Drive (jb5s)](https://pan.baidu.com/s/1JQ02BjIDk8wd8Bo5NqHkpg) | H->R | **Cls.: BCL (w=180/256)** | iou-smooth L1 | [-90,0)->[-90,90)  | [dota1.0,](./libs/configs/DOTA/r3det_dcl/cfgs_res50_dota_r3det_dcl_v1.py) [dota1.5,](./libs/configs/DOTA1.5/r3det_dcl/cfgs_res50_dota1.5_r3det_dcl_v2.py) [dota2.0](./libs/configs/DOTA2.0/r3det_dcl/cfgs_res50_dota2.0_r3det_dcl_v2.py) |
 | **[R<sup>3</sup>Det-GWD](https://arxiv.org/abs/2101.11952)** | 71.56 | [Baidu Drive (8962)](https://pan.baidu.com/s/17_nhbq35YU7WLBvad3TasQ) | 63.22 | [Baidu Drive (c3jk)](https://pan.baidu.com/s/1OYfZ9Vm0FCsLOexFsLScQg) | 49.25 | [Baidu Drive (o3dw)](https://pan.baidu.com/s/1lA5o8a_3fXoh0WDyGPeMqg) | H->R | Reg. (∆⍬) | **smooth L1->gwd** | [-90,0)  | [dota1.0,](./libs/configs/DOTA/r3det_gwd/cfgs_res50_dota_r3det_gwd_v6.py) [dota1.5,](./libs/configs/DOTA1.5/r3det_gwd/cfgs_res50_1.5_dota_r3det_gwd_v6.py) [dota2.0](./libs/configs/DOTA2.0/r3det_gwd/cfgs_res50_2.0_dota_r3det_gwd_v6.py) |
-| **R<sup>3</sup>Det-new work** | 71.73 | [Baidu Drive ()]() | 65.18 | [Baidu Drive ()]() | 50.90 | [Baidu Drive ()]() | H->R | Reg. (∆⍬) |  | [-90,0)  |  |
+| **[R<sup>3</sup>Det-KLD](https://arxiv.org/abs/2106.01883)** | 71.73 | [Baidu Drive (go1m)](https://pan.baidu.com/s/1KYCPsZGuyMBZigrL4CunJA) | 65.18 | [Baidu Drive (qwwa)](https://pan.baidu.com/s/1kHTsF_iJUtM3h7_xT8j-qA) | 50.90 | [Baidu Drive (hc49)](https://pan.baidu.com/s/15N31GPwYtn98i7Ov0TUtOA) | H->R | Reg. (∆⍬) | **kld** | [-90,0)  |  |
 | [R<sup>2</sup>CNN (Faster-RCNN)](https://arxiv.org/abs/1706.09579) | 72.27 | [Baidu Drive (wt2b)](https://pan.baidu.com/s/1R_31U2jl7gj6OMvirURnsg) | 66.45 | [Baidu Drive (ho88)](https://pan.baidu.com/s/1Yn3ekkqpwHd21WLRLVaxhQ) | 52.35 | [Baidu Drive (suwu)](https://pan.baidu.com/s/1Jf4qyQ2qUzOcURdTgIFhkA) | H->R | Reg. (∆⍬) | smooth L1 | [-90,0)  | [dota1.0,](./libs/configs/DOTA/r2cnn/cfgs_res50_dota_v1.py) [dota1.5](./libs/configs/DOTA1.5/r2cnn/cfgs_res50_dota1.5_r2cnn_v1.py) [dota2.0](./libs/configs/DOTA2.0/r2cnn/cfgs_res50_dota2.0_r2cnn_v1.py) |
 
 **Note:**    
@@ -188,6 +189,13 @@ tensorboard --logdir=.
 If you find our code useful for your research, please consider cite.
 
 ```
+@article{yang2021learning,
+    title={Learning High-Precision Bounding Box for Rotated Object Detection via Kullback-Leibler Divergence},
+    author={Yang, Xue and Yang, Xiaojiang and Yang, Jirui and Ming, Qi and Wang, Wentao and Tian, Qi and Yan, Junchi},
+    journal={arXiv preprint arXiv:2106.01883},
+    year={2021}
+}
+
 @inproceedings{yang2021rethinking,
     title={Rethinking Rotated Object Detection with Gaussian Wasserstein Distance Loss},
     author={Yang, Xue and Yan, Junchi and Qi, Ming and Wang, Wentao and Xiaopeng, Zhang and Qi, Tian},

@@ -198,7 +198,7 @@ def voc_eval(detpath,
 
             # 1. calculate the overlaps between hbbs, if the iou between hbbs are 0, the iou between obbs are 0, too.
             # pdb.set_trace()
-            BBGT_xmin =  np.min(BBGT[:, 0::2], axis=1)
+            BBGT_xmin = np.min(BBGT[:, 0::2], axis=1)
             BBGT_ymin = np.min(BBGT[:, 1::2], axis=1)
             BBGT_xmax = np.max(BBGT[:, 0::2], axis=1)
             BBGT_ymax = np.max(BBGT[:, 1::2], axis=1)
@@ -271,9 +271,9 @@ def voc_eval(detpath,
 
 def main():
 
-    detpath = r'../../tools/r3det_kl/test_dota/%s/dota_res/Task1_{:s}.txt' % cfgs.VERSION
+    detpath = r'../../tools/ridet/test_dota/%s/dota_res/Task1_{:s}.txt' % cfgs.VERSION
     # change the directory to the path of val/labelTxt, if you want to do evaluation on the valset
-    annopath = r'/data/dataset/DOTA/val/labelTxt/labelTxt/{:s}.txt'
+    annopath = r'/data/yangxue/dataset/DOTA/val/labelTxt/labelTxt/{:s}.txt'
     imagesetfile = r'../../dataloader/dataset/DOTA/val_set.txt'
 
     # For DOTA-v1.5

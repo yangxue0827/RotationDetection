@@ -141,6 +141,7 @@ __pycache__/
 *README_v2.md*
 *ridet*
 *arbitrary_shaped*
+*scale_invariance*
 
 tools/*/test_dota/*
 tools/*/test_hrsc/*

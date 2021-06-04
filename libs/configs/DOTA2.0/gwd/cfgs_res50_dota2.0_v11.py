@@ -71,5 +71,39 @@ Username: sjtu-deter
 Institute: SJTU
 Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
 TeamMembers: yangxue
+
+
+SWA
+
+This is your evaluation result for task 1:
+
+    mAP: 0.47634086829937744
+    ap of each class:
+    plane:0.7668082454617845,
+    baseball-diamond:0.48418812812821305,
+    bridge:0.4075901704186716,
+    ground-track-field:0.5820167236252256,
+    small-vehicle:0.4051345869003496,
+    large-vehicle:0.4167099036188684,
+    ship:0.5396401906183046,
+    tennis-court:0.7650083921519408,
+    basketball-court:0.5829846026735821,
+    storage-tank:0.5034460965788641,
+    soccer-ball-field:0.4233857143369985,
+    roundabout:0.5072543667424922,
+    harbor:0.43125132941971067,
+    swimming-pool:0.5547004579756261,
+    helicopter:0.4990813435158377,
+    container-crane:0.11896443067478767,
+    airport:0.4449535830679548,
+    helipad:0.14101736347958232
+
+The submitted information is :
+
+Description: RetinaNet_DOTA2.0_GWD_2x_20210318_swa10
+Username: yangxue
+Institute: UCAS
+Emailadress: yangxue16@mails.ucas.ac.cn
+TeamMembers: yangxue
 """
 

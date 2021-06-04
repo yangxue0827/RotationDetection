@@ -33,7 +33,8 @@ def parse_args():
                         help='images path',
                         default='/data/dataset/HRSC2016/HRSC2016/Test/AllImages', type=str)
     parser.add_argument('--image_ext', dest='image_ext',
-                        help='image format',
+                        help='image forma'
+                             't',
                         default='.bmp', type=str)
     parser.add_argument('--test_annotation_path', dest='test_annotation_path',
                         help='test annotate path',

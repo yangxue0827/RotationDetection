@@ -138,8 +138,8 @@ class DrawBox(object):
                           width=width)
         elif method == 2:
             for ii in range(box.shape[0] // 2):
-                draw_obj.line(xy=[(box[(2*ii)%box.shape[0]], box[(2*ii+1)%box.shape[0]]),
-                                  (box[(2*ii+2)%box.shape[0]], box[(2*ii+3)%box.shape[0]])],
+                draw_obj.line(xy=[(box[(2 * ii) % box.shape[0]], box[(2 * ii + 1) % box.shape[0]]),
+                                  (box[(2 * ii + 2) % box.shape[0]], box[(2 * ii + 3) % box.shape[0]])],
                               fill=color,
                               width=width)
         else:
@@ -214,8 +214,11 @@ class DrawBox(object):
                 img_array = (img_array * np.array(self.cfgs.PIXEL_STD) + np.array(self.cfgs.PIXEL_MEAN_)) * 255
             else:
                 img_array = img_array + np.array(self.cfgs.PIXEL_MEAN)
-        if method == 7:
+        if method == 3:
+            img_array = self.draw_contours(img_array, boxes, labels)
+        elif method == 4:
             img_array = self.draw_boxes_ellipse(img_array, boxes, labels)
+
         img_array.astype(np.float32)
         boxes = boxes.astype(np.float32)
         labels = labels.astype(np.int32)
@@ -259,6 +262,11 @@ class DrawBox(object):
                                     angle=box[4], startAngle=0, endAngle=360,
                                     color=(255, 0, 0),
                                     thickness=3, lineType=-1)
+        return img_array
+
+    def draw_contours(self, img_array, polys, labels):
+        for poly, a_label in zip(polys, labels):
+            img_array = cv2.fillConvexPoly(img_array, np.reshape(poly, [-1, 2]).astype(np.int32), color=(255, 255, 255))
         return img_array
 
 

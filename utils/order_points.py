@@ -128,7 +128,7 @@ def sort_corners(quads):
     return sorted
 
 
-# counterclockwise, write by qianwen
+# counterclockwise, write by WenQian
 def re_order(bboxes):
     n=len(bboxes)
     targets=[]
@@ -199,7 +199,7 @@ def re_order(bboxes):
                 break
 
         targets.append([x1, y1, x2, y2, x3, y3, x4, y4])
-    return np.array(targets,np.float32)
+    return np.array(targets, np.float32)
 # pts = np.array([[296, 245] ,[351 ,266], [208, 487],[263, 507]])
 # npts = order_points_quadrangle(pts)
 
@@ -213,7 +213,7 @@ if __name__ == '__main__':
     npts = sort_corners(pts)
     print(pts)
     # print(npts)
-    # print(re_order([[242.7452, 314.5097, 242.7452, 133.4903, 333.2548, 133.4903, 333.2548, 314.5097],
-    #                 [333.2548, 133.4903, 333.2548, 314.5097, 242.7452, 314.5097, 242.7452, 133.4903],
-    #                 [60, 0, 80, 20, 20, 80, 0, 60],
-    #                 [40, 0, 40, 40, 0, 40, 0, 0]]))
+    print(re_order([[242.7452, 314.5097, 242.7452, 133.4903, 333.2548, 133.4903, 333.2548, 314.5097],
+                    [333.2548, 133.4903, 333.2548, 314.5097, 242.7452, 314.5097, 242.7452, 133.4903],
+                    [60, 0, 80, 20, 20, 80, 0, 60],
+                    [40, 0, 40, 40, 0, 40, 0, 0]]))

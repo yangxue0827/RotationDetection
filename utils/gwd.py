@@ -178,25 +178,25 @@ def sigma(a, w, h):
 if __name__ == '__main__':
     from utils.gaussian_wasserstein_distance import get_element1, get_element4
 
-    # boxes1 = np.array([[20, 20, 40, 10, -0.9],
-    #                    [20, 20, 40, 10, -0.9]], np.float32)
+    boxes1 = np.array([[20, 20, 40, 40, -20],
+                       [20, 20, 40, 40, -20]], np.float32)
+
+    boxes2 = np.array([[20, 20, 40, 40, -30],
+                       [20, 20, 40, 40, -50]], np.float32)
+
+    # boxes1 = np.array([    # prediction box
+    #     [50, 50, 10, 70, -35],     # 90 <--> 180
+    #     [50, 50, 70, 10, -90.5],   # 90   PoA + EoE
+    #     [50, 50, 70, 10, -90.5],   # 180  PoA
+    #     [50, 50, 40, 40, -35],     # 180  w=h
+    # ], np.float32)
     #
-    # boxes2 = np.array([[20, 20, 40, 10, -0.8],
-    #                    [20, 20, 40, 10, -180]], np.float32)
-
-    boxes1 = np.array([    # prediction box
-        [50, 50, 10, 70, -35],     # 90 <--> 180
-        [50, 50, 70, 10, -90.5],   # 90   PoA + EoE
-        [50, 50, 70, 10, -90.5],   # 180  PoA
-        [50, 50, 40, 40, -35],     # 180  w=h
-    ], np.float32)
-
-    boxes2 = np.array([    # ground truth
-        [50, 50, 70, 10, 55],
-        [50, 50, 10, 70, -0.5],
-        [50, 50, 70, 10, 89.5],
-        [50, 50, 40, 40, 55],
-    ], np.float32)
+    # boxes2 = np.array([    # ground truth
+    #     [50, 50, 70, 10, 55],
+    #     [50, 50, 10, 70, -0.5],
+    #     [50, 50, 70, 10, 89.5],
+    #     [50, 50, 40, 40, 55],
+    # ], np.float32)
 
     print('iou', iou_rotate_calculate2(boxes1, boxes2).reshape(-1,))  # [0.9999996 0.9999998 0.9999998 1.       ]
     # print(diou_rotate_calculate(boxes1, boxes2).reshape(-1,))  # [0.9999997  0.99999994 0.99999994 1.        ]

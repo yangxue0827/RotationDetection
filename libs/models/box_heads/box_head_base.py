@@ -5,6 +5,8 @@ from __future__ import absolute_import, division, print_function
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 
+from libs.utils.coordinate_convert import get_horizen_minAreaRectangle, forward_convert
+
 
 class BoxHead(object):
     def __init__(self, cfgs):
@@ -17,7 +19,12 @@ class BoxHead(object):
                 roi_features_list = []
                 for level_name, rois in zip(self.cfgs.LEVEL, rois_list):  # exclude P6_rois
 
-                    # if mode == 0:
+                    if mode == 1:
+                        rois = tf.py_func(forward_convert,
+                                          inp=[rois, False],
+                                          Tout=tf.float32)
+                        rois = get_horizen_minAreaRectangle(rois, False)
+
                     roi_features = roi_extractor.roi_align(feature_maps=feature_pyramid[level_name],
                                                            rois=rois, img_shape=img_shape,
                                                            scope=level_name)

@@ -240,3 +240,15 @@ def qbbox_transform_inv_(boxes, deltas, scale_factors=None):
     # pred_theta = dtheta * 180 / np.pi + boxes[:, 4]
 
     return tf.transpose(tf.stack([pred_x_1, pred_y_1,pred_x_2, pred_y_2,pred_x_3, pred_y_3,pred_x_4, pred_y_4]))
+
+
+def poly_transform_inv(boxes, deltas, point_num):
+    pred_xy = []
+    for i in range(point_num):
+        dx, dy = deltas[:, 2 * i], deltas[:, 2 * i + 1]
+        pred_x = dx * boxes[:, 2] + boxes[:, 0]
+        pred_y = dy * boxes[:, 3] + boxes[:, 1]
+        pred_xy.append(pred_x)
+        pred_xy.append(pred_y)
+
+    return tf.transpose(tf.stack(pred_xy))

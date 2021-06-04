@@ -69,7 +69,7 @@ def read_xml_gtbox_and_label(xml_path):
                     tmp_box.append(label)
                     box_list.append(tmp_box)
 
-    gtbox_label = np.array(box_list, dtype=np.int32)
+    gtbox_label = np.array(box_list, dtype=np.int32)  # int32 is important
 
     return img_height, img_width, gtbox_label
 

@@ -1,6 +1,9 @@
 import numpy as np
 import math
 import tensorflow as tf
+import sys
+sys.path.append('../')
+from libs.utils.coordinate_convert import backward_convert
 
 
 def dist(p1, p2):
@@ -55,3 +58,7 @@ if __name__ == "__main__":
     with tf.Session() as sess:
         box_tf_ = sess.run(box_tf)
         print(box_tf_)
+
+        print(backward_convert(quad, False))
+
+

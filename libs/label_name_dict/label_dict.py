@@ -61,17 +61,7 @@ class LabelMap(object):
                 'back_ground': 0,
                 'face': 1
             }
-        elif self.cfgs.DATASET_NAME == 'ICDAR2015':
-            name_label_map = {
-                'back_ground': 0,
-                'text': 1
-            }
-        elif self.cfgs.DATASET_NAME == 'MSRA-TD500':
-            name_label_map = {
-                'back_ground': 0,
-                'text': 1
-            }
-        elif self.cfgs.DATASET_NAME == 'MLT':
+        elif self.cfgs.DATASET_NAME in ['ICDAR2015', 'MSRA-TD500', 'MLT', 'Total_Text']:
             name_label_map = {
                 'back_ground': 0,
                 'text': 1
