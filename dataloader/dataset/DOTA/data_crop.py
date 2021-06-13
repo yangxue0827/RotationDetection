@@ -139,6 +139,9 @@ def format_label(txt_list):
             continue
         if 'turntable' in i:
             i = i.replace('turntable', 'roundabout')
+        # if i.split(' ')[-1].split('\n')[0] == '1':
+        #     print(i)
+        #     continue
         format_data.append(
             [float(xy) for xy in i.split(' ')[:8]] + [class_list.index(i.split(' ')[8])]
         )
@@ -205,11 +208,11 @@ def clip_image(file_idx, image, boxes_all, width, height, stride_w, stride_h):
 
 
 print('class_list', len(class_list))
-raw_data = '/data/dataset/DOTA2.0/train/'
+raw_data = '/data/dataset/DOTA/val/'
 raw_images_dir = os.path.join(raw_data, 'images', 'images')
-raw_label_dir = os.path.join(raw_data, 'labelTxt-v2.0', 'labelTxt')
+raw_label_dir = os.path.join(raw_data, 'labelTxt', 'labelTxt')
 
-save_dir = '/data/dataset/DOTA2.0/crop/train/'
+save_dir = '/data/dataset/DOTA/DOTA1.0/trainval_easy/'
 
 images = [i for i in os.listdir(raw_images_dir) if 'png' in i]
 labels = [i for i in os.listdir(raw_label_dir) if 'txt' in i]

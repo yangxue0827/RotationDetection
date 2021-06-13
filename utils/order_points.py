@@ -129,7 +129,7 @@ def sort_corners(quads):
 
 
 # counterclockwise, write by WenQian
-def re_order(bboxes):
+def re_order(bboxes, with_label=False):
     n=len(bboxes)
     targets=[]
     for i in range(n):
@@ -197,8 +197,10 @@ def re_order(bboxes):
                             x4=x
                             y4=y
                 break
-
-        targets.append([x1, y1, x2, y2, x3, y3, x4, y4])
+        if with_label:
+            targets.append([x1, y1, x2, y2, x3, y3, x4, y4, box[-1]])
+        else:
+            targets.append([x1, y1, x2, y2, x3, y3, x4, y4])
     return np.array(targets, np.float32)
 # pts = np.array([[296, 245] ,[351 ,266], [208, 487],[263, 507]])
 # npts = order_points_quadrangle(pts)
