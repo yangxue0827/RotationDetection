@@ -15,7 +15,6 @@ import numpy as np
 from libs.models.losses.losses import Loss
 from libs.utils import bbox_transform
 from libs.utils.coordinate_convert import coordinate90_2_180_tf, coordinate_present_convert
-from libs.utils.iou_rotate import iou_rotate_calculate2
 
 
 class LossGWD(Loss):
@@ -106,5 +105,3 @@ class LossGWD(Loss):
         normalizer = tf.maximum(1.0, normalizer)
 
         return tf.reduce_sum(wasserstein_loss) / normalizer
-
-

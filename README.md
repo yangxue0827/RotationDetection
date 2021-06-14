@@ -4,7 +4,7 @@
 
 ## Abstract
 This is a tensorflow-based rotation detection benchmark, also called UranusDet.     
-UranusDet is written and maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
+UranusDet is maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
 
 **Papers and codes related to remote sensing/aerial image detection: [DOTA-DOAI](https://github.com/SJTU-Thinklab-Det/DOTA-DOAI) <img src="https://img.shields.io/github/stars/SJTU-Thinklab-Det/DOTA-DOAI?style=social" />.**      
 
@@ -13,7 +13,7 @@ Techniques:
 - [x] Baackbone: [ResNet](https://arxiv.org/abs/1512.03385), [MobileNetV2](https://arxiv.org/abs/1801.04381), [EfficientNet](https://arxiv.org/abs/1905.11946), [DarkNet53](https://arxiv.org/abs/1506.02640)
 - [x] Neck: [FPN](https://arxiv.org/abs/1708.02002), [BiFPN](https://arxiv.org/abs/1911.09070)
 - [x] Detectors: 
-  - [x] [R<sup>2</sup>CNN (Faster-RCNN-H)](https://arxiv.org/abs/1706.09579): [TF code](https://github.com/DetectionTeamUCAS/R2CNN_Faster-RCNN_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/R2CNN_Faster-RCNN_Tensorflow?style=social" />
+  - [x] [R<sup>2</sup>CNN (Faster-RCNN-H)](https://arxiv.org/abs/1706.09579): [R2CNN_Faster-RCNN_Tensorflow](https://github.com/DetectionTeamUCAS/R2CNN_Faster-RCNN_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/R2CNN_Faster-RCNN_Tensorflow?style=social" />, [DOTA-DOAI](https://github.com/SJTU-Thinklab-Det/DOTA-DOAI) <img src="https://img.shields.io/github/stars/SJTU-Thinklab-Det/DOTA-DOAI?style=social" />, [R2CNN_FPN_Tensorflow (Deprecated)](https://github.com/yangxue0827/R2CNN_FPN_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/R2CNN_FPN_Tensorflow?style=social" />
   - [x] [RRPN (Faster-RCNN-R)](https://arxiv.org/pdf/1703.01086): [TF code](https://github.com/DetectionTeamUCAS/RRPN_Faster-RCNN_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/RRPN_Faster-RCNN_Tensorflow?style=social" />
   - [x] [SCRDet **(ICCV19)**](https://arxiv.org/abs/1811.07126): [R<sup>2</sup>CNN++](https://github.com/DetectionTeamUCAS/R2CNN-Plus-Plus_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/R2CNN-Plus-Plus_Tensorflow?style=social" />, [IoU-Smooth L1 Loss](https://github.com/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation?style=social" />
   - [x] [RetinaNet-H, RetinaNet-R](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation?style=social" />
@@ -25,7 +25,7 @@ Techniques:
   - [x] [Densely Coded Label (DCL, **CVPR21**)](https://arxiv.org/abs/2011.09670): [TF code](https://github.com/Thinklab-SJTU/DCL_RetinaNet_Tensorflow) <img src="https://img.shields.io/github/stars/Thinklab-SJTU/DCL_RetinaNet_Tensorflow?style=social" />
   - [x] [GWD](https://arxiv.org/abs/2101.11952): [TF code](https://github.com/yangxue0827/RotationDetection) <img src="https://img.shields.io/github/stars/yangxue0827/RotationDetection?style=social" />
   - [ ] [KLD](https://arxiv.org/abs/2106.01883): [TF code](https://github.com/yangxue0827/RotationDetection) <img src="https://img.shields.io/github/stars/yangxue0827/RotationDetection?style=social" />
-  - [ ] [RIDet](https://arxiv.org/abs/2103.11636): [Pytorch code](https://github.com/ming71/RIDet) <img src="https://img.shields.io/github/stars/ming71/RIDet?style=social" />
+  - [x] [RIDet](https://arxiv.org/abs/2103.11636): [Pytorch code](https://github.com/ming71/RIDet) <img src="https://img.shields.io/github/stars/ming71/RIDet?style=social" />
   - [x] Mixed method: R<sup>3</sup>Det-DCL, R<sup>3</sup>Det-GWD, R<sup>3</sup>Det-KLD
 - [x] Loss: CE, [Focal Loss](https://arxiv.org/abs/1708.02002), [Smooth L1 Loss](https://arxiv.org/abs/1504.08083), [IoU-Smooth L1 Loss](https://arxiv.org/abs/1811.07126), [Modulated Loss](https://arxiv.org/abs/1911.08299)
 - [x] [Others](./OTHERS.md): [SWA](https://arxiv.org/pdf/2012.12645.pdf), exportPb, [MMdnn](https://github.com/Microsoft/MMdnn)
@@ -33,7 +33,7 @@ Techniques:
 The above-mentioned rotation detectors are all modified based on the following horizontal detectors:
 - Faster RCNN: [TF code](https://github.com/DetectionTeamUCAS/Faster-RCNN_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/Faster-RCNN_Tensorflow?style=social" />
 - R-FCN: [TF code](https://github.com/DetectionTeamUCAS/R-FCN_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/R-FCN_Tensorflow?style=social" />
-- FPN: [TF code](https://github.com/DetectionTeamUCAS/FPN_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/FPN_Tensorflow?style=social" />
+- FPN: [TF code1](https://github.com/DetectionTeamUCAS/FPN_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/FPN_Tensorflow?style=social" />, [TF code2 (Deprecated)](https://github.com/yangxue0827/FPN_Tensorflow) <img src="https://img.shields.io/github/stars/yangxue0827/FPN_Tensorflow?style=social" />
 - Cascade RCNN: [TF code](https://github.com/DetectionTeamUCAS/Cascade-RCNN_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/Cascade-RCNN_Tensorflow?style=social" />
 - Cascade FPN RCNN: [TF code](https://github.com/DetectionTeamUCAS/Cascade_FPN_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/Cascade_FPN_Tensorflow?style=social" /> 
 - RetinaNet: [TF code](https://github.com/DetectionTeamUCAS/RetinaNet_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/RetinaNet_Tensorflow?style=social" />
@@ -58,7 +58,7 @@ Base setting:
 
 | Model |    DOTA1.0   | Model |   DOTA1.5   | Model |   DOTA2.0   | Model | Anchor | Angle Pred. | Reg. Loss| Angle Range | Configs |      
 |:------------:|:-----------:|:----------:|:-----------:|:----------:|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:---------:|:---------:|    
-| [RetinaNet-R](https://arxiv.org/abs/1908.05612) |  | [Baidu Drive ()]() |  | [Baidu Drive ()]() | 42.04 | [Baidu Drive ()]() | **R** | Reg. (∆⍬) | smooth L1 | [-90,0)  | [dota2.0](./libs/configs/DOTA2.0/retinanet/cfgs_res50_dota2.0_v7.py) |
+| [RetinaNet-R](https://arxiv.org/abs/1908.05612) |  | [Baidu Drive ()]() | 56.50 | [Baidu Drive ()]() | 42.04 | [Baidu Drive ()]() | **R** | Reg. (∆⍬) | smooth L1 | [-90,0)  | [dota1.5,](./libs/configs/DOTA1.5/retinanet/cfgs_res50_dota1.5_v7.py) [dota2.0](./libs/configs/DOTA2.0/retinanet/cfgs_res50_dota2.0_v7.py) |
 | [RetinaNet-H](https://arxiv.org/abs/1908.05612) | 64.17 | [Baidu Drive (j5l0)](https://pan.baidu.com/s/1Qh_LE6QeGsOBYqMzjAESsA) | 56.10 | [Baidu Drive (70lo)](https://pan.baidu.com/s/1bgEdn3kR794qwQ_VxJR9MQ) | 43.06 | [Baidu Drive (5kb2)](https://pan.baidu.com/s/1zFRqtgUGJSaD3MFHhcUODg) | H | Reg. (∆⍬) | smooth L1 | **[-90,90)**  | [dota1.0,](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v15.py) [dota1.5,](./libs/configs/DOTA1.5/retinanet/cfgs_res50_dota1.5_v15.py) [dota2.0](./libs/configs/DOTA2.0/retinanet/cfgs_res50_dota2.0_v15.py) |
 | [RetinaNet-H](https://arxiv.org/abs/1908.05612) | 65.17 | [Baidu Drive (b3f5)](https://pan.baidu.com/s/12uQhzVrrGqHr-x2cNTojXw) | 58.25 | [Baidu Drive (4u6d)](https://pan.baidu.com/s/19D2_bf0fhc84HEWJJgC8Zg) | 44.05 | [Baidu Drive (5pn3)](https://pan.baidu.com/s/1RuKwD5pcggniztj24VWPOQ) | H | Reg. **(sin⍬, cos⍬)** | smooth L1 | [-90,90)  | [dota1.0,](./libs/configs/DOTA/retinanet/cfgs_res50_dota_atan_v1.py) [dota1.5,](./libs/configs/DOTA1.5/retinanet/cfgs_res50_dota1.5_atan_v1.py) [dota2.0](./libs/configs/DOTA2.0/retinanet/cfgs_res50_dota2.0_atan_v1.py) |
 | [RetinaNet-H](https://arxiv.org/abs/1908.05612) | 65.73 | [Baidu Drive (jum2)](https://pan.baidu.com/s/19-hEtCGxLfYuluTATQJpdg) | 58.87 | [Baidu Drive (lld0)](https://pan.baidu.com/s/15pqhPVJ6XzvIMLjVZh6aDw) | 44.16 | [Baidu Drive (ffmo)](https://pan.baidu.com/s/1LgDJV2mS6dDhhVwujz_K8A) | H | Reg. (∆⍬) | smooth L1 | **[-90,0)**  | [dota1.0,](./libs/configs/DOTA/retinanet/cfgs_res50_dota_v4.py) [dota1.5,](./libs/configs/DOTA1.5/retinanet/cfgs_res50_dota1.5_v4.py) [dota2.0](./libs/configs/DOTA2.0/retinanet/cfgs_res50_dota2.0_v4.py)|
@@ -225,7 +225,9 @@ If you find our code useful for your research, please consider cite.
     title={Dense Label Encoding for Boundary Discontinuity Free Rotation Detection},
     author={Yang, Xue and Hou, Liping and Zhou, Yue and Wang, Wentao and Yan, Junchi},
     booktitle={Proceedings of the IEEE Computer Vision and Pattern Recognition (CVPR)},
-    year={2021}
+    month={June},
+    year={2021},
+    pages={15819-15829}
 }
 
 @inproceedings{yang2020arbitrary,
