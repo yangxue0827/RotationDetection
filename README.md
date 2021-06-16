@@ -143,7 +143,7 @@ Download a pretrain weight you need from the following three options, and then p
     If image does not need to be cropped, just convert the annotation file into xml format, refer to [example.xml](./example.xml).
     ```  
     cd $PATH_ROOT/dataloader/dataset/  
-    python convert_data_to_tfrecord.py --VOC_dir='/PATH/TO/DOTA/' 
+    python convert_data_to_tfrecord.py --root_dir='/PATH/TO/DOTA/' 
                                        --xml_dir='labeltxt'
                                        --image_dir='images'
                                        --save_name='train' 
