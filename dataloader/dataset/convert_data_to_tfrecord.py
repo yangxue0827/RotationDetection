@@ -16,7 +16,7 @@ from utils.tools import makedirs, view_bar
 from libs.configs import cfgs
 from utils.order_points import re_order
 
-tf.app.flags.DEFINE_string('root_dir', '/data/dataset/DOTA2.0/crop/trainval/', 'Voc dir')
+tf.app.flags.DEFINE_string('root_dir', '/data/dataset/DOTA2.0/crop/trainval/', 'root dir')
 tf.app.flags.DEFINE_string('xml_dir', 'labeltxt', 'xml dir')
 tf.app.flags.DEFINE_string('image_dir', 'images', 'image dir')
 tf.app.flags.DEFINE_string('save_name', 'train', 'save name')
@@ -77,6 +77,9 @@ def read_xml_gtbox_and_label(xml_path):
 
 
 def convert_pascal_to_tfrecord():
+
+    assert FLAGS.dataset == cfgs.DATASET_NAME, 'Keep the FLAGS.dataset == cfgs.DATASET_NAME.'
+
     xml_path = os.path.join(FLAGS.root_dir, FLAGS.xml_dir)
     image_path = os.path.join(FLAGS.root_dir, FLAGS.image_dir)
     save_path = os.path.join(FLAGS.save_dir, FLAGS.dataset + '_' + FLAGS.save_name + '.tfrecord')
