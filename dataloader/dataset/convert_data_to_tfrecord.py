@@ -7,20 +7,22 @@ import tensorflow as tf
 import glob
 import cv2
 import os
+from tqdm import tqdm
 
 sys.path.append('../../')
 
 from libs.label_name_dict.label_dict import LabelMap
 from utils.tools import makedirs, view_bar
 from libs.configs import cfgs
+from utils.order_points import re_order
 
-tf.app.flags.DEFINE_string('VOC_dir', '/data/dataset/DOTA/DOTA1.0/trainval_easy/', 'Voc dir')
+tf.app.flags.DEFINE_string('VOC_dir', '/data/dataset/DOTA2.0/crop/trainval/', 'Voc dir')
 tf.app.flags.DEFINE_string('xml_dir', 'labeltxt', 'xml dir')
 tf.app.flags.DEFINE_string('image_dir', 'images', 'image dir')
 tf.app.flags.DEFINE_string('save_name', 'train', 'save name')
 tf.app.flags.DEFINE_string('save_dir', '../tfrecord/', 'save name')
 tf.app.flags.DEFINE_string('img_format', '.png', 'format of image')
-tf.app.flags.DEFINE_string('dataset', 'DOTA1.0', 'dataset')
+tf.app.flags.DEFINE_string('dataset', 'DOTA2.0', 'dataset')
 FLAGS = tf.app.flags.FLAGS
 
 
@@ -83,7 +85,11 @@ def convert_pascal_to_tfrecord():
     # writer_options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.ZLIB)
     # writer = tf.python_io.TFRecordWriter(path=save_path, options=writer_options)
     writer = tf.python_io.TFRecordWriter(path=save_path)
-    for count, xml in enumerate(glob.glob(xml_path + '/*.xml')):
+    all_xml = glob.glob(xml_path + '/*.xml')
+    total_data = len(all_xml)
+    assert total_data != 0, 'Yur dataset is empty, please check the data path.'
+    pbar = tqdm(total=total_data)
+    for count, xml in enumerate(all_xml):
 
         img_name = xml.split('/')[-1].split('.')[0] + FLAGS.img_format
         img_path = image_path + '/' + img_name
@@ -93,6 +99,9 @@ def convert_pascal_to_tfrecord():
             continue
 
         img_height, img_width, gtbox_label = read_xml_gtbox_and_label(xml)
+
+        # For quad. detection in this repo, such as RSdet, FCOS
+        gtbox_label = np.array(re_order(gtbox_label, True), np.int32)
 
         # if img_height != 600 or img_width != 600:
         #     continue
@@ -114,9 +123,13 @@ def convert_pascal_to_tfrecord():
 
         writer.write(example.SerializeToString())
 
-        view_bar('Conversion progress', count + 1, len(glob.glob(xml_path + '/*.xml')))
+        pbar.set_description("Image: %s" % img_name)
 
-    print('\nConversion is complete!')
+        pbar.update(1)
+
+        # view_bar('Conversion progress', count + 1, len(glob.glob(xml_path + '/*.xml')))
+
+    # print('\nConversion is complete!')
     writer.close()
 
 
