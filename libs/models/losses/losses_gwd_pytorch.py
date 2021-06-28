@@ -112,7 +112,7 @@ def xywhr2xyrs(xywhr):
     return xy, R, S
 
 
-def gwd_loss(pred, target, fun='log', tau=1.0, alpha=1.0, normalize=False):
+def gwd_loss(pred, target, fun='sqrt', tau=1.0, alpha=1.0, normalize=False):
     """
     given any positive-definite symmetrical 2*2 matrix Z:
     Tr(Z^(1/2)) = sqrt(λ_1) + sqrt(λ_2)
@@ -160,29 +160,28 @@ def gwd_loss(pred, target, fun='log', tau=1.0, alpha=1.0, normalize=False):
     _t_tr = _t.diagonal(dim1=-2, dim2=-1).sum(dim=-1)
     _t_det_sqrt = S_p.diagonal(dim1=-2, dim2=-1).prod(dim=-1)
     _t_det_sqrt = _t_det_sqrt * S_t.diagonal(dim1=-2, dim2=-1).prod(dim=-1)
-    whr_distance = whr_distance + (-2) * (
-        (_t_tr + 2 * _t_det_sqrt).clamp(0).sqrt())
+    whr_distance = whr_distance + (-2) * ((_t_tr + 2 * _t_det_sqrt).clamp(0).sqrt())
 
-    distance = (xy_distance + alpha * alpha * whr_distance).clamp(0).sqrt()
+    distance = (xy_distance + alpha * alpha * whr_distance).clamp(0)
+    # distance = (xy_distance + alpha * alpha * whr_distance).clamp(0).sqrt()
 
     if normalize:
         wh_p = pred[..., 2:4].clamp(min=1e-7, max=1e7)
         wh_t = target[..., 2:4].clamp(min=1e-7, max=1e7)
         scale = ((wh_p.log() + wh_t.log()).sum(dim=-1) / 4).exp()
         distance = distance / scale
-    return distance
 
-    # if fun == 'log':
-    #     distance = torch.log1p(distance)
-    # elif fun == 'none':
-    #     pass
-    # else:
-    #     raise ValueError('Invalid non-linear function {fun} for gwd loss')
-    #
-    # if tau >= 1.0:
-    #     return 1 - 1 / (tau + distance)
-    # else:
-    #     return distance
+    if fun == 'log':
+        distance = torch.log1p(distance)
+    elif fun == 'sqrt':
+        distance = torch.sqrt(distance)
+    else:
+        raise ValueError('Invalid non-linear function {fun} for gwd loss')
+
+    if tau >= 1.0:
+        return 1 - 1 / (tau + distance)
+    else:
+        return distance
 
     # @LOSSES.register_module()
     # class GWDLoss(nn.Module):
