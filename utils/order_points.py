@@ -90,7 +90,7 @@ def cos_dist(a, b):
 ############  another method##############
 
 def sort_corners(quads):
-    sorted = np.zeros(quads.shape, dtype=np.float32)
+    sorted_quads = np.zeros(quads.shape, dtype=np.float32)
     for i, corners in enumerate(quads):
         corners = corners.reshape(4, 2)
         centers = np.mean(corners, axis=0)
@@ -123,9 +123,9 @@ def sort_corners(quads):
                 first_idx = 3
         for j in range(4):
             idx = (first_idx + j) % 4
-            sorted[i, j * 2] = corners[idx * 2]
-            sorted[i, j * 2 + 1] = corners[idx * 2 + 1]
-    return sorted
+            sorted_quads[i, j * 2] = corners[idx * 2]
+            sorted_quads[i, j * 2 + 1] = corners[idx * 2 + 1]
+    return sorted_quads
 
 
 # counterclockwise, write by WenQian
@@ -139,12 +139,15 @@ def re_order(bboxes, with_label=False):
         y1=box[1]
         x1_index=0
         for j in range(1,4):
+            ### if x larger than x1 then continue
             if box[2*j]>x1:
                 continue
+            ### if x smaller than x1 then replace x1 as x
             elif box[2*j]<x1:
                 x1=box[2*j]
                 y1=box[2*j+1]
                 x1_index=j
+            ### if they are euqal then we aims to find the upper point
             else:
                 if box[2*j+1]<y1:
                     x1=box[2*j]
@@ -180,9 +183,9 @@ def re_order(bboxes, with_label=False):
                         continue
                     x=box[2*k]
                     y=box[2*k+1]
-                    if not x1==x_:
-                        val=(y-y1)-(y_-y1)/(x_-x1)*(x-x1)
-                        if val>0:
+                    if not x1==x3:
+                        val=(y-y1)-(y3-y1)/(x3-x1)*(x-x1)
+                        if val>=0:
                             x2=x
                             y2=y
                         if val<0:
@@ -190,17 +193,22 @@ def re_order(bboxes, with_label=False):
                             y4=y
                     else:
                         val=x1-x
-                        if val>0:
+                        if val>=0:
                             x2=x
                             y2=y
                         if val<0:
                             x4=x
                             y4=y
                 break
-        if with_label:
-            targets.append([x1, y1, x2, y2, x3, y3, x4, y4, box[-1]])
-        else:
-            targets.append([x1, y1, x2, y2, x3, y3, x4, y4])
+        try:
+            if with_label:
+                targets.append([x1, y1, x2, y2, x3, y3, x4, y4, box[-1]])
+            else:
+                targets.append([x1, y1, x2, y2, x3, y3, x4, y4])
+        except:
+            print('**'*20)
+            print(box)
+            targets.append(box)
     return np.array(targets, np.float32)
 # pts = np.array([[296, 245] ,[351 ,266], [208, 487],[263, 507]])
 # npts = order_points_quadrangle(pts)
