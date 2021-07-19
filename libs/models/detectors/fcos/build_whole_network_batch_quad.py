@@ -233,7 +233,10 @@ class DetectionNetworkFCOS(DetectionNetworkBase):
 
                 rpn_cls_loss = self.losses.focal_loss_fcos(rpn_cls_score, cls_gt)
 
-                rpn_bbox_loss = self.losses.smooth_l1_loss_fcos(gt_boxes, rpn_box_pred, cls_gt, weight=ctr_gt)
+                if self.cfgs.REG_LOSS_MODE == 0:
+                    rpn_bbox_loss = self.losses.modulated_loss_fcos(gt_boxes, rpn_box_pred, cls_gt, weight=ctr_gt)
+                else:
+                    rpn_bbox_loss = self.losses.smooth_l1_loss_fcos(gt_boxes, rpn_box_pred, cls_gt, weight=ctr_gt)
 
                 rpn_ctr_loss = self.losses.centerness_loss(rpn_cnt_scores, ctr_gt, cls_gt)
                 self.losses_dict = {
