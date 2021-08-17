@@ -131,6 +131,7 @@ __pycache__/
 *r2cnn_gwd*
 *r2cnn_dcl*
 *r2cnn_csl*
+*fcos*
 *centernet*
 *tensorpack*
 *.DS_Store*
@@ -140,6 +141,9 @@ __pycache__/
 *README_v2.md*
 *arbitrary_shaped*
 *scale_invariance*
+*kf*
+*gwd_norm*
+*bcd*
 
 tools/*/test_dota/*
 tools/*/test_hrsc/*

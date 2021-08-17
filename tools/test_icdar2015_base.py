@@ -30,7 +30,7 @@ def parse_args():
 
     parser.add_argument('--test_dir', dest='test_dir',
                         help='evaluate imgs dir ',
-                        default='/data/dataset/ICDAR2015/ch4_test_images', type=str)
+                        default='/data/dataset_share/ICDAR2015/ch4_test_images', type=str)
     parser.add_argument('--gpus', dest='gpus',
                         help='gpu id',
                         default='0,1,2,3,4,5,6,7', type=str)

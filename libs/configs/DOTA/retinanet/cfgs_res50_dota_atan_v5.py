@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+5# -*- coding: utf-8 -*-
 from __future__ import division, print_function, absolute_import
 
 import numpy as np
@@ -33,38 +33,40 @@ CLS_WEIGHT = 1.0
 REG_WEIGHT = 1.0 / 5.0
 REG_LOSS_MODE = None
 
-VERSION = 'RetinaNet_DOTA_2x_20210401'
+VERSION = 'RetinaNet_DOTA_2x_20210727'
 
 """
-RetinaNet-H + theta=atan(sin(theta)/cos(theta))
-FLOPs: 862193609;    Trainable params: 33051321
+RetinaNet-H + theta=atan(sin(theta)/cos(theta)) + 180, sin^2(theta) + cos^2(theta) = 1
+[-90, 90]   sin in [-1, 1]   cos in [0, 1]
+FLOPs: 862193708;    Trainable params: 33051321
+
 This is your result for task 1:
 
-    mAP: 0.651696632387858
+    mAP: 0.6578072042544206
     ap of each class:
-    plane:0.8879777802653781,
-    baseball-diamond:0.7377507544050896,
-    bridge:0.42536648303837926,
-    ground-track-field:0.6532556426863868,
-    small-vehicle:0.6556639819529395,
-    large-vehicle:0.484385913933396,
-    ship:0.7059253552779867,
-    tennis-court:0.8905830467374414,
-    basketball-court:0.7993635154768965,
-    storage-tank:0.7555854625496603,
-    soccer-ball-field:0.5261429541192497,
-    roundabout:0.5980802639622864,
-    harbor:0.5210216901007899,
-    swimming-pool:0.6502795971050093,
-    helicopter:0.4840670442069815
+    plane:0.8876928590825857,
+    baseball-diamond:0.7080134003984874,
+    bridge:0.41518046969184713,
+    ground-track-field:0.6641334517905239,
+    small-vehicle:0.6393647386261688,
+    large-vehicle:0.44946718683582615,
+    ship:0.7117757018402356,
+    tennis-court:0.9014456759798808,
+    basketball-court:0.7988175573739552,
+    storage-tank:0.7810617259611029,
+    soccer-ball-field:0.5544134674919993,
+    roundabout:0.6054450098129257,
+    harbor:0.5322431963201936,
+    swimming-pool:0.6650098753335547,
+    helicopter:0.5530437472770227
 
 The submitted information is :
 
-Description: RetinaNet_DOTA_2x_20210401_70.2w
-Username: yangxue
-Institute: DetectionTeamUCAS
-Emailadress: yangxue16@mails.ucas.ac.cn
-TeamMembers: yangxue, yangjirui
+Description: RetinaNet_DOTA_2x_20210727_70.2w
+Username: SJTU-Det
+Institute: SJTU
+Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
+TeamMembers: yangxue
 """
 
 
