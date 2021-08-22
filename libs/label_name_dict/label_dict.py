@@ -105,22 +105,7 @@ class LabelMap(object):
             }
         elif self.cfgs.DATASET_NAME.startswith('DOTA'):
             name_label_map = {
-                'back_ground': 0,
-                'roundabout': 1,
-                'tennis-court': 2,
-                'swimming-pool': 3,
-                'storage-tank': 4,
-                'soccer-ball-field': 5,
-                'small-vehicle': 6,
-                'ship': 7,
-                'plane': 8,
-                'large-vehicle': 9,
-                'helicopter': 10,
-                'harbor': 11,
-                'ground-track-field': 12,
-                'bridge': 13,
-                'basketball-court': 14,
-                'baseball-diamond': 15
+                'car': 0
             }
             if self.cfgs.DATASET_NAME == 'DOTA1.5':
                 name_label_map['container-crane'] = 16

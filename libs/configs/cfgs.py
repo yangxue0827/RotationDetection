@@ -10,34 +10,55 @@ from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
 
 # schedule
 BATCH_SIZE = 1
-GPU_GROUP = "0,1,2,3"
+GPU_GROUP = "0"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
 LR = 0.001 * BATCH_SIZE * NUM_GPU
-SAVE_WEIGHTS_INTE = 32000
+SAVE_WEIGHTS_INTE = 27000
 DECAY_STEP = np.array(DECAY_EPOCH, np.int32) * SAVE_WEIGHTS_INTE
 MAX_ITERATION = SAVE_WEIGHTS_INTE * MAX_EPOCH
 WARM_SETP = int(WARM_EPOCH * SAVE_WEIGHTS_INTE)
 
 # dataset
-DATASET_NAME = 'DOTA1.5'
-CLASS_NUM = 16
+DATASET_NAME = 'DOTA'
+CLASS_NUM = 1
 
 # model
+NET_NAME="resnet_v1_50"
 # backbone
 pretrain_zoo = PretrainModelZoo()
 PRETRAINED_CKPT = pretrain_zoo.pretrain_weight_path(NET_NAME, ROOT_PATH)
 TRAINED_CKPT = os.path.join(ROOT_PATH, 'output/trained_weights')
 
-# loss
-FAST_RCNN_LOCATION_LOSS_WEIGHT = 1.0
-FAST_RCNN_CLASSIFICATION_LOSS_WEIGHT = 2.0
-
-KL_TAU = 1.0
-KL_FUNC = 1   # 0: sqrt  1: log
-
-VERSION = 'FPN_Res50D_DOTA1.5_1x_20210602'
+VERSION = 'FPN_Res50D_DOTA_1x_20210819'
 
 """
-R2CNN + KLD
-FLOPs: 1238001985;    Trainable params: 41778832
+R2CNN
+FLOPs: 1024153266;    Trainable params: 41772682
+This is your result for task 1:
+
+    mAP: 0.7227414456963894
+    ap of each class:
+    plane:0.8954291131230108,
+    baseball-diamond:0.7615013248230833,
+    bridge:0.47589589239010427,
+    ground-track-field:0.6484503831218632,
+    small-vehicle:0.7616171143029637,
+    large-vehicle:0.7395101403930869,
+    ship:0.8587426481796258,
+    tennis-court:0.9022025499507798,
+    basketball-court:0.8327346869026073,
+    storage-tank:0.8431585743608815,
+    soccer-ball-field:0.5106006620292729,
+    roundabout:0.6561468034665185,
+    harbor:0.6530002955426998,
+    swimming-pool:0.6823392612570894,
+    helicopter:0.6197922356022552
+
+The submitted information is :
+
+Description: FPN_Res50D_DOTA_1x_20201031_37.8w
+Username: SJTU-Det
+Institute: SJTU
+Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
+TeamMembers: yangxue
 """

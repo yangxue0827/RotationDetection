@@ -10,7 +10,7 @@ from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
 
 # schedule
 BATCH_SIZE = 1
-GPU_GROUP = "0,1,2"
+GPU_GROUP = "0"
 NUM_GPU = len(GPU_GROUP.strip().split(','))
 LR = 0.001 * BATCH_SIZE * NUM_GPU
 SAVE_WEIGHTS_INTE = 27000
@@ -19,6 +19,8 @@ MAX_ITERATION = SAVE_WEIGHTS_INTE * MAX_EPOCH
 WARM_SETP = int(WARM_EPOCH * SAVE_WEIGHTS_INTE)
 
 # dataset
+DATASET_NAME = 'DOTA'
+CLASS_NUM = 1
 
 # model
 # backbone
@@ -26,7 +28,7 @@ pretrain_zoo = PretrainModelZoo()
 PRETRAINED_CKPT = pretrain_zoo.pretrain_weight_path(NET_NAME, ROOT_PATH)
 TRAINED_CKPT = os.path.join(ROOT_PATH, 'output/trained_weights')
 
-VERSION = 'FPN_Res50D_DOTA_1x_20201031'
+VERSION = 'FPN_Res50D_DOTA_1x_20210819'
 
 """
 R2CNN

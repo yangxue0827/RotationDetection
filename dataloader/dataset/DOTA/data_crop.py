@@ -123,14 +123,14 @@ def save_to_xml(save_path, im_height, im_width, objects_axis, label_name):
     f.close()
 
 
-class_list = ['plane', 'baseball-diamond', 'bridge', 'ground-track-field',
-              'small-vehicle', 'large-vehicle', 'ship',
-              'tennis-court', 'basketball-court',
-              'storage-tank', 'soccer-ball-field',
-              'roundabout', 'harbor', 'swimming-pool', 'helicopter',
-              'container-crane',
-              'airport', 'helipad']
-
+# class_list = ['plane', 'baseball-diamond', 'bridge', 'ground-track-field',
+#               'small-vehicle', 'large-vehicle', 'ship',
+#               'tennis-court', 'basketball-court',
+#               'storage-tank', 'soccer-ball-field',
+#               'roundabout', 'harbor', 'swimming-pool', 'helicopter',
+#               'container-crane',
+#               'airport', 'helipad']
+class_list = ['car']
 
 def format_label(txt_list):
     format_data = []
@@ -208,11 +208,11 @@ def clip_image(file_idx, image, boxes_all, width, height, stride_w, stride_h):
 
 
 print('class_list', len(class_list))
-raw_data = '/data/dataset/DOTA/val/'
-raw_images_dir = os.path.join(raw_data, 'images', 'images')
-raw_label_dir = os.path.join(raw_data, 'labelTxt', 'labelTxt')
+raw_data = '/home/omega/Documents/DOTA/'
+raw_images_dir = os.path.join(raw_data, 'images')
+raw_label_dir = os.path.join(raw_data, 'labelTxt')
 
-save_dir = '/data/dataset/DOTA/DOTA1.0/trainval_easy/'
+save_dir = '/home/omega/Documents/easy_dota/'
 
 images = [i for i in os.listdir(raw_images_dir) if 'png' in i]
 labels = [i for i in os.listdir(raw_label_dir) if 'txt' in i]
