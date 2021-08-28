@@ -305,7 +305,7 @@ class EvalCkptDriver(object):
       image = tf.cast(image_decoded, tf.float32)
       return image, label
 
-    dataset = dataset.map(_parse_function)
+    dataset = dataset.map(_parse_function,num_parallel_calls=tf.data.experimental.AUTOTUNE)
     dataset = dataset.batch(self.batch_size,
                             drop_remainder=batch_drop_remainder)
 
