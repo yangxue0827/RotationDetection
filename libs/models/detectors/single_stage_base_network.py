@@ -130,7 +130,7 @@ class DetectionNetworkBase(object):
 
             return rpn_delta_boxes_list, rpn_scores_list, rpn_probs_list
 
-    def make_anchors(self, feature_pyramid, use_tf=False):
+    def make_anchors(self, feature_pyramid, use_tf=True):
         with tf.variable_scope('make_anchors'):
             anchor = GenerateAnchors(self.cfgs, self.method)
             if use_tf and self.method == 'H':

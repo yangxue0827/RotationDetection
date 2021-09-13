@@ -1,4 +1,7 @@
 # -*- coding:utf-8 -*-
+# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
+#
+# License: Apache-2.0 license
 
 from __future__ import absolute_import
 from __future__ import print_function
@@ -42,6 +45,8 @@ def parse_args():
     parser.add_argument('--flip_img', '-f', default=False,
                         action='store_true')
     parser.add_argument('--multi_scale', '-ms', default=False,
+                        action='store_true')
+    parser.add_argument('--cpu_nms', '-cn', default=False,
                         action='store_true')
     args = parser.parse_args()
     return args
@@ -194,20 +199,35 @@ class TestICDAR2015(object):
                         if self.args.multi_scale:
                             tmp_boxes_r_ = backward_convert(tmp_boxes_r, False)
 
-                            # try:
-                            #     inx = nms_rotate.nms_rotate_cpu(boxes=np.array(tmp_boxes_r_),
-                            #                                     scores=np.array(tmp_score_r),
-                            #                                     iou_threshold=self.cfgs.NMS_IOU_THRESHOLD,
-                            #                                     max_output_size=5000)
-                            # except:
-                            tmp_boxes_r_ = np.array(tmp_boxes_r_)
-                            tmp = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
-                            tmp[:, 0:-1] = tmp_boxes_r_
-                            tmp[:, -1] = np.array(tmp_score_r)
-                            # Note: the IoU of two same rectangles is 0, which is calculated by rotate_gpu_nms
-                            jitter = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
-                            jitter[:, 0] += np.random.rand(tmp_boxes_r_.shape[0], ) / 1000
-                            inx = rotate_gpu_nms(np.array(tmp, np.float32) + np.array(jitter, np.float32), 0.1, 0)
+                            # cpu nms better than gpu nms (default)
+                            if self.args.cpu_nms:
+                                try:
+                                    inx = nms_rotate.nms_rotate_cpu(boxes=np.array(tmp_boxes_r_),
+                                                                    scores=np.array(tmp_score_r),
+                                                                    iou_threshold=0.1,
+                                                                    max_output_size=5000)
+
+                                except:
+                                    tmp_boxes_r_ = np.array(tmp_boxes_r_)
+                                    tmp = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
+                                    tmp[:, 0:-1] = tmp_boxes_r_
+                                    tmp[:, -1] = np.array(tmp_score_r)
+                                    # Note: the IoU of two same rectangles is 0
+                                    jitter = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
+                                    jitter[:, 0] += np.random.rand(tmp_boxes_r_.shape[0], ) / 1000
+                                    inx = rotate_gpu_nms(np.array(tmp, np.float32) + np.array(jitter, np.float32),
+                                                         0.1, 0)
+                            else:
+                                tmp_boxes_r_ = np.array(tmp_boxes_r_)
+                                tmp = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
+                                tmp[:, 0:-1] = tmp_boxes_r_
+                                tmp[:, -1] = np.array(tmp_score_r)
+                                # Note: the IoU of two same rectangles is 0
+                                jitter = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
+                                jitter[:, 0] += np.random.rand(tmp_boxes_r_.shape[0], ) / 1000
+                                inx = rotate_gpu_nms(np.array(tmp, np.float32) + np.array(jitter, np.float32),
+                                                     0.1, 0)
+
                         else:
                             inx = np.arange(0, tmp_score_r.shape[0])
 

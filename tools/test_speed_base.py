@@ -1,4 +1,7 @@
 # -*- coding:utf-8 -*-
+# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
+#
+# License: Apache-2.0 license
 
 from __future__ import absolute_import
 from __future__ import print_function
@@ -36,6 +39,8 @@ def parse_args():
     parser.add_argument('--draw_imgs', '-s', default=False,
                         action='store_true')
     parser.add_argument('--multi_scale', '-ms', default=False,
+                        action='store_true')
+    parser.add_argument('--cpu_nms', '-cn', default=False,
                         action='store_true')
 
     if len(sys.argv) == 1:

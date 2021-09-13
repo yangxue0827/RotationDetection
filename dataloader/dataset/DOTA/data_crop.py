@@ -212,7 +212,7 @@ raw_data = '/data/dataset/DOTA/val/'
 raw_images_dir = os.path.join(raw_data, 'images', 'images')
 raw_label_dir = os.path.join(raw_data, 'labelTxt', 'labelTxt')
 
-save_dir = '/data/dataset/DOTA/DOTA1.0/trainval_easy/'
+save_dir = '/data/dataset/DOTA/DOTA1.0/trainval/'
 
 images = [i for i in os.listdir(raw_images_dir) if 'png' in i]
 labels = [i for i in os.listdir(raw_label_dir) if 'txt' in i]

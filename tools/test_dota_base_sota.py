@@ -1,4 +1,7 @@
 # -*- coding:utf-8 -*-
+# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
+#
+# License: Apache-2.0 license
 
 from __future__ import absolute_import
 from __future__ import print_function
@@ -28,7 +31,7 @@ def parse_args():
 
     parser.add_argument('--test_dir', dest='test_dir',
                         help='evaluate imgs dir ',
-                        default='/data/dataset/DOTA/test/images/', type=str)
+                        default='/data/dataset_share/DOTA/test/images/', type=str)
     parser.add_argument('--gpus', dest='gpus',
                         help='gpu id',
                         default='0,1,2,3,4,5,6,7', type=str)
@@ -37,6 +40,8 @@ def parse_args():
     parser.add_argument('--multi_scale', '-ms', default=False,
                         action='store_true')
     parser.add_argument('--flip_img', '-f', default=False,
+                        action='store_true')
+    parser.add_argument('--cpu_nms', '-cn', default=False,
                         action='store_true')
     parser.add_argument('--num_imgs', dest='num_imgs',
                         help='test image number',
@@ -62,6 +67,9 @@ class TestDOTA(object):
     def __init__(self, cfgs):
         self.cfgs = cfgs
         self.args = parse_args()
+        print('+-' * 40)
+        print(self.args)
+        print('+-' * 40)
         label_map = LabelMap(cfgs)
         self.name_label_map, self.label_name_map = label_map.name2label(), label_map.label2name()
 
@@ -217,11 +225,11 @@ class TestDOTA(object):
                 box_res_rotate_ = []
                 label_res_rotate_ = []
                 score_res_rotate_ = []
-                threshold = {'roundabout': 0.1, 'tennis-court': 0.3, 'swimming-pool': 0.1, 'storage-tank': 0.2,
-                             'soccer-ball-field': 0.3, 'small-vehicle': 0.2, 'ship': 0.2, 'plane': 0.3,
+                threshold = {'roundabout': 0.1, 'tennis-court': 0.3, 'swimming-pool': 0.05, 'storage-tank': 0.2,
+                             'soccer-ball-field': 0.3, 'small-vehicle': 0.2, 'ship': 0.2, 'plane': 0.15,
                              'large-vehicle': 0.1, 'helicopter': 0.2, 'harbor': 0.0001, 'ground-track-field': 0.3,
-                             'bridge': 0.0001, 'basketball-court': 0.3, 'baseball-diamond': 0.3,
-                             'container-crane': 0.05, 'airport': 0.1, 'helipad': 0.1}
+                             'bridge': 0.0001, 'basketball-court': 0.3, 'baseball-diamond': 0.1,
+                             'container-crane': 0.05, 'airport': 0.5, 'helipad': 0.1}
 
                 for sub_class in range(1, self.cfgs.CLASS_NUM + 1):
                     index = np.where(label_res_rotate == sub_class)[0]
@@ -233,22 +241,34 @@ class TestDOTA(object):
 
                     tmp_boxes_r_ = backward_convert(tmp_boxes_r, False)
 
-                    # try:
-                    #     inx = nms_rotate.nms_rotate_cpu(boxes=np.array(tmp_boxes_r_),
-                    #                                     scores=np.array(tmp_score_r),
-                    #                                     iou_threshold=threshold[self.label_name_map[sub_class]],
-                    #                                     max_output_size=5000)
-                    #
-                    # except:
-                    tmp_boxes_r_ = np.array(tmp_boxes_r_)
-                    tmp = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
-                    tmp[:, 0:-1] = tmp_boxes_r_
-                    tmp[:, -1] = np.array(tmp_score_r)
-                    # Note: the IoU of two same rectangles is 0, which is calculated by rotate_gpu_nms
-                    jitter = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
-                    jitter[:, 0] += np.random.rand(tmp_boxes_r_.shape[0], ) / 1000
-                    inx = rotate_gpu_nms(np.array(tmp, np.float32) + np.array(jitter, np.float32),
-                                         float(threshold[self.label_name_map[sub_class]]), 0)
+                    # cpu nms better than gpu nms (default)
+                    if self.args.cpu_nms:
+                        try:
+                            inx = nms_rotate.nms_rotate_cpu(boxes=np.array(tmp_boxes_r_),
+                                                            scores=np.array(tmp_score_r),
+                                                            iou_threshold=threshold[self.label_name_map[sub_class]],
+                                                            max_output_size=5000)
+
+                        except:
+                            tmp_boxes_r_ = np.array(tmp_boxes_r_)
+                            tmp = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
+                            tmp[:, 0:-1] = tmp_boxes_r_
+                            tmp[:, -1] = np.array(tmp_score_r)
+                            # Note: the IoU of two same rectangles is 0
+                            jitter = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
+                            jitter[:, 0] += np.random.rand(tmp_boxes_r_.shape[0], ) / 1000
+                            inx = rotate_gpu_nms(np.array(tmp, np.float32) + np.array(jitter, np.float32),
+                                                 float(threshold[self.label_name_map[sub_class]]), 0)
+                    else:
+                        tmp_boxes_r_ = np.array(tmp_boxes_r_)
+                        tmp = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
+                        tmp[:, 0:-1] = tmp_boxes_r_
+                        tmp[:, -1] = np.array(tmp_score_r)
+                        # Note: the IoU of two same rectangles is 0
+                        jitter = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
+                        jitter[:, 0] += np.random.rand(tmp_boxes_r_.shape[0], ) / 1000
+                        inx = rotate_gpu_nms(np.array(tmp, np.float32) + np.array(jitter, np.float32),
+                                             float(threshold[self.label_name_map[sub_class]]), 0)
 
                     box_res_rotate_.extend(np.array(tmp_boxes_r)[inx])
                     score_res_rotate_.extend(np.array(tmp_score_r)[inx])

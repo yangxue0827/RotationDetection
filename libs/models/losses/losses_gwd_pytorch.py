@@ -1,3 +1,12 @@
+# --------------------------------------------------------
+# gwd pytorch version
+
+# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
+#
+# License: Apache-2.0 license
+# --------------------------------------------------------
+
+
 import torch
 import torch.nn as nn
 from torch.autograd import Variable

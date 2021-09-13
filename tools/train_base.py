@@ -1,4 +1,7 @@
 # -*- coding:utf-8 -*-
+# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
+#
+# License: Apache-2.0 license
 
 from __future__ import absolute_import
 from __future__ import print_function
@@ -248,7 +251,7 @@ class Train(object):
                             summary_writer.add_summary(summary_str, (global_stepnp-1)*num_gpu)
                             summary_writer.flush()
 
-                if (step > 0 and step % (self.cfgs.SAVE_WEIGHTS_INTE // num_gpu) == 0) or (step >= (self.cfgs.MAX_ITERATION // num_gpu - 1)):
+                if (step > 0 and step % (self.cfgs.SAVE_WEIGHTS_INTE // num_gpu) == 0) or (step >= (self.cfgs.MAX_ITERATION // num_gpu - 1)) or (global_stepnp-1)*num_gpu > self.cfgs.MAX_ITERATION:
 
                     save_dir = os.path.join(self.cfgs.TRAINED_CKPT, self.cfgs.VERSION)
                     if not os.path.exists(save_dir):

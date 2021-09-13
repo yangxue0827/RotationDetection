@@ -178,11 +178,11 @@ def sigma(a, w, h):
 if __name__ == '__main__':
     from utils.gaussian_wasserstein_distance import get_element1, get_element4
 
-    boxes1 = np.array([[20, 20, 40, 40, -20],
-                       [20, 20, 40, 40, -20]], np.float32)
+    boxes1 = np.array([[50, 50, 10, 70, -30],
+                       [50, 50, 100, 700, -30]], np.float32)
 
-    boxes2 = np.array([[20, 20, 40, 40, -30],
-                       [20, 20, 40, 40, -50]], np.float32)
+    boxes2 = np.array([[10, 40, 10, 70, -30],
+                       [10, 40, 100, 700, -40]], np.float32)
 
     # boxes1 = np.array([    # prediction box
     #     [50, 50, 10, 70, -35],     # 90 <--> 180
@@ -216,6 +216,7 @@ if __name__ == '__main__':
     #
     sigma1_tf1, sigma2_tf1, gwd_tf1 = gwd(coordinate_present_convert(boxes1, -1, False), coordinate_present_convert(boxes2, -1, False))
     sigma1_tf2, sigma2_tf2, gwd_tf2 = gwd(boxes1, boxes2)
+    # sigma1_tf2 = tf.linalg.eigvalsh(sigma1_tf2)
 
     with tf.Session() as sess:
         sigma1_tf_1, sigma2_tf_1, gwd_tf_1 = sess.run([sigma1_tf1, sigma2_tf1, gwd_tf1])
@@ -223,7 +224,7 @@ if __name__ == '__main__':
         # print(sigma1_tf_1)
         # print(sigma2_tf_1)
         # print('**'*10)
-        # print(sigma1_tf_2)
+        print(sigma1_tf_2)
         # print(sigma2_tf_2)
 
         print('**' * 10)
@@ -231,6 +232,7 @@ if __name__ == '__main__':
         # print(np.argsort(np.reshape(gwd_tf_1, [-1, ])))
 
         print('gwd', np.reshape(gwd_tf_2, [-1, ]))
+        print(1-1/(np.sqrt(gwd_tf_2)+1))
         # print(np.argsort(np.reshape(gwd_tf_2, [-1, ])))
 
         # gwd_tf_2 = np.maximum(np.log(gwd_tf_2 + 1e-3), 0.0)

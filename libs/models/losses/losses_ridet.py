@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+# Author:  Qi Ming <chaser.ming@gmail.com>
+#          Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
+#
+# License: Apache-2.0 license
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function

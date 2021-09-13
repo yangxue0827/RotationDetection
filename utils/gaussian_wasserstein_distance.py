@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+
+# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
+#
+# License: Apache-2.0 license
+
 import numpy as np
 import tensorflow as tf
 

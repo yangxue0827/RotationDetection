@@ -74,6 +74,67 @@ class LossFCOS(Loss):
 
         return loss
 
+    def modulated_loss_fcos(self, targets, preds, cls_gt, background=0, weight=None, sigma=3.0):
+
+        cls_gt = tf.reshape(cls_gt, [-1, ])
+        mask = 1 - tf.cast(tf.equal(cls_gt, background), tf.int32)
+        targets = tf.reshape(targets, [-1, 8])
+        preds = tf.reshape(preds, [-1, 8])
+
+        sigma_squared = sigma ** 2
+
+        # prepare for normalization
+        normalizer = tf.stop_gradient(tf.where(tf.equal(mask, 0)))
+        normalizer = tf.cast(tf.shape(normalizer)[0], tf.float32)
+        normalizer = tf.maximum(1.0, normalizer)
+
+        # loss1
+        loss1_tmp = []
+        for i in range(4):
+            loss1_tmp.append((preds[:, i * 2] - targets[:, i * 2]) / 16.0)
+            loss1_tmp.append((preds[:, i * 2 + 1] - targets[:, i * 2 + 1]) / 16.0)
+        box_diff_1 = tf.stack(loss1_tmp, 1)
+        box_diff_1 = tf.abs(box_diff_1)
+        loss_1 = tf.where(
+            tf.less(box_diff_1, 1.0 / sigma_squared),
+            0.5 * sigma_squared * tf.pow(box_diff_1, 2),
+            box_diff_1 - 0.5 / sigma_squared
+        )
+
+        loss_1 = tf.reduce_sum(loss_1, 1) * tf.cast(mask, tf.float32)
+
+        # # loss2
+        loss2_tmp = []
+        for i in range(4):
+            loss2_tmp.append((preds[:, i * 2] - targets[:, ((i + 1) * 2) % 8]) / 16.0)
+            loss2_tmp.append((preds[:, i * 2 + 1] - targets[:, ((i + 1) * 2 + 1) % 8]) / 16.0)
+        box_diff_2 = tf.stack(loss2_tmp, 1)
+        box_diff_2 = tf.abs(box_diff_2)
+        loss_2 = tf.where(
+            tf.less(box_diff_2, 1.0 / sigma_squared),
+            0.5 * sigma_squared * tf.pow(box_diff_2, 2),
+            box_diff_2 - 0.5 / sigma_squared
+        )
+        loss_2 = tf.reduce_sum(loss_2, 1) * tf.cast(mask, tf.float32)
+
+        loss3_tmp = []
+        for i in range(4):
+            loss3_tmp.append((preds[:, i * 2] - targets[:, ((i + 3) * 2) % 8]) / 16.0)
+            loss3_tmp.append((preds[:, i * 2 + 1] - targets[:, ((i + 3) * 2 + 1) % 8]) / 16.0)
+        box_diff_3 = tf.stack(loss3_tmp, 1)
+        box_diff_3 = tf.abs(box_diff_3)
+        loss_3 = tf.where(
+            tf.less(box_diff_3, 1.0 / sigma_squared),
+            0.5 * sigma_squared * tf.pow(box_diff_3, 2),
+            box_diff_3 - 0.5 / sigma_squared
+        )
+        loss_3 = tf.reduce_sum(loss_3, 1) * tf.cast(mask, tf.float32)
+
+        loss = tf.minimum(tf.minimum(loss_1, loss_2), loss_3)
+        loss = tf.reduce_sum(loss) / normalizer
+
+        return loss
+
     def centerness_loss(self, pred, label, cls_gt, background=0):
         mask = 1 - tf.cast(tf.equal(cls_gt, background), tf.int32)
         loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=pred, labels=label) * tf.cast(mask, tf.float32)

@@ -66,7 +66,7 @@ class LabelMap(object):
                 'back_ground': 0,
                 'text': 1
             }
-        elif self.cfgs.DATASET_NAME == 'HRSC2016':
+        elif self.cfgs.DATASET_NAME in ['HRSC2016', 'HRSID']:
             name_label_map = {
                 'back_ground': 0,
                 'ship': 1

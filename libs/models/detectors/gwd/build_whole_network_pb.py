@@ -8,14 +8,14 @@ from libs.models.detectors.single_stage_base_network import DetectionNetworkBase
 from libs.models.losses.losses_gwd import LossGWD
 from libs.utils import bbox_transform, nms_rotate
 from libs.models.anchor_heads.generate_anchors import GenerateAnchors
-from libs.models.samplers.retinanet.anchor_sampler_gwd import AnchorSamplerRetinaNet
+from libs.models.samplers.gwd.anchor_sampler_gwd import AnchorSamplerGWD
 
 
 class DetectionNetworkGWD(DetectionNetworkBase):
 
     def __init__(self, cfgs, is_training):
         super(DetectionNetworkGWD, self).__init__(cfgs, is_training)
-        self.anchor_sampler_gwd = AnchorSamplerRetinaNet(cfgs)
+        self.anchor_sampler_gwd = AnchorSamplerGWD(cfgs)
         self.losses = LossGWD(self.cfgs)
 
     def build_whole_detection_network(self, input_img_batch, gtboxes_batch_h=None, gtboxes_batch_r=None, gpu_id=0):

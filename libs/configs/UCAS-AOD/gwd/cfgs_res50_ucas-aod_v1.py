@@ -42,6 +42,9 @@ REG_LOSS_MODE = 2  # GWD loss
 GWD_TAU = 2.0
 GWD_FUNC = tf.sqrt
 
+# test and eval
+USE_07_METRIC = False
+
 VERSION = 'RetinaNet_UCAS-AOD_2x_20201223'
 
 """

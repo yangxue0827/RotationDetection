@@ -71,13 +71,15 @@ class NeckFPNRetinaNet(object):
                                  stride=2, trainable=is_training, scope='p6_conv')
                 pyramid_dict['P6'] = p6
 
-                p7 = tf.nn.relu(p6, name='p6_relu')
+                if int(self.cfgs.LEVEL[-1][-1]) == 7:
 
-                p7 = slim.conv2d(p7,
-                                 num_outputs=self.cfgs.FPN_CHANNEL, kernel_size=[3, 3], padding="SAME",
-                                 stride=2, trainable=is_training, scope='p7_conv')
+                    p7 = tf.nn.relu(p6, name='p6_relu')
 
-                pyramid_dict['P7'] = p7
+                    p7 = slim.conv2d(p7,
+                                     num_outputs=self.cfgs.FPN_CHANNEL, kernel_size=[3, 3], padding="SAME",
+                                     stride=2, trainable=is_training, scope='p7_conv')
+
+                    pyramid_dict['P7'] = p7
 
         # for level in range(7, 1, -1):
         #     add_heatmap(pyramid_dict['P%d' % level], name='Layer%d/P%d_heat' % (level, level))

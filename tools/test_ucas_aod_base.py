@@ -1,4 +1,7 @@
 # -*- coding:utf-8 -*-
+# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
+#
+# License: Apache-2.0 license
 
 from __future__ import absolute_import
 from __future__ import print_function
@@ -31,19 +34,21 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Test HRSC2016')
     parser.add_argument('--img_dir', dest='img_dir',
                         help='images path',
-                        default='/data/dataset/UCAS-AOD/VOCdevkit_test/JPEGImages', type=str)
+                        default='/data/dataset_share/UCAS-AOD/VOCdevkit_test/JPEGImages', type=str)
     parser.add_argument('--image_ext', dest='image_ext',
                         help='image format',
                         default='.png', type=str)
     parser.add_argument('--test_annotation_path', dest='test_annotation_path',
                         help='test annotate path',
-                        default='/data/dataset/UCAS-AOD/VOCdevkit_test/Annotations', type=str)
+                        default='/data/dataset_share/UCAS-AOD/VOCdevkit_test/Annotations', type=str)
     parser.add_argument('--gpu', dest='gpu',
                         help='gpu index',
                         default='0', type=str)
     parser.add_argument('--draw_imgs', '-s', default=False,
                         action='store_true')
     parser.add_argument('--multi_scale', '-ms', default=False,
+                        action='store_true')
+    parser.add_argument('--cpu_nms', '-cn', default=False,
                         action='store_true')
 
     if len(sys.argv) == 1:

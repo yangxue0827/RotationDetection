@@ -1,10 +1,9 @@
-# UranusDet
+# AlphaRotate: A Rotation Detection Benchmark using TensorFlow
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Abstract
-This is a tensorflow-based rotation detection benchmark, also called UranusDet.     
-UranusDet is maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
+AlphaRotate is maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
 
 **Papers and codes related to remote sensing/aerial image detection: [DOTA-DOAI](https://github.com/SJTU-Thinklab-Det/DOTA-DOAI) <img src="https://img.shields.io/github/stars/SJTU-Thinklab-Det/DOTA-DOAI?style=social" />.**      
 
@@ -18,15 +17,18 @@ Techniques:
   - [x] [SCRDet **(ICCV19)**](https://arxiv.org/abs/1811.07126): [R<sup>2</sup>CNN++](https://github.com/DetectionTeamUCAS/R2CNN-Plus-Plus_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/R2CNN-Plus-Plus_Tensorflow?style=social" />, [IoU-Smooth L1 Loss](https://github.com/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation?style=social" />
   - [x] [RetinaNet-H, RetinaNet-R](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/RetinaNet_Tensorflow_Rotation?style=social" />
   - [x] [RefineRetinaNet (CascadeRetinaNet)](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/yangxue0827/RotationDetection) <img src="https://img.shields.io/github/stars/Thinklab-SJTU/R3Det_Tensorflow?style=social" />
+  - [x] [ATSS](https://arxiv.org/abs/1912.02424)
   - [x] [FCOS](https://arxiv.org/abs/1904.01355)
   - [x] [RSDet **(AAAI21)**](https://arxiv.org/abs/1911.08299): [TF code](https://github.com/Mrqianduoduo/RSDet-8P-4R) <img src="https://img.shields.io/github/stars/Mrqianduoduo/RSDet-8P-4R?style=social" />
   - [x] [R<sup>3</sup>Det **(AAAI21)**](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow) <img src="https://img.shields.io/github/stars/Thinklab-SJTU/R3Det_Tensorflow?style=social" />, [Pytorch code](https://github.com/SJTU-Thinklab-Det/r3det-on-mmdetection) <img src="https://img.shields.io/github/stars/SJTU-Thinklab-Det/r3det-on-mmdetection?style=social" />
   - [x] [Circular Smooth Label (CSL, **ECCV20**)](https://arxiv.org/abs/2003.05597): [TF code](https://github.com/Thinklab-SJTU/CSL_RetinaNet_Tensorflow) <img src="https://img.shields.io/github/stars/Thinklab-SJTU/CSL_RetinaNet_Tensorflow?style=social" />
   - [x] [Densely Coded Label (DCL, **CVPR21**)](https://arxiv.org/abs/2011.09670): [TF code](https://github.com/Thinklab-SJTU/DCL_RetinaNet_Tensorflow) <img src="https://img.shields.io/github/stars/Thinklab-SJTU/DCL_RetinaNet_Tensorflow?style=social" />
   - [x] [GWD (**ICML21**)](https://arxiv.org/abs/2101.11952): [TF code](https://github.com/yangxue0827/RotationDetection) <img src="https://img.shields.io/github/stars/yangxue0827/RotationDetection?style=social" />, [Pytorch code (YOLOv5-GWD)](https://github.com/zhanggefan/rotmmdet) <img src="https://img.shields.io/github/stars/zhanggefan/rotmmdet?style=social" />
+  - [ ] BCD (comng soon!): [TF code](https://github.com/yangxue0827/RotationDetection) <img src="https://img.shields.io/github/stars/yangxue0827/RotationDetection?style=social" />
   - [ ] [KLD](https://arxiv.org/abs/2106.01883): [TF code](https://github.com/yangxue0827/RotationDetection) <img src="https://img.shields.io/github/stars/yangxue0827/RotationDetection?style=social" />
   - [x] [RIDet](https://arxiv.org/abs/2103.11636): [Pytorch code](https://github.com/ming71/RIDet) <img src="https://img.shields.io/github/stars/ming71/RIDet?style=social" />
-  - [x] Mixed method: R<sup>3</sup>Det-DCL, R<sup>3</sup>Det-GWD, R<sup>3</sup>Det-KLD, FCOS-RSDet
+  - [ ] KF (comng soon!): [TF code](https://github.com/yangxue0827/RotationDetection) <img src="https://img.shields.io/github/stars/yangxue0827/RotationDetection?style=social" />
+  - [x] Mixed method: R<sup>3</sup>Det-DCL, R<sup>3</sup>Det-GWD, R<sup>3</sup>Det-BCD, R<sup>3</sup>Det-KLD, FCOS-RSDet, R<sup>2</sup>CNN-BCD
 - [x] Loss: CE, [Focal Loss](https://arxiv.org/abs/1708.02002), [Smooth L1 Loss](https://arxiv.org/abs/1504.08083), [IoU-Smooth L1 Loss](https://arxiv.org/abs/1811.07126), [Modulated Loss](https://arxiv.org/abs/1911.08299)
 - [x] [Others](./OTHERS.md): [SWA](https://arxiv.org/pdf/2012.12645.pdf), exportPb, [MMdnn](https://github.com/Microsoft/MMdnn)
 
@@ -50,7 +52,7 @@ The above-mentioned rotation detectors are all modified based on the following h
 More results and trained models are available in the [MODEL_ZOO.md](MODEL_ZOO.md).
 
 ### DOTA (Task1)
-Base setting: 
+**Baseline**
 
 |   Backbone  |  Neck  |  Training/test dataset  | Data Augmentation | Epoch |      
 |:-----------:|:------:|:-----------------------:|:-----------------:|:-----:|
@@ -71,12 +73,24 @@ Base setting:
 | [RSDet](https://arxiv.org/pdf/1911.08299) | [FCOS](https://arxiv.org/abs/1904.01355) | 67.91 | 62.18 | 48.81 | [Baidu Drive (8ww5)](https://pan.baidu.com/s/1gH4WT4_ZNyYtUwnuZM5iUg) | - | Quad | modulated loss | -  | [dota1.0,](./libs/configs/DOTA/fcos/cfgs_res50_dota_fcos_v3.py) [dota1.5](./libs/configs/DOTA1.5/fcos/cfgs_res50_dota1.5_fcos_v2.py) [dota2.0](./libs/configs/DOTA2.0/fcos/cfgs_res50_dota2.0_fcos_v2.py) |
 | [GWD](https://arxiv.org/abs/2101.11952) | [RetinaNet-H](https://arxiv.org/abs/1908.05612) | 68.93 | 60.03 | 46.65 | [Baidu Drive (7g5a)](https://pan.baidu.com/s/1D1pSOoq35lU3OkkUhErLBw) | H | Reg. (∆⍬) | **gwd** | [-90,0)  | [dota1.0,](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) [dota1.5,](./libs/configs/DOTA1.5/gwd/cfgs_res50_dota1.5_v11.py) [dota2.0](./libs/configs/DOTA2.0/gwd/cfgs_res50_dota2.0_v11.py) |
 | [GWD](https://arxiv.org/abs/2101.11952) **[+ SWA](https://arxiv.org/pdf/2012.12645.pdf)**  | [RetinaNet-H](https://arxiv.org/abs/1908.05612) |  69.92 | 60.60 | 47.63 | [Baidu Drive (qcn0)](https://pan.baidu.com/s/1kZ2kCMIwJSODgfayypTMNw) | H | Reg. (∆⍬) | gwd | [-90,0)  | [dota1.0,](./libs/configs/DOTA/gwd/cfgs_res50_dota_v10.py) [dota1.5,](./libs/configs/DOTA1.5/gwd/cfgs_res50_dota1.5_v11.py) [dota2.0](./libs/configs/DOTA2.0/gwd/cfgs_res50_dota2.0_v11.py) |
+| [BCD]() | [RetinaNet-H](https://arxiv.org/abs/1908.05612) | 71.23 | 60.78 | 47.48 | [Baidu Drive (0puk)](https://pan.baidu.com/s/1Yn6xkNlJy-jtMXOY0VKdAA) | H | Reg. (∆⍬) | **bcd** | [-90,0) | [dota1.0,](./libs/configs/DOTA/bcd/cfgs_res50_dota_bcd_v3.py) [dota1.5,](./libs/configs/DOTA1.5/bcd/cfgs_res50_dota1.5_bcd_v6.py) [dota2.0](./libs/configs/DOTA2.0/bcd/cfgs_res50_dota2.0_bcd_v6.py) |
 | [KLD](https://arxiv.org/abs/2106.01883) | [RetinaNet-H](https://arxiv.org/abs/1908.05612) | 71.28 | 62.50 | 47.69 | [Baidu Drive (o6rv)](https://pan.baidu.com/s/1nymEcwYEWoW4vcIxCYEsyw) | H | Reg. (∆⍬) | **kld** | [-90,0) | [dota1.0,](./libs/configs/DOTA/kl/cfgs_res50_dota_kl_v5.py) [dota1.5,](./libs/configs/DOTA1.5/kl/cfgs_res50_dota1.5_kl_v6.py) [dota2.0](./libs/configs/DOTA2.0/kl/cfgs_res50_dota2.0_kl_v5.py) |
+| [KF]() | [RetinaNet-H](https://arxiv.org/abs/1908.05612) | 70.64 | 62.71 | 48.04 | [Baidu Drive (o72o)](https://pan.baidu.com/s/1MD-N2XGZ10r2HxSJ8PikUQ) | H | Reg. (∆⍬) | **kf** | [-90,0) | [dota1.0,](./libs/configs/DOTA/kf/cfgs_res50_dota_kf_v3.py) [dota1.5,](./libs/configs/DOTA1.5/kf/cfgs_res50_dota1.5_kf_v3.py) [dota2.0](./libs/configs/DOTA2.0/kf/cfgs_res50_dota2.0_kf_v3.py) |
 | [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | [RetinaNet-H](https://arxiv.org/abs/1908.05612) | 70.66 | 62.91 | 48.43 | [Baidu Drive (n9mv)](https://pan.baidu.com/s/1mCKXkTgyBUzmEJz5sng0UA) | H->R | Reg. (∆⍬) | smooth L1 | [-90,0)  | [dota1.0,](./libs/configs/DOTA/r3det/cfgs_res50_dota_r3det_v1.py) [dota1.5,](./libs/configs/DOTA1.5/r3det/cfgs_res50_dota1.5_r3det_v1.py) [dota2.0](./libs/configs/DOTA2.0/r3det/cfgs_res50_dota2.0_r3det_v1.py) |
 | [DCL](https://arxiv.org/abs/2011.09670) | [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | 71.21 | 61.98 | 48.71 | [Baidu Drive (eg2s)](https://pan.baidu.com/s/18M0JJ-PBpauPzoImigweyw) | H->R | **Cls.: BCL (w=180/256)** | iou-smooth L1 | [-90,0)->[-90,90)  | [dota1.0,](./libs/configs/DOTA/r3det_dcl/cfgs_res50_dota_r3det_dcl_v1.py) [dota1.5,](./libs/configs/DOTA1.5/r3det_dcl/cfgs_res50_dota1.5_r3det_dcl_v2.py) [dota2.0](./libs/configs/DOTA2.0/r3det_dcl/cfgs_res50_dota2.0_r3det_dcl_v2.py) |
 | [GWD](https://arxiv.org/abs/2101.11952) | [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | 71.56 | 63.22 | 49.25 | [Baidu Drive (jb6e)](https://pan.baidu.com/s/1DmluE1rOs377bZQMT2Y0tg) | H->R | Reg. (∆⍬) | **smooth L1->gwd** | [-90,0)  | [dota1.0,](./libs/configs/DOTA/r3det_gwd/cfgs_res50_dota_r3det_gwd_v6.py) [dota1.5,](./libs/configs/DOTA1.5/r3det_gwd/cfgs_res50_1.5_dota_r3det_gwd_v6.py) [dota2.0](./libs/configs/DOTA2.0/r3det_gwd/cfgs_res50_2.0_dota_r3det_gwd_v6.py) |
+| [BCD]() | [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | 72.22 | 63.53 | 49.71 | [Baidu Drive (v60g)](https://pan.baidu.com/s/1zlwpt6ptCnzTsJzNJyQaHQ) | H->R | Reg. (∆⍬) | **bcd** | [-90,0)  | [dota1.0,](./libs/configs/DOTA/r3det_bcd/cfgs_res50_dota_r3det_bcd_v2.py) [dota1.5,](./libs/configs/DOTA1.5/r3det_bcd/cfgs_res50_dota1.5_r3det_bcd_v2.py) [dota2.0](./libs/configs/DOTA2.0/r3det_bcd/cfgs_res50_dota2.0_r3det_bcd_v2.py) |
 | [KLD](https://arxiv.org/abs/2106.01883) | [R<sup>3</sup>Det](https://arxiv.org/abs/1908.05612) | 71.73 | 65.18 | 50.90 | [Baidu Drive (tq7f)](https://pan.baidu.com/s/1ORscIxy4ccx_bj4knJk1qw) | H->R | Reg. (∆⍬) | **kld** | [-90,0)  | [dota1.0,](./libs/configs/DOTA/r3det_kl/cfgs_res50_dota_r3det_kl_v2.py) [dota1.5,](./libs/configs/DOTA1.5/r3det_kl/cfgs_res50_dota1.5_r3det_kl_v2.py) [dota2.0](./libs/configs/DOTA2.0/r3det_kl/cfgs_res50_dota2.0_r3det_kl_v2.py) |
 | - | [R<sup>2</sup>CNN (Faster-RCNN)](https://arxiv.org/abs/1706.09579) | 72.27 | 66.45 | 52.35 | [Baidu Drive (02s5)](https://pan.baidu.com/s/1tdIc2IUouVwrwUSIbNdvWg) | H->R | Reg. (∆⍬) | smooth L1 | [-90,0)  | [dota1.0,](./libs/configs/DOTA/r2cnn/cfgs_res50_dota_v1.py) [dota1.5](./libs/configs/DOTA1.5/r2cnn/cfgs_res50_dota1.5_r2cnn_v1.py) [dota2.0](./libs/configs/DOTA2.0/r2cnn/cfgs_res50_dota2.0_r2cnn_v1.py) |
+
+**SOTA**    
+
+| Method | Backbone  | DOTA1.0 | Model | MS | Data Augmentation | Epoch | Configs |
+|:-----------:|:-----------:|:----------:|:----------:|:----------:|:-----------:|:----------:|:-----------:|
+| R<sup>2</sup>CNN-BCD | ResNet152_v1d-FPN | 79.54 | [Baidu Drive (h2u1)](https://pan.baidu.com/s/1HFTUmXynTEaTGxmwFgpo2A) | √ | √ | 34 | [dota1.0](./libs/configs/DOTA/r2cnn_bcd/cfgs_res152_dota_r2cnn_bcd_v4.py) |
+| RetinaNet-BCD | ResNet152_v1d-FPN | 78.52 | [Baidu Drive (0puk)](https://pan.baidu.com/s/1Yn6xkNlJy-jtMXOY0VKdAA) |  √ | √ | 51 | [dota1.0](./libs/configs/DOTA/bcd/cfgs_res152_dota_bcd_v5.py) |
+| R<sup>3</sup>Det-BCD | ResNet50_v1d-FPN | 79.08 | [Baidu Drive (v60g)](https://pan.baidu.com/s/1zlwpt6ptCnzTsJzNJyQaHQ) | √ | √ | 51 | [dota1.0](./libs/configs/DOTA/r3det_bcd/cfgs_res50_dota_r3det_bcd_v6.py) |
+| R<sup>3</sup>Det-BCD | ResNet152_v1d-FPN | 79.95 | [Baidu Drive (v60g)](https://pan.baidu.com/s/1zlwpt6ptCnzTsJzNJyQaHQ) | √ | √ | 51 | [dota1.0](./libs/configs/DOTA/r3det_bcd/cfgs_res152_dota_r3det_bcd_v3.py) |
 
 **Note:**    
 - Single GPU training: [SAVE_WEIGHTS_INTE](./libs/configs/cfgs.py) = iter_epoch * 1 (DOTA1.0: iter_epoch=27000, DOTA1.5: iter_epoch=32000, DOTA2.0: iter_epoch=40000)
@@ -97,7 +111,7 @@ Base setting:
 ## Download Model
 ### Pretrain weights
 Download a pretrain weight you need from the following three options, and then put it to $PATH_ROOT/dataloader/pretrained_weights. 
-1. MxNet pretrain weights **(recommend in this repo, default in [NET_NAME](/Users/yangxue/Desktop/yangxue/code/RotationDetection/libs/configs/_base_/models/retinanet_r50_fpn.py))**: resnet_v1d, resnet_v1b, refer to [gluon2TF](./thirdparty/gluon2TF/README.md).    
+1. MxNet pretrain weights **(recommend in this repo, default in [NET_NAME](./libs/configs/_base_/models/retinanet_r50_fpn.py))**: resnet_v1d, resnet_v1b, refer to [gluon2TF](./thirdparty/gluon2TF/README.md).    
 * [Baidu Drive (5ht9)](https://pan.baidu.com/s/1GpqKg0dOaaWmwshvv1qWGg)          
 * [Google Drive](https://drive.google.com/drive/folders/1BM8ffn1WnsRRb5RcuAcyJAHX8NS2M1Gz?usp=sharing)  
 2. Tensorflow pretrain weights: [resnet50_v1](http://download.tensorflow.org/models/resnet_v1_50_2016_08_28.tar.gz), [resnet101_v1](http://download.tensorflow.org/models/resnet_v1_101_2016_08_28.tar.gz), [resnet152_v1](http://download.tensorflow.org/models/resnet_v1_152_2016_08_28.tar.gz), [efficientnet](https://github.com/tensorflow/tpu/tree/master/models/official/efficientnet), [mobilenet_v2](https://storage.googleapis.com/mobilenet_v2/checkpoints/mobilenet_v2_1.0_224.tgz), darknet53 ([Baidu Drive (1jg2)](https://pan.baidu.com/s/1p8V9aaivo9LNxa_OjXjUwA), [Google Drive](https://drive.google.com/drive/folders/1zyg1bvdmLxNRIXOflo_YmJjNJdpHX2lJ?usp=sharing)).      
@@ -167,12 +181,14 @@ Download a pretrain weight you need from the following three options, and then p
                         --gpus=0,1,2,3,4,5,6,7  
                         -ms (multi-scale testing, optional)
                         -s (visualization, optional)
+                        -cn (use cpu nms, slightly better <1% than gpu nms but slower, optional)
     
-    or (better than multi-scale testing)
+    or (recommend in this repo, better than multi-scale testing)
     
     python test_dota_sota.py --test_dir='/PATH/TO/IMAGES/'  
                              --gpus=0,1,2,3,4,5,6,7  
                              -s (visualization, optional)
+                             -cn (use cpu nms, slightly better <1% than gpu nms but slower, optional)
     ``` 
 
     **Notice: In order to set the breakpoint conveniently, the read and write mode of the file is' a+'. If the model of the same #VERSION needs to be tested again, the original test results need to be deleted.**

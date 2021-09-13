@@ -1,9 +1,9 @@
 import os
 
 
-filter_thres = 0.3
-version = 'RetinaNet_MLT_KL_1x_20210206'
-detector = 'kl'
+filter_thres = 0.25
+version = 'RetinaNet_MLT_BCD_1x_20210818'
+detector = 'bcd'
 res_files = os.listdir('../../../tools/{}/test_mlt/{}/mlt_res'.format(detector, version))
 filter_res_path = '../../../tools/{}/test_mlt/{}_{}/mlt_res'.format(detector, version, filter_thres)
 

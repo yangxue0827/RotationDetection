@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
+#         Jirui Yang <yangjirui123@gmail.com>
+#
+# License: Apache-2.0 license
+
 from __future__ import division, print_function, absolute_import
 import sys
 import xml.etree.cElementTree as ET
