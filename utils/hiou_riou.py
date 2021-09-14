@@ -3,6 +3,15 @@ import numpy as np
 
 
 def hiou(boxes_1, boxes_2):
+
+    """
+    Calculate the Axis-aligned IoU
+
+    :param boxes_1: horizontal bounding box1
+    :param boxes_2: horizontal bounding box2
+    :return: axis-aligned IoU
+    """
+
     xmin_1, ymin_1, xmax_1, ymax_1 = np.split(boxes_1, 4, axis=1)
 
     xmin_2, ymin_2, xmax_2, ymax_2 = boxes_2[:, 0], boxes_2[:, 1], boxes_2[:, 2], boxes_2[:, 3]
@@ -27,6 +36,14 @@ def hiou(boxes_1, boxes_2):
 
 
 def riou(boxes1, boxes2):
+    """
+    Calculate the Skew IoU
+
+    :param boxes_1: rotated bounding box1
+    :param boxes_2: rotated bounding box2
+    :return: Skew IoU
+    """
+
     ious = []
     if boxes1.shape[0] != 0:
         boxes1[:, 2] += 1.0

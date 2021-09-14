@@ -1,6 +1,8 @@
-.. autosummary::
-   :toctree: _autosummary
-   :template: module-template.rst
-   :recursive:
+API Reference
+=================
 
-   utils.hiou_riou
+utils
+--------------
+
+.. automodule:: utils.densely_coded_label
+    :members:

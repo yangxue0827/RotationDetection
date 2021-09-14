@@ -20,7 +20,7 @@ This repository is developed for the following purposes:
    guide/models
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: API Reference
 
-   api/_autosummary/utils.hiou_riou
+   api/src

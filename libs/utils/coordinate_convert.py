@@ -326,14 +326,12 @@ def sort_box_points(boxes, with_label=True):
         return np.array(out_boxes, dtype=np.float32)
 
 if __name__ == '__main__':
-    boxes = np.array([[70, 40, 80, 70, 10, 80, 0, 50],
-                      [10, 0, 30, 10, 20, 80, 0, 70],
-                      [40, 0, 80, 40, 40, 80, 0, 40],
-                      [60, 0, 80, 20, 20, 80, 0, 60],
-                      [20, 0, 80, 60, 60, 80, 0, 20],
-                      [0, 0, 80, 0, 80, 80, 0, 80]])
-    sorted_boxes = sort_box_points(boxes, False)
-    print(sorted_boxes)
+    boxes = np.array([[70, 40, 10, 70, -10]])
+    print(forward_convert(boxes, False))
+    boxes_tf = coordinate5_2_8_tf(tf.convert_to_tensor(boxes, dtype=tf.float32))
+    with tf.Session() as sess:
+        boxes_np = sess.run(boxes_tf)
+        print(boxes_np)
 
 
 
