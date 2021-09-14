@@ -49,7 +49,7 @@ The above-mentioned rotation detectors are all modified based on the following h
 
 ## Latest Performance
 
-More results and trained models are available in the [MODEL_ZOO.md](MODEL_ZOO.md).
+<!-- More results and trained models are available in the [MODEL_ZOO.md](MODEL_ZOO.md). -->
 
 ### DOTA (Task1)
 **Baseline**

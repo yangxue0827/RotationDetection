@@ -51,7 +51,8 @@ def quad2rbox_tf(boxes):
 if __name__ == "__main__":
     quad = np.array([[278, 418, 308, 331, 761, 581, 691, 668],
                      [758, 418, 348, 331, 241, 581, 591, 668],
-                     [624, 112, 490, 93, 496, 50, 630, 68]], np.float32)
+                     [624, 112, 490, 93, 496, 50, 630, 68],
+                     [10, 0, 30, 20, 20, 30, 0, 10]], np.float32)
     box = quad2rbox(quad)
     print(box)
     box_tf = quad2rbox_tf(quad)
