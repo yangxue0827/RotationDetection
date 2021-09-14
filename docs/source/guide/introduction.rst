@@ -15,7 +15,7 @@ Rotation detection techniques have been applied to the following applications:
 
   .. image:: ../images/text.png
 
-* face
+* Face
 
   .. image:: ../images/face.png
 
@@ -28,3 +28,8 @@ Rotation detection techniques have been applied to the following applications:
   .. image:: ../images/retail.png
 
 * and more...
+
+In this repository, we mainly focus on aerial images due to its challenging.
+
+Readers are referred to the following survey for more technical details about aerial image rotation detection: `DOTA-DOAI <https://github.com/SJTU-Thinklab-Det/DOTA-DOAI>`_
+
