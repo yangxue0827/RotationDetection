@@ -18,3 +18,9 @@ This repository is developed for the following purposes:
    guide/installation
    guide/experiment
    guide/models
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API Reference
+
+   api/_autosummary/tools.train_base

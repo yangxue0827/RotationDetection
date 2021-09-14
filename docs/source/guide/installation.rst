@@ -19,4 +19,5 @@ This repository is developed and tested with ubuntu 16.04, python 3.5 (anaconda 
 If docker is not available, we provide detailed steps to install the requirements by ``apt`` and ``pip``.
 
 .. note::
-    For 30xx series graphics cards (cuda11), we recommend this `blog <https://blog.csdn.net/qq_39543404/article/details/112171851>`_ to install tf1.xx
+    For 30xx series graphics cards (cuda11), we recommend this
+`blog <https://blog.csdn.net/qq_39543404/article/details/112171851>`_ to install tf1.xx
