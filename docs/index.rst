@@ -23,4 +23,4 @@ This repository is developed for the following purposes:
    :maxdepth: 2
    :caption: API Reference
 
-   api/api
+   api/_autosummary/utils.hiou_riou
