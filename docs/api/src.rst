@@ -3,4 +3,4 @@
    :template: module-template.rst
    :recursive:
 
-   utils.bcd
+   utils.hiou_riou
