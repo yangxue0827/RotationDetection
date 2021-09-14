@@ -3,4 +3,4 @@
    :template: module-template.rst
    :recursive:
 
-   src
+   tools
