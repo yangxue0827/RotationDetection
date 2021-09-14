@@ -2,6 +2,9 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+Documentation: [https://rotationdetection.readthedocs.io/](https://rotationdetection.readthedocs.io/)
+
+
 ## Abstract
 AlphaRotate is maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
 
