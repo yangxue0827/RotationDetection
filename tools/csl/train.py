@@ -115,12 +115,12 @@ class TrainCSL(Train):
 
                                         gt_smooth_label = tf.py_func(angle_smooth_label,
                                                                      inp=[gtboxes_and_label_r_[:, -2], cfgs.ANGLE_RANGE,
-                                                                          cfgs.LABEL_TYPE, cfgs.RADUIUS, cfgs.OMEGA],
+                                                                          cfgs.LABEL_TYPE, cfgs.RADIUS, cfgs.OMEGA],
                                                                      Tout=tf.float32)
                                     else:
                                         gt_smooth_label = tf.py_func(angle_smooth_label,
                                                                      inp=[gtboxes_and_label_r[:, -2], cfgs.ANGLE_RANGE,
-                                                                          cfgs.LABEL_TYPE, cfgs.RADUIUS, cfgs.OMEGA],
+                                                                          cfgs.LABEL_TYPE, cfgs.RADIUS, cfgs.OMEGA],
                                                                      Tout=tf.float32)
 
                                     img = inputs_list[i][0]

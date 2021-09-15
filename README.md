@@ -45,10 +45,10 @@ The above-mentioned rotation detectors are all modified based on the following h
 - RefineDet: [MxNet code](https://github.com/DetectionTeamUCAS/RefineDet_MxNet) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/RefineDet_MxNet?style=social" />
 - FCOS: [TF code](https://github.com/DetectionTeamUCAS/FCOS_Tensorflow) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/FCOS_Tensorflow?style=social" />, [MxNet code](https://github.com/DetectionTeamUCAS/FCOS_GluonCV) <img src="https://img.shields.io/github/stars/DetectionTeamUCAS/FCOS_GluonCV?style=social" />
 
-![3](demo.gif)
+![3](./images/demo.gif)
 
 ## Projects
-![0](projects.png)
+![0](./images/projects.png)
 
 ## Latest Performance
 
@@ -212,9 +212,9 @@ cd $PATH_ROOT/output/summary
 tensorboard --logdir=.
 ``` 
 
-![1](images.png)
+![1](./images/images.png)
 
-![2](scalars.png)
+![2](./images/scalars.png)
 
 ## Citation
 

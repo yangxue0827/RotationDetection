@@ -38,7 +38,7 @@ REG_LOSS_MODE = None
 
 # CSL
 LABEL_TYPE = 0  # {0: gaussian_label, 1: rectangular_label, 2: pulse_label, 3: triangle_label}
-RADUIUS = 1
+RADIUS = 1
 OMEGA = 10
 
 VERSION = 'RetinaNet_DOTA2.0_CSL_2x_20210429'
