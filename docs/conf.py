@@ -59,7 +59,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'AlphaRotate'
-copyright = '2021, AlphaRotate'
+copyright = '2021, Xue Yang'
 author = ' Xue Yang'
 
 # The version info for the project you're documenting, acts as replacement for

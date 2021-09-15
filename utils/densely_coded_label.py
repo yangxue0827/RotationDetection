@@ -18,7 +18,7 @@ def get_code_len(class_range, mode=0):
     Get encode length
 
     :param class_range: angle_range/omega
-    :param mode: 0 and 1 for binary and gray label
+    :param mode: 0: binary label, 1: gray label
     :return: encode length
     """
     if mode in [0, 1]:
@@ -170,6 +170,24 @@ def gray_label_decode(gray_label, angle_range, omega=1.):
 
 
 def angle_label_encode(angle_label, angle_range, omega=1., mode=0):
+
+    """
+    Encode angle label as binary/gray label
+
+    :param angle_label: angle label, range in [-90,0) or [-180, 0)
+    :param angle_range: 90 or 180
+    :param omega: angle discretization granularity
+    :param mode: 0: binary label, 1: gray label
+    :return: binary/gray label
+
+    **Dense Coded Label:**
+    Proposed by `"Xue Yang et al. Dense Label Encoding for Boundary Discontinuity Free Rotation Detection. CVPR 2021."
+    <https://openaccess.thecvf.com/content/CVPR2021/papers/Yang_Dense_Label_Encoding_for_Boundary_Discontinuity_Free_Rotation_Detection_CVPR_2021_paper.pdf>`_
+
+    .. image:: ../../images/dcl_1.png
+    .. image:: ../../images/dcl_2.png
+    """
+
     if mode == 0:
         angle_binary_label = binary_label_encode(angle_label, angle_range, omega=omega)
         return angle_binary_label
@@ -181,6 +199,17 @@ def angle_label_encode(angle_label, angle_range, omega=1., mode=0):
 
 
 def angle_label_decode(angle_encode_label, angle_range, omega=1., mode=0):
+
+    """
+    Decode binary/gray label back to angle label
+
+    :param angle_encode_label: binary/gray label
+    :param angle_label: angle label, range in [-90,0) or [-180, 0)
+    :param angle_range: 90 or 180
+    :param mode: 0: binary label, 1: gray label
+    :return: angle label
+
+    """
     if mode == 0:
         angle_label = binary_label_decode(angle_encode_label, angle_range, omega=omega)
     elif mode == 1:

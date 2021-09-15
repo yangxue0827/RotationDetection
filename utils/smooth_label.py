@@ -104,6 +104,8 @@ def angle_smooth_label(angle_label, angle_range=90, label_type=0, radius=4, omeg
     :return:
 
     **Circular Smooth Label:**
+    Proposed by `"Xue Yang et al. Arbitrary-Oriented Object Detection with Circular Smooth Label. ECCV 2020."
+    <https://link.springer.com/chapter/10.1007/978-3-030-58598-3_40>`_
 
     .. image:: ../../images/csl.jpg
     """
