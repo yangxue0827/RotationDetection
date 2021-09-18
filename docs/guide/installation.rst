@@ -3,9 +3,9 @@ Installation
 =============
 Docker
 -----------
-We recommend using docker images if docker_ or other container runtimes e.g. singularity_ is available on your devices.
+We recommend using docker images if `docker <https://www.docker.com/>`_ or other container runtimes e.g. `singularity <https://sylabs.io/singularity/>`_ is available on your devices.
 
-We maintain a prebuilt image at dockerhub_:
+We maintain a prebuilt image at `dockerhub <https://hub.docker.com/u/yangxue2docker>`_:
 ::
 
     yangxue2docker/yx-tf-det:tensorflow1.13.1-cuda10-gpu-py3
@@ -19,5 +19,4 @@ This repository is developed and tested with ubuntu 16.04, python 3.5 (anaconda 
 If docker is not available, we provide detailed steps to install the requirements by ``apt`` and ``pip``.
 
 .. note::
-    For 30xx series graphics cards (cuda11), we recommend this
-`blog <https://blog.csdn.net/qq_39543404/article/details/112171851>`_ to install tf1.xx
+    For 30xx series graphics cards (cuda11), we recommend this `blog <https://blog.csdn.net/qq_39543404/article/details/112171851>`_ to install tf1.xx

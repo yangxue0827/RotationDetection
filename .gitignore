@@ -136,8 +136,6 @@ __pycache__/
 *centernet*
 *tensorpack*
 *.DS_Store*
-*KL*
-*kl*
 *configs_v2*
 *README_v2.md*
 *arbitrary_shaped*
@@ -145,6 +143,7 @@ __pycache__/
 *kf*
 *gwd_norm*
 *bcd*
+*.DS_Store*
 
 tools/*/test_dota/*
 tools/*/test_hrsc/*
