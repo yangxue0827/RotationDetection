@@ -144,6 +144,7 @@ __pycache__/
 *gwd_norm*
 *bcd*
 *.DS_Store*
+libs/configs/cfgs.py
 
 tools/*/test_dota/*
 tools/*/test_hrsc/*

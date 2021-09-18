@@ -6,7 +6,7 @@ Documentation: [https://rotationdetection.readthedocs.io/](https://rotationdetec
 
 
 ## Abstract
-AlphaRotate is maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
+[AlphaRotate](https://yangxue0827.github.io/files/alpharotate_yx.pdf) is maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
 
 **Papers and codes related to remote sensing/aerial image detection: [DOTA-DOAI](https://github.com/SJTU-Thinklab-Det/DOTA-DOAI) <img src="https://img.shields.io/github/stars/SJTU-Thinklab-Det/DOTA-DOAI?style=social" />.**      
 
@@ -222,78 +222,11 @@ tensorboard --logdir=.
 If you find our code useful for your research, please consider cite.
 
 ```
-@article{yang2021learning,
-    title={Learning High-Precision Bounding Box for Rotated Object Detection via Kullback-Leibler Divergence},
-    author={Yang, Xue and Yang, Xiaojiang and Yang, Jirui and Ming, Qi and Wang, Wentao and Tian, Qi and Yan, Junchi},
-    journal={arXiv preprint arXiv:2106.01883},
-    year={2021}
-}
-
-@inproceedings{yang2021rethinking,
-    title={Rethinking Rotated Object Detection with Gaussian Wasserstein Distance Loss},
-    author={Yang, Xue and Yan, Junchi and Qi, Ming and Wang, Wentao and Xiaopeng, Zhang and Qi, Tian},
-    booktitle={International Conference on Machine Learning (ICML)},
-    year={2021}
-}
-
-@article{ming2021optimization,
-    title={Optimization for Oriented Object Detection via Representation Invariance Loss},
-    author={Ming, Qi and Zhou, Zhiqiang and Miao, Lingjuan and Yang, Xue and Dong, Yunpeng},
-    journal={arXiv preprint arXiv:2103.11636},
-    year={2021}
-}
-
-@inproceedings{yang2021dense,
-    title={Dense Label Encoding for Boundary Discontinuity Free Rotation Detection},
-    author={Yang, Xue and Hou, Liping and Zhou, Yue and Wang, Wentao and Yan, Junchi},
-    booktitle={Proceedings of the IEEE Computer Vision and Pattern Recognition (CVPR)},
-    month={June},
-    year={2021},
-    pages={15819-15829}
-}
-
-@inproceedings{yang2020arbitrary,
-    title={Arbitrary-oriented object detection with circular smooth label},
-    author={Yang, Xue and Yan, Junchi},
-    booktitle={European Conference on Computer Vision (ECCV)},
-    pages={677--694},
-    year={2020},
-    organization={Springer}
-}
-
-@inproceedings{yang2021r3det,
-    title={R3Det: Refined Single-Stage Detector with Feature Refinement for Rotating Object},
-    author={Yang, Xue and Yan, Junchi and Feng, Ziming and He, Tao},
-    booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
-    volume={35},
-    number={4},
-    pages={3163--3171},
-    year={2021}
-}
-
-@inproceedings{qian2021learning,
-    title={Learning Modulated Loss for Rotated Object Detection},
-    author={Qian, Wen and Yang, Xue and Peng, Silong and Yan, Junchi and Guo, Yue},
-    booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
-    volume={35},
-    number={3},
-    pages={2458--2466},
-    year={2021}
-}
-
-@article{yang2020scrdet++,
-    title={SCRDet++: Detecting Small, Cluttered and Rotated Objects via Instance-Level Feature Denoising and Rotation Loss Smoothing},
-    author={Yang, Xue and Yan, Junchi and Yang, Xiaokang and Tang, Jin and Liao, Wenglong and He, Tao},
-    journal={arXiv preprint arXiv:2004.13316},
-    year={2020}
-}
-
-@inproceedings{yang2019scrdet,
-    title={SCRDet: Towards more robust detection for small, cluttered and rotated objects},
-    author={Yang, Xue and Yang, Jirui and Yan, Junchi and Zhang, Yue and Zhang, Tengfei and Guo, Zhi and Sun, Xian and Fu, Kun},
-    booktitle={Proceedings of the IEEE International Conference on Computer Vision (ICCV)},
-    pages={8232--8241},
-    year={2019}
+@article{yang2021alpharotate,
+    author  = {Yang, Xue and Yan, Junchi},
+    title   = {AlphaRotate: A Rotation Detection Benchmark using TensorFlow},
+    year    = {2021},
+    url     = {https://github.com/yangxue0827/RotationDetection}
 }
 
 ```
