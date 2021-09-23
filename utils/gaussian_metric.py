@@ -8,14 +8,14 @@ import tensorflow as tf
 import numpy as np
 
 
-def wasserstein_distance_sigma(sigma1, sigma2):
+def wasserstein_distance_item2(sigma1, sigma2):
 
     """
-    :math: `\mathbf{Tr}\left(\mathbf{\Sigma}_{1}+\mathbf{\Sigma}_{2}-2(\mathbf{\Sigma}_{1}^{1/2}\mathbf{\Sigma}_{2}\mathbf{\Sigma}_{1}^{1/2})^{1/2}\right)`
+    Calculate the second term of wasserstein distance: :math:`Tr(\mathbf \Sigma_{1} + \mathbf \Sigma_{2} - 2(\mathbf \Sigma_{1}^{1/2}\mathbf \Sigma_{2}\mathbf \Sigma_{1}^{1/2})^{1/2})`
 
-    :param sigma1:
-    :param sigma2:
-    :return:
+    :param sigma1: covariance of boxes1, [-1, 2, 2]
+    :param sigma2: covariance of boxes2, [-1, 2, 2]
+    :return: the second term of wasserstein distance
     """
 
     wasserstein_diss_item2 = tf.linalg.matmul(sigma1, sigma1) + tf.linalg.matmul(sigma2, sigma2) - 2 * tf.linalg.sqrtm(
@@ -24,7 +24,16 @@ def wasserstein_distance_sigma(sigma1, sigma2):
     return wasserstein_diss_item2
 
 
-def gwd(boxes1, boxes2):
+def gaussian_wasserstein_distance(boxes1, boxes2):
+
+    """
+    Calculate the wasserstein distance between boxes1 and boxes2
+
+    :param boxes1: :math:`(x_{1},y_{1},w_{1},h_{1},\theta_{1})`, [-1, 5]
+    :param boxes2: :math:`(x_{2},y_{2},w_{2},h_{2},\theta_{2})`, [-1, 5]
+    :return: wasserstein distance, :math:`\mathbf D_{w} = ||\mathbf \mu_{1} - \mathbf \mu_{2}||^{2}_{2} + Tr(\mathbf \Sigma_{1} + \mathbf \Sigma_{2} - 2(\mathbf \Sigma_{1}^{1/2}\mathbf \Sigma_{2}\mathbf \Sigma_{1}^{1/2})^{1/2})`
+    """
+
     x1, y1, w1, h1, theta1 = tf.unstack(boxes1, axis=1)
     x2, y2, w2, h2, theta2 = tf.unstack(boxes2, axis=1)
     x1 = tf.reshape(x1, [-1, 1])
@@ -52,7 +61,7 @@ def gwd(boxes1, boxes2):
     sigma2_4 = w2 / 2 * tf.sin(theta2) ** 2 + h2 / 2 * tf.cos(theta2) ** 2
     sigma2 = tf.reshape(tf.concat([sigma2_1, sigma2_2, sigma2_3, sigma2_4], axis=-1), [-1, 2, 2])
 
-    wasserstein_diss_item1 = (x1 - x2) ** 2 + (y1 - y2) ** 2
-    wasserstein_diss_item2 = tf.reshape(wasserstein_distance_sigma(sigma1, sigma2), [-1, 1])
-    wasserstein_diss = wasserstein_diss_item1 + wasserstein_diss_item2
-    return sigma1, sigma2, wasserstein_diss
+    wasserstein_dis_item1 = (x1 - x2) ** 2 + (y1 - y2) ** 2
+    wasserstein_dis_item2 = tf.reshape(wasserstein_distance_item2(sigma1, sigma2), [-1, 1])
+    wasserstein_distance = wasserstein_dis_item1 + wasserstein_dis_item2
+    return sigma1, sigma2, wasserstein_distance

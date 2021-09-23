@@ -74,7 +74,7 @@ If image does not need to be cropped, just convert the annotation file into xml 
    python train.py
 
 Train and Evaluation
--------------------
+----------------------
 * For large-scale image, take DOTA dataset as a example (the output file or visualization is in ``$PATH_ROOT/tools/#DETECTOR/test_dota/VERSION``):
 ::
 
