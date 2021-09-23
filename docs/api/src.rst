@@ -13,3 +13,8 @@ smooth_label
 ^^^^^^^^^^^^^^^^^^^^^^
 .. automodule:: utils.smooth_label
     :members:
+
+gaussian_metric
+^^^^^^^^^^^^^^^^^^^^^^
+.. automodule:: utils.gaussian_metric
+    :members:

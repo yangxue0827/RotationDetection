@@ -143,8 +143,8 @@ __pycache__/
 *kf*
 *gwd_norm*
 *bcd*
+*double_head*
 *.DS_Store*
-libs/configs/cfgs.py
 
 tools/*/test_dota/*
 tools/*/test_hrsc/*
