@@ -106,7 +106,7 @@ class TestHRSC2016(object):
             pbar = tqdm(imgs)
             for a_img_name in pbar:
 
-                # if '1546' not in a_img_name:
+                # if '1545' not in a_img_name:
                 #     continue
 
                 a_img_name = a_img_name.split(image_ext)[0]

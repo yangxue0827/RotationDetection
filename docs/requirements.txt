@@ -6,7 +6,7 @@ pyyaml
 sphinx==4.1.1
 sphinx_rtd_theme==0.5.2
 tensorflow
-opencv-python==4.1.1.26
+opencv-python
 tqdm==4.54.0
 Shapely==1.7.1
 Cython

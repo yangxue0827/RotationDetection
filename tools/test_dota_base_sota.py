@@ -327,6 +327,19 @@ class TestDOTA(object):
                                                                            in_graph=False)
                 cv2.imwrite(draw_path, final_detections)
 
+                # pseudo label txt
+                # tools.makedirs(os.path.join(save_path, 'dota_test_txt'))
+                # txt_path = os.path.join(save_path, 'dota_test_txt', nake_name.split('.')[0]+'.txt')
+                # fw_txt = open(txt_path, 'w')
+                # for i, rbox in enumerate(res['boxes'][detected_indices]):
+                #     command = '%.1f %.1f %.1f %.1f %.1f %.1f %.1f %.1f %s 0\n'% (rbox[0], rbox[1], rbox[2], rbox[3],
+                #                                                                  rbox[4], rbox[5], rbox[6], rbox[7],
+                #                                                                  self.label_name_map[detected_categories[i]]
+                #                                                                  )
+                #     fw_txt.write(command)
+                # fw_txt.close()
+
+
             else:
                 CLASS_DOTA = self.name_label_map.keys()
                 write_handle = {}

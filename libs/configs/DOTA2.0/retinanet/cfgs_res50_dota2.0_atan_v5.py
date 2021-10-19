@@ -35,7 +35,7 @@ CLS_WEIGHT = 1.0
 REG_WEIGHT = 1.0 / 5.0
 REG_LOSS_MODE = None
 
-VERSION = 'RetinaNet_DOTA2.0_2x_20210813'
+VERSION = 'RetinaNet_DOTA2.0_1x_20210813'
 
 """
 RetinaNet-H + theta=atan(sin(theta)/cos(theta)) + 180, sin^2(theta) + cos^2(theta) = 1
@@ -43,30 +43,11 @@ RetinaNet-H + theta=atan(sin(theta)/cos(theta)) + 180, sin^2(theta) + cos^2(thet
 
 This is your evaluation result for task 1:
 
-    mAP: 0.43915134481218604
-    ap of each class:
-    plane:0.7452025314053422,
-    baseball-diamond:0.465345437959971,
-    bridge:0.37478072189595657,
-    ground-track-field:0.6131133292307437,
-    small-vehicle:0.3413886559945709,
-    large-vehicle:0.31453542492957676,
-    ship:0.4381808084156131,
-    tennis-court:0.759258101199081,
-    basketball-court:0.5461806480060146,
-    storage-tank:0.5176508913492636,
-    soccer-ball-field:0.3874204508627029,
-    roundabout:0.48870818927345167,
-    harbor:0.37433083038974285,
-    swimming-pool:0.5346951854402754,
-    helicopter:0.47274904931609435,
-    container-crane:0.09784493435719593,
-    airport:0.37623883629166993,
-    helipad:0.0571001803020811
-
+mAP: 0.4458437614121817
+ap of each class: plane:0.7402263224804869, baseball-diamond:0.49505805445369216, bridge:0.37282365114297317, ground-track-field:0.5952399740955576, small-vehicle:0.34390443732599546, large-vehicle:0.3338629984397782, ship:0.43972789183769895, tennis-court:0.7591685915175856, basketball-court:0.5549993068684814, storage-tank:0.5118234164554336, soccer-ball-field:0.40638376772093465, roundabout:0.4928485005968652, harbor:0.3388100093701085, swimming-pool:0.529949566929558, helicopter:0.5133102432120433, container-crane:0.09530877285979326, airport:0.38610577443831995, helipad:0.11563642567396436
 The submitted information is :
 
-Description: RetinaNet_DOTA2.0_2x_20210813_52w
+Description: RetinaNet_DOTA2.0_1x_20210813_52w_v1
 Username: sjtu-deter
 Institute: SJTU
 Emailadress: yangxue-2019-sjtu@sjtu.edu.cn

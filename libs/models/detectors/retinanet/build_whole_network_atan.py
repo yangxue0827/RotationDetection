@@ -79,14 +79,14 @@ class DetectionNetworkRetinaNet(DetectionNetworkBase):
             # [-90, 0]   sin in [-1, 0]   cos in [0, 1]
             rpn_angle_sin *= -1  # not work due to period mismatch (presumably)
 
-        rpn_angle_sin = rpn_angle_sin / tf.sqrt(tf.pow(rpn_angle_sin, 2) + tf.pow(rpn_angle_cos, 2))
-        rpn_angle_cos = rpn_angle_cos / tf.sqrt(tf.pow(rpn_angle_sin, 2) + tf.pow(rpn_angle_cos, 2))
+        rpn_angle_sin_ = rpn_angle_sin / tf.sqrt(tf.pow(rpn_angle_sin, 2) + tf.pow(rpn_angle_cos, 2))
+        rpn_angle_cos_ = rpn_angle_cos / tf.sqrt(tf.pow(rpn_angle_sin, 2) + tf.pow(rpn_angle_cos, 2))
 
         rpn_delta_boxes = tf.reshape(rpn_delta_boxes, [-1, 4], name='rpn_{}_regression_reshape'.format(level))
-        rpn_angle_sin = tf.reshape(rpn_angle_sin, [-1, 1], name='rpn_{}_sin_reshape'.format(level))
-        rpn_angle_cos = tf.reshape(rpn_angle_cos, [-1, 1], name='rpn_{}_cos_reshape'.format(level))
+        rpn_angle_sin_ = tf.reshape(rpn_angle_sin_, [-1, 1], name='rpn_{}_sin_reshape'.format(level))
+        rpn_angle_cos_ = tf.reshape(rpn_angle_cos_, [-1, 1], name='rpn_{}_cos_reshape'.format(level))
 
-        rpn_delta_boxes = tf.concat([rpn_delta_boxes, rpn_angle_sin, rpn_angle_cos], axis=-1)
+        rpn_delta_boxes = tf.concat([rpn_delta_boxes, rpn_angle_sin_, rpn_angle_cos_], axis=-1)
 
         return rpn_delta_boxes
 

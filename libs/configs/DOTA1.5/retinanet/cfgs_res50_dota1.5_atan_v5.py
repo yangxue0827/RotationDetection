@@ -40,35 +40,19 @@ VERSION = 'RetinaNet_DOTA1.5_1x_20210813'
 """
 RetinaNet-H + theta=atan(sin(theta)/cos(theta)) + 180, sin^2(theta) + cos^2(theta) = 1
 [-90, 90]   sin in [-1, 1]   cos in [0, 1]
+FLOPs: 486656046;    Trainable params: 33099726
 
 This is your evaluation result for task 1:
 
-    mAP: 0.571662845101055
-    ap of each class:
-    plane:0.785860352359881,
-    baseball-diamond:0.7487482192331396,
-    bridge:0.3855323501874327,
-    ground-track-field:0.647768350234277,
-    small-vehicle:0.40264427732383384,
-    large-vehicle:0.4520002488728411,
-    ship:0.6590035655147902,
-    tennis-court:0.8961089944878728,
-    basketball-court:0.7273552261544072,
-    storage-tank:0.6118851021052684,
-    soccer-ball-field:0.499722184305952,
-    roundabout:0.6747025379899058,
-    harbor:0.5287795104707887,
-    swimming-pool:0.6348622406841741,
-    helicopter:0.4609098155106093,
-    container-crane:0.03072254618170631
-
+mAP: 0.5720575264888819
+ap of each class: plane:0.7864624371144598, baseball-diamond:0.7756439330671105, bridge:0.393849654436808, ground-track-field:0.6186626832628273, small-vehicle:0.39361999419656213, large-vehicle:0.4092996574704831, ship:0.6423314379340461, tennis-court:0.8981020143807608, basketball-court:0.7325034724190221, storage-tank:0.6163836465326267, soccer-ball-field:0.47385185055681156, roundabout:0.6974853729014523, harbor:0.4512854606763586, swimming-pool:0.6451983907587344, helicopter:0.5270394842164826, container-crane:0.09120093389756312
 The submitted information is :
 
-Description: RetinaNet_DOTA1.5_1x_20210813_41.6w
-Username: SJTU-Det
-Institute: SJTU
-Emailadress: yangxue-2019-sjtu@sjtu.edu.cn
-TeamMembers: yangxue
+Description: RetinaNet_DOTA1.5_1x_20210813_45.6w
+Username: AICyber
+Institute: IECAS
+Emailadress: yangxue16@mails.ucas.ac.cn
+TeamMembers: Yang Xue; Yang Jirui
 """
 
 
