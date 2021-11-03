@@ -130,16 +130,16 @@ Download a pretrain weight you need from the following three options, and then p
 1. Please download trained models by this project, then put them to $PATH_ROOT/output/pretained_weights.
 
 ## Install
-You can simply install mmdetection with the following command:
-    ```  
-    pip install alpharotate
-    ```
+```shell
+pip install -r requirements.txt
+pip install -v -e .  # or "python setup.py develop"
+```
 
-or clone the repository and then install it:
-    ```  
-    pip install -r requirements.txt
-    pip -v -e .
-    ```
+Or, you can simply install AlphaRotate with the following commands:
+
+```shell
+pip install alpharotate
+```
 
 ## Train 
 
