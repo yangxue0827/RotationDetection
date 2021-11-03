@@ -15,8 +15,17 @@ We maintain a prebuilt image at `dockerhub <https://hub.docker.com/u/yangxue2doc
 
 Manual configuration
 --------------------------
-This repository is developed and tested with ubuntu 16.04, python 3.5 (anaconda recommend), tensorflow-gpu 1.13, cuda 10.0, opencv-python 4.1.1.26, tqdm 4.54.0, Shapely 1.7.1, tfplot 0.2.0 (optional).
-If docker is not available, we provide detailed steps to install the requirements by ``apt`` and ``pip``.
+If docker is not available, we provide detailed steps to install the requirements by ``pip``:
+::
+
+    pip install -r requirements.txt
+    pip install -v -e .  # or "python setup.py develop"
+
+Or, you can simply install AlphaRotate with the following commands:
+::
+
+    pip install alpharotate
+
 
 .. note::
     For 30xx series graphics cards (cuda11), we recommend this `blog <https://blog.csdn.net/qq_39543404/article/details/112171851>`_ to install tf1.xx

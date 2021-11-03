@@ -106,7 +106,6 @@ class EVAL(object):
 
     return objects
 
-
   def voc_ap(self, rec, prec, use_07_metric=False):
     """ ap = voc_ap(rec, prec, [use_07_metric])
     Compute VOC AP given precision and recall.

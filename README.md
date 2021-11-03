@@ -102,17 +102,23 @@ The above-mentioned rotation detectors are all modified based on the following h
 - Single GPU training: [SAVE_WEIGHTS_INTE](./libs/configs/cfgs.py) = iter_epoch * 1 (DOTA1.0: iter_epoch=27000, DOTA1.5: iter_epoch=32000, DOTA2.0: iter_epoch=40000)
 - Multi-GPU training (**better**): [SAVE_WEIGHTS_INTE](./libs/configs/cfgs.py) = iter_epoch * 2
 
-## My Development Environment
-**docker images: yangxue2docker/yx-tf-det:tensorflow1.13.1-cuda10-gpu-py3 or yangxue2docker/py3-tf1.15.2-nv-torch1.8.0-cuda11:v1.0**        
-1. python3.5 (anaconda recommend)               
-2. cuda 10.0                     
-3. opencv-python 4.1.1.26         
-4. [tfplot 0.2.0](https://github.com/wookayin/tensorflow-plot) (optional)            
-5. tensorflow-gpu 1.13
-6. tqdm 4.54.0
-7. Shapely 1.7.1
+## Installation
+### Manual configuration
+```shell
+pip install -r requirements.txt
+pip install -v -e .  # or "python setup.py develop"
+```
 
-**Note: For 30xx series graphics cards, I recommend this [blog](https://blog.csdn.net/qq_39543404/article/details/112171851) to install tf1.xx, or refer to [ngc](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow) and [tensorflow-release-notes](https://docs.nvidia.com/deeplearning/frameworks/tensorflow-release-notes/rel_20-11.html#rel_20-11) to download docker image according to your environment, or just use my docker image (yangxue2docker/py3-tf1.15.2-nv-torch1.8.0-cuda11:v1.0)**
+Or, you can simply install AlphaRotate with the following command:
+
+```shell
+pip install alpharotate
+```
+
+### Docker
+**docker images: yangxue2docker/yx-tf-det:tensorflow1.13.1-cuda10-gpu-py3**        
+
+**Note: For 30xx series graphics cards, I recommend this [blog](https://blog.csdn.net/qq_39543404/article/details/112171851) to install tf1.xx, or download image from [tensorflow-release-notes](https://docs.nvidia.com/deeplearning/frameworks/tensorflow-release-notes/rel_20-11.html#rel_20-11) according to your development environment, e.g. nvcr.io/nvidia/tensorflow:20.11-tf1-py3**
 
 ## Download Model
 ### Pretrain weights
@@ -128,18 +134,6 @@ Download a pretrain weight you need from the following three options, and then p
 
 ### Trained weights
 1. Please download trained models by this project, then put them to $PATH_ROOT/output/pretained_weights.
-
-## Install
-```shell
-pip install -r requirements.txt
-pip install -v -e .  # or "python setup.py develop"
-```
-
-Or, you can simply install AlphaRotate with the following commands:
-
-```shell
-pip install alpharotate
-```
 
 ## Train 
 
@@ -222,7 +216,7 @@ If you find our code useful for your research, please consider cite.
 
 ```
 @article{yang2021alpharotate,
-    author  = {Yang, Xue and Yan, Junchi},
+    author  = {Yang, Xue and Zhou, Yue and Yan, Junchi},
     title   = {AlphaRotate: A Rotation Detection Benchmark using TensorFlow},
     year    = {2021},
     url     = {https://github.com/yangxue0827/RotationDetection}
