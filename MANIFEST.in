@@ -1,0 +1,4 @@
+include alpharotate/libs/utils/*.hpp
+include alpharotate/libs/utils/*.cpp
+include alpharotate/libs/utils/cython_utils/*.c
+prune configs

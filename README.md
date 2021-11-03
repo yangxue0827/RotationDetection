@@ -129,19 +129,16 @@ Download a pretrain weight you need from the following three options, and then p
 ### Trained weights
 1. Please download trained models by this project, then put them to $PATH_ROOT/output/pretained_weights.
 
-## Compile
+## Install
+You can simply install mmdetection with the following command:
     ```  
-    cd $PATH_ROOT/libs/utils/cython_utils
-    rm *.so
-    rm *.c
-    rm *.cpp
-    python setup.py build_ext --inplace (or make)
-    
-    cd $PATH_ROOT/libs/utils/
-    rm *.so
-    rm *.c
-    rm *.cpp
-    python setup.py build_ext --inplace
+    pip install alpharotate
+    ```
+
+or clone the repository and then install it:
+    ```  
+    pip install -r requirements.txt
+    pip -v -e .
     ```
 
 ## Train 
