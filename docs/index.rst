@@ -1,5 +1,5 @@
 Welcome to AlphaRotate's documentation!
-===================================
+=========================================
 
 **AlphaRotate** is an open-source Tensorflow benchmark for performing scalable rotation detection on various datasets, which is maintained by `Xue Yang <https://yangxue0827.github.io/>`_ with Shanghai Jiao Tong University supervised by Prof. `Junchi Yan <http://thinklab.sjtu.edu.cn>`_.
 

@@ -1,9 +1,11 @@
 # AlphaRotate: A Rotation Detection Benchmark using TensorFlow
 
+[![Documentation Status](https://readthedocs.org/projects/alpharotate-tutorial/badge/?version=latest)](https://alpharotate-tutorial.readthedocs.io/en/latest/?badge=latest)
+[![PyPI](https://img.shields.io/pypi/v/alpharotate.svg)](https://pypi.python.org/pypi/alpharotate)
+<!-- [![Downloads](http://pepy.tech/badge/alpharotate)](http://pepy.tech/project/alpharotate) -->
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Documentation: [https://rotationdetection.readthedocs.io/](https://rotationdetection.readthedocs.io/)
-
+<!-- Documentation: [https://rotationdetection.readthedocs.io/](https://rotationdetection.readthedocs.io/) -->
 
 ## Abstract
 [AlphaRotate](https://yangxue0827.github.io/files/alpharotate_yx.pdf) is maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
