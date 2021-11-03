@@ -1,28 +1,26 @@
 # -*- coding:utf-8 -*-
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
 
+import math
 import os
 import sys
-import tensorflow as tf
-import time
+
 import cv2
-import pickle
 import numpy as np
-import math
-from tqdm import tqdm
+import tensorflow as tf
 from tensorflow.python.tools import freeze_graph
 
 sys.path.append("../../")
 
-from libs.models.detectors.gwd import build_whole_network_pb
-from libs.configs import cfgs
-from libs.utils.draw_box_in_img import DrawBox
-from libs.utils.nms_rotate import nms_rotate_cpu
-from libs.models.anchor_heads.generate_anchors import GenerateAnchors
-from utils import tools
+from alpharotate.libs.models.detectors.gwd import build_whole_network_pb
+from configs import cfgs
+from alpharotate.libs.utils.draw_box_in_img import DrawBox
+from alpharotate.libs.utils.nms_rotate import nms_rotate_cpu
+from alpharotate.libs.models.anchor_heads.generate_anchors import GenerateAnchors
+from alpharotate.utils import tools
 
 CKPT_PATH = '../../output/trained_weights/{}/HRSC2016_179999model.ckpt'.format(cfgs.VERSION)
 OUT_DIR = '../../output/Pbs'

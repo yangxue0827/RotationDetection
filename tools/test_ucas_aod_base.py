@@ -4,34 +4,33 @@
 # License: Apache-2.0 license
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
 
+import argparse
 import os
 import sys
-import tensorflow as tf
-import time
+
 import cv2
-import pickle
 import numpy as np
-import argparse
+import tensorflow as tf
 from tqdm import tqdm
+
 sys.path.append("../")
 
-from utils import tools
-from libs.label_name_dict.label_dict import LabelMap
-from libs.utils.draw_box_in_img import DrawBox
-from libs.utils.coordinate_convert import forward_convert, backward_convert
-from libs.utils import nms_rotate
-from libs.utils.rotate_polygon_nms import rotate_gpu_nms
-from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
+from alpharotate.utils import tools
+from alpharotate.libs.label_name_dict.label_dict import LabelMap
+from alpharotate.libs.utils.draw_box_in_img import DrawBox
+from alpharotate.libs.utils.coordinate_convert import forward_convert, backward_convert
+from alpharotate.libs.utils.rotate_polygon_nms import rotate_gpu_nms
+from alpharotate.utils.pretrain_zoo import PretrainModelZoo
 
 
 def parse_args():
     """
     Parse input arguments
     """
-    parser = argparse.ArgumentParser(description='Test HRSC2016')
+    parser = argparse.ArgumentParser(description='Test UCAS-AOD')
     parser.add_argument('--img_dir', dest='img_dir',
                         help='images path',
                         default='/data/dataset_share/UCAS-AOD/VOCdevkit_test/JPEGImages', type=str)

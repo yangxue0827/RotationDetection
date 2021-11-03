@@ -1,14 +1,15 @@
-import os
 import json
+import os
 import sys
-import numpy as np
-from xml.dom.minidom import Document
 import xml.dom.minidom
+from xml.dom.minidom import Document
+
+import numpy as np
 
 sys.path.append('../../..')
 
-from utils.tools import makedirs
-from libs.utils.coordinate_convert import backward_convert, forward_convert
+from alpharotate.utils import makedirs
+from alpharotate.libs.utils.coordinate_convert import backward_convert, forward_convert
 
 
 def make_xml(filename, path, box_list, labels, w, h, d):

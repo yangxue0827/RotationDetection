@@ -1,14 +1,15 @@
-import xml.etree.cElementTree as ET
-from xml.dom.minidom import Document
-import xml.dom.minidom
-import numpy as np
-import os
 import math
+import os
 import sys
+import xml.dom.minidom
+import xml.etree.cElementTree as ET
+
+import numpy as np
+
 sys.path.append('../../..')
 
-from libs.label_name_dict.label_dict import LabelMap
-from libs.configs import cfgs
+from alpharotate.libs.label_name_dict.label_dict import LabelMap
+from configs import cfgs
 
 
 def coordinate_convert_r(box):

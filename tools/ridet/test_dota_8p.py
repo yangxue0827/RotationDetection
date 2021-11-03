@@ -1,16 +1,17 @@
 # -*- coding:utf-8 -*-
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
 
 import os
 import sys
+
 sys.path.append("../../")
 
-from libs.models.detectors.ridet import build_whole_network_8p
+from alpharotate.libs.models.detectors.ridet import build_whole_network_8p
 from tools.test_dota_base_q import TestDOTA
-from libs.configs import cfgs
+from configs import cfgs
 
 
 class TestDOTARIDet(TestDOTA):

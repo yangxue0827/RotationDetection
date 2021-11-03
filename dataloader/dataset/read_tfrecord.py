@@ -5,16 +5,18 @@
 # License: Apache-2.0 license
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
 
-import tensorflow as tf
 import os
 import sys
+
+import tensorflow as tf
+
 sys.path.append('../../')
 
 from dataloader.dataset.image_augmentation import ImageAugmentation
-from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
+from alpharotate.utils.pretrain_zoo import PretrainModelZoo
 
 
 class ReadTFRecord(object):
@@ -105,12 +107,12 @@ class ReadTFRecord(object):
         valid_dataset= ['DOTA1.5', 'ICDAR2015', 'pascal', 'coco', 'bdd100k', 'DOTA', 'DOTA800', 'DOTA600', 'MLT',
                         'HRSC2016', 'UCAS-AOD', 'OHD-SJTU', 'OHD-SJTU-600', 'OHD-SJTU-ALL-600', 'DOTATrain', 'SSDD++',
                         'SKU110K-R', 'SKU110K', 'MSRA-TD500', 'DOTA2.0', 'DOTA_1024', 'DOTA1.0', 'Total_Text',
-                        'HRSID']
+                        'HRSID', 'DOTA_test', 'DIOR-R']
         if dataset_name not in valid_dataset:
             raise ValueError('dataSet name must be in {}'.format(valid_dataset))
 
         if is_training:
-            pattern = os.path.join('../../dataloader/tfrecord', dataset_name + ('_train*' if 'MLT' not in dataset_name else '_*'))
+            pattern = os.path.join('../../dataloader/tfrecord', dataset_name + ('_*train*' if 'MLT' not in dataset_name else '_*'))
         else:
             pattern = os.path.join('../../dataloader/tfrecord', dataset_name + '_test*')
 
@@ -136,7 +138,8 @@ class ReadTFRecord(object):
 
 if __name__ == '__main__':
     os.environ["CUDA_VISIBLE_DEVICES"] = '1'
-    from libs.configs import cfgs
+    from configs import cfgs
+
     reader = ReadTFRecord(cfgs)
     num_gpu = len(cfgs.GPU_GROUP.strip().split(','))
     img_name_batch, img_batch, gtboxes_and_label_batch, num_objects_batch, img_h_batch, img_w_batch = \

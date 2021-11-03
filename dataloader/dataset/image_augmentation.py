@@ -5,14 +5,14 @@
 # License: Apache-2.0 license
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
 
-import tensorflow as tf
 import cv2
 import numpy as np
+import tensorflow as tf
 
-from libs.label_name_dict.label_dict import LabelMap
+from alpharotate.libs.label_name_dict.label_dict import LabelMap
 
 
 class ImageAugmentation(object):

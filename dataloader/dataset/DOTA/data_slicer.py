@@ -1,13 +1,15 @@
-import os
-from xml.dom.minidom import Document
-import numpy as np
 import copy
-import cv2
+import os
 import sys
+from xml.dom.minidom import Document
+
+import cv2
+import numpy as np
+
 sys.path.append('../../..')
 
-from utils.tools import makedirs
-from libs.utils.coordinate_convert import backward_convert
+from alpharotate.utils import makedirs
+from alpharotate.libs.utils.coordinate_convert import backward_convert
 
 
 class_list = ['plane', 'baseball-diamond', 'bridge', 'ground-track-field',

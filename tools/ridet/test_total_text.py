@@ -1,24 +1,18 @@
 # -*- coding:utf-8 -*-
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
 
 import os
 import sys
-import tensorflow as tf
-import time
-import cv2
-import pickle
-import numpy as np
-import argparse
-from tqdm import tqdm
+
 sys.path.append("../../")
 
-from libs.models.detectors.ridet import build_whole_network_arbitrary_shaped
+from alpharotate.libs.models.detectors.ridet import build_whole_network_arbitrary_shaped
 from tools.test_total_text_base_arbitrary_shaped import TestTotalText
-from libs.configs import cfgs
-from libs.val_libs.voc_eval_r import EVAL
+from configs import cfgs
+from alpharotate.libs.val_libs.voc_eval_r import EVAL
 
 
 class TestTotalTextRIDet(TestTotalText):

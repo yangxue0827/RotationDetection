@@ -1,17 +1,17 @@
 # -*- coding:utf-8 -*-
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
+
+import os
+import sys
 
 import tensorflow as tf
-import tensorflow.contrib.slim as slim
 from tensorflow.python import pywrap_tensorflow
-import numpy as np
-import sys
-import os
+
 sys.path.append('../')
-from libs.configs import cfgs
+from configs import cfgs
 
 
 class SWA(object):
@@ -38,6 +38,9 @@ class SWA(object):
             model_reader = pywrap_tensorflow.NewCheckpointReader(wp)
             var_dict = model_reader.get_variable_to_shape_map()
             for key in var_dict:
+                # if 'global_step' in key:
+                #     average_weights[key] = model_reader.get_tensor(key)
+                #     continue
                 if key not in average_weights.keys():
                     average_weights[key] = model_reader.get_tensor(key)
                 else:

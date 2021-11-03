@@ -4,21 +4,23 @@
 # License: Apache-2.0 license
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
 
 import os
 import sys
+
+import numpy as np
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
-import numpy as np
+
 sys.path.append("../../")
 
 from tools.train_base import Train
-from libs.configs import cfgs
-from libs.models.detectors.kl import build_whole_network
-from libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
-from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
+from configs import cfgs
+from alpharotate.libs.models.detectors.kl import build_whole_network
+from alpharotate.libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
+from alpharotate.utils.pretrain_zoo import PretrainModelZoo
 
 os.environ["CUDA_VISIBLE_DEVICES"] = cfgs.GPU_GROUP
 
@@ -41,7 +43,7 @@ class TrainSWAKL(Train):
             global_step = slim.get_or_create_global_step()
 
             lr = self.warmup_and_cosine_lr(cfgs.LR, (global_step * num_gpu) % cfgs.SAVE_WEIGHTS_INTE,
-                                           cfgs.SAVE_WEIGHTS_INTE // 100, cfgs.SAVE_WEIGHTS_INTE, alpha=cfgs.LR/100.)
+                                           cfgs.SAVE_WEIGHTS_INTE // 100, cfgs.SAVE_WEIGHTS_INTE, alpha=cfgs.LR / 100.)
             tf.summary.scalar('lr', lr)
 
             optimizer = tf.train.MomentumOptimizer(lr, momentum=cfgs.MOMENTUM)

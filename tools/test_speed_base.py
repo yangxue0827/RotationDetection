@@ -4,19 +4,21 @@
 # License: Apache-2.0 license
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
 
+import argparse
 import os
 import sys
-import tensorflow as tf
+
 import cv2
-import argparse
+import tensorflow as tf
 from tqdm import tqdm
+
 sys.path.append("../")
 
-from libs.label_name_dict.label_dict import LabelMap
-from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
+from alpharotate.libs.label_name_dict.label_dict import LabelMap
+from alpharotate.utils.pretrain_zoo import PretrainModelZoo
 
 
 def parse_args():

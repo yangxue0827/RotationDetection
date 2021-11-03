@@ -4,27 +4,27 @@
 # License: Apache-2.0 license
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
 
-import os
-import sys
-import tensorflow as tf
-import cv2
-import numpy as np
-import math
-from tqdm import tqdm
 import argparse
+import math
+import os
 from multiprocessing import Queue, Process
 
-from utils import tools
-from libs.label_name_dict.label_dict import LabelMap
-from libs.utils.draw_box_in_img import DrawBox
-from libs.utils.coordinate_convert import forward_convert, backward_convert
-from libs.utils import nms_rotate
-from libs.utils.rotate_polygon_nms import rotate_gpu_nms
-from utils.order_points import sort_corners
-from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
+import cv2
+import numpy as np
+import tensorflow as tf
+from alpharotate.libs.utils.coordinate_convert import forward_convert, backward_convert
+from alpharotate.libs.utils.draw_box_in_img import DrawBox
+from alpharotate.libs.utils.rotate_polygon_nms import rotate_gpu_nms
+from tqdm import tqdm
+
+from alpharotate.libs.label_name_dict.label_dict import LabelMap
+from alpharotate.libs.utils import nms_rotate
+from alpharotate.utils.pretrain_zoo import PretrainModelZoo
+from alpharotate.utils.order_points import sort_corners
+from alpharotate.utils import tools
 
 
 def parse_args():

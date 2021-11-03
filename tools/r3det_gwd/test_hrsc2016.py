@@ -1,24 +1,18 @@
 # -*- coding:utf-8 -*-
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
 
 import os
 import sys
-import tensorflow as tf
-import time
-import cv2
-import pickle
-import numpy as np
-import argparse
-from tqdm import tqdm
+
 sys.path.append("../../")
 
-from libs.models.detectors.r3det_gwd import build_whole_network
+from alpharotate.libs.models.detectors.r3det_gwd import build_whole_network
 from tools.test_hrsc2016_base import TestHRSC2016
-from libs.configs import cfgs
-from libs.val_libs.voc_eval_r import EVAL
+from configs import cfgs
+from alpharotate.libs.val_libs.voc_eval_r import EVAL
 
 
 class TestHRSC2016R3DetGWD(TestHRSC2016):

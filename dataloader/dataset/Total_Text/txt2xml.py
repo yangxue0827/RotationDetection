@@ -11,7 +11,7 @@ import sys
 sys.path.append('../../..')
 
 
-from libs.utils.mask_sample import points_sampling
+from alpharotate.libs.utils.mask_sample import points_sampling
 
 
 def make_xml(filename, path, box_list, labels, w, h, d):

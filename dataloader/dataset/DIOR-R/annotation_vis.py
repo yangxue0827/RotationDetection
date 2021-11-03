@@ -1,12 +1,12 @@
-import cv2
-import os
-import numpy as np
-import json
 import glob
-import shutil
+import json
+import os
 
-from libs.utils.draw_box_in_img import DrawBox
-from libs.configs import cfgs
+import cv2
+import numpy as np
+
+from configs import cfgs
+from alpharotate.libs.utils.draw_box_in_img import DrawBox
 
 
 def load_label(json_dir):

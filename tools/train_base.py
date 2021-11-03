@@ -4,19 +4,21 @@
 # License: Apache-2.0 license
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
 
-import tensorflow as tf
 import os
 import sys
-import numpy as np
 import time
+
+import numpy as np
+import tensorflow as tf
+
 sys.path.append("../")
 
 from dataloader.dataset.read_tfrecord import ReadTFRecord
-from libs.utils.show_box_in_tensor import DrawBoxTensor
-from utils import tools
+from alpharotate.libs.utils.show_box_in_tensor import DrawBoxTensor
+from alpharotate.utils import tools
 
 
 class Train(object):

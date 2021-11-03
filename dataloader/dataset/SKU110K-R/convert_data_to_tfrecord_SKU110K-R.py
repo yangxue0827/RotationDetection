@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import division, print_function, absolute_import
+
+import json
+import math
+import os
 import sys
+
+import cv2
 import numpy as np
 import tensorflow as tf
-import math
-import cv2
-import os
-import json
 
 sys.path.append('../../../')
 
-from utils.tools import makedirs, view_bar
+from alpharotate.utils import makedirs, view_bar
 
 tf.app.flags.DEFINE_string('root_dir', '/data/dataset/SKU110K/', 'Voc dir')
 tf.app.flags.DEFINE_string('json_file', 'SKU110K-R-Json/sku110k-r_train.json', 'xml dir')

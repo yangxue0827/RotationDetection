@@ -10,14 +10,15 @@
     search for PATH_TO_BE_CONFIGURED to config the paths
     Note, the evaluation is on the large scale images
 """
+import sys
+
 import numpy as np
 import polyiou
-import sys
 
 sys.path.append('../..')
 
-from libs.configs import cfgs
-from libs.utils.coordinate_convert import backward_convert
+from configs import cfgs
+from alpharotate.libs.utils.coordinate_convert import backward_convert
 
 
 def parse_gt(filename):
@@ -253,7 +254,7 @@ def voc_eval(detpath,
                     gt_5p = backward_convert(np.reshape(BBGT[jmax], [-1, 8]), False)
 
                     angle_error = abs(bb_5p[0][-1]-gt_5p[0][-1]) % cfgs.ANGLE_RANGE
-                    ae += min(angle_error, abs(cfgs.ANGLE_RANGE-angle_error))
+                    ae += min(angle_error, abs(cfgs.ANGLE_RANGE - angle_error))
                     iou += polyiou.iou_poly(polyiou.VectorDouble(BBGT[jmax]), polyiou.VectorDouble(bb))
                     tp_num += 1
 

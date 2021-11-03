@@ -5,29 +5,31 @@
 # License: Apache-2.0 license
 
 from __future__ import division, print_function, absolute_import
+
+import glob
+import os
 import sys
 import xml.etree.cElementTree as ET
+
+import cv2
 import numpy as np
 import tensorflow as tf
-import glob
-import cv2
-import os
 from tqdm import tqdm
 
 sys.path.append('../../')
 
-from libs.label_name_dict.label_dict import LabelMap
-from utils.tools import makedirs, view_bar
-from libs.configs import cfgs
-from utils.order_points import re_order
+from alpharotate.libs.label_name_dict.label_dict import LabelMap
+from alpharotate.utils import makedirs
+from configs import cfgs
+from alpharotate.utils.order_points import re_order
 
-tf.app.flags.DEFINE_string('root_dir', '/data/dataset/DOTA2.0/crop/trainval/', 'root dir')
+tf.app.flags.DEFINE_string('root_dir', '/data/dataset_share/DOTA/DOTA1.0/test/', 'root dir')
 tf.app.flags.DEFINE_string('xml_dir', 'labeltxt', 'xml dir')
 tf.app.flags.DEFINE_string('image_dir', 'images', 'image dir')
 tf.app.flags.DEFINE_string('save_name', 'train', 'save name')
 tf.app.flags.DEFINE_string('save_dir', '../tfrecord/', 'save name')
 tf.app.flags.DEFINE_string('img_format', '.png', 'format of image')
-tf.app.flags.DEFINE_string('dataset', 'DOTA2.0', 'dataset')
+tf.app.flags.DEFINE_string('dataset', 'DOTA_test', 'dataset')
 FLAGS = tf.app.flags.FLAGS
 
 
@@ -83,7 +85,7 @@ def read_xml_gtbox_and_label(xml_path):
 
 def convert_pascal_to_tfrecord():
 
-    assert FLAGS.dataset == cfgs.DATASET_NAME, 'Keep the FLAGS.dataset == cfgs.DATASET_NAME.'
+    # assert FLAGS.dataset == cfgs.DATASET_NAME, 'Keep the FLAGS.dataset == cfgs.DATASET_NAME.'
 
     xml_path = os.path.join(FLAGS.root_dir, FLAGS.xml_dir)
     image_path = os.path.join(FLAGS.root_dir, FLAGS.image_dir)

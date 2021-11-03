@@ -1,16 +1,17 @@
 # -*- coding:utf-8 -*-
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
 
 import os
 import sys
+
 sys.path.append("../../")
 
-from libs.models.detectors.r3det import build_whole_network
+from alpharotate.libs.models.detectors.r3det import build_whole_network
 from tools.test_icdar2015_base import TestICDAR2015
-from libs.configs import cfgs
+from configs import cfgs
 
 
 class TestICDAR2015R3Det(TestICDAR2015):

@@ -10,13 +10,14 @@
     search for PATH_TO_BE_CONFIGURED to config the paths
     Note, the evaluation is on the large scale images
 """
+import sys
+
 import numpy as np
 import polyiou
-import sys
 
 sys.path.append('../..')
 
-from libs.configs import cfgs
+from configs import cfgs
 
 
 def parse_gt(filename):
@@ -246,6 +247,7 @@ def voc_eval(detpath,
                 if not R['det'][jmax]:
                     tp[d] = 1.
                     R['det'][jmax] = 1
+
                 else:
                     fp[d] = 1.
         else:
@@ -271,9 +273,9 @@ def voc_eval(detpath,
 
 def main():
 
-    detpath = r'../../tools/ridet/test_dota/%s/dota_res/Task1_{:s}.txt' % cfgs.VERSION
+    detpath = r'../../tools/retinanet/test_dota/%s/dota_res/Task1_{:s}.txt' % cfgs.VERSION
     # change the directory to the path of val/labelTxt, if you want to do evaluation on the valset
-    annopath = r'/data/yangxue/dataset/DOTA/val/labelTxt/labelTxt/{:s}.txt'
+    annopath = r'/data/dataset_share/DOTA/val/labelTxt/labelTxt/{:s}.txt'
     imagesetfile = r'../../dataloader/dataset/DOTA/val_set.txt'
 
     # For DOTA-v1.5
@@ -290,7 +292,7 @@ def main():
         print('iou threshold:', ovthresh)
         res['{}'.format(ovthresh)] = {}
         classaps = []
-        map = 0
+        map, mae = 0, 0
         for classname in classnames:
             print('classname:', classname)
             rec, prec, ap = voc_eval(detpath,
@@ -301,7 +303,7 @@ def main():
                                      use_07_metric=True)
             map += ap
             # print('rec: ', rec, 'prec: ', prec, 'ap: ', ap)
-            print('ap: ', ap)
+            print('ap: {}'.format(ap))
             classaps.append(ap)
             res['{}'.format(ovthresh)][classname] = ap
 

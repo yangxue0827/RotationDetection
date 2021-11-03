@@ -4,21 +4,23 @@
 # License: Apache-2.0 license
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
 
 import os
 import sys
+
+import numpy as np
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
-import numpy as np
+
 sys.path.append("../../")
 
 from tools.train_base import Train
-from libs.configs import cfgs
-from libs.models.detectors.retinanet import build_whole_network_batch
-from libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
-from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
+from configs import cfgs
+from alpharotate.libs.models.detectors.retinanet import build_whole_network_batch
+from alpharotate.libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
+from alpharotate.utils.pretrain_zoo import PretrainModelZoo
 os.environ["CUDA_VISIBLE_DEVICES"] = cfgs.GPU_GROUP
 
 
@@ -33,7 +35,7 @@ class TrainRetinaNet(Train):
 
             num_gpu = len(cfgs.GPU_GROUP.strip().split(','))
             global_step = slim.get_or_create_global_step()
-            lr = self.warmup_lr(cfgs.LR, global_step, cfgs.WARM_SETP, num_gpu*cfgs.BATCH_SIZE)
+            lr = self.warmup_lr(cfgs.LR, global_step, cfgs.WARM_SETP, num_gpu * cfgs.BATCH_SIZE)
             tf.summary.scalar('lr', lr)
 
             optimizer = tf.train.MomentumOptimizer(lr, momentum=cfgs.MOMENTUM)
@@ -157,7 +159,7 @@ class TrainRetinaNet(Train):
                             if cfgs.GRADIENT_CLIPPING_BY_NORM is not None:
                                 grads = slim.learning.clip_gradient_norms(grads, cfgs.GRADIENT_CLIPPING_BY_NORM)
                             tower_grads.append(grads)
-            self.log_printer(retinanet, optimizer, global_step, tower_grads, total_loss_dict, num_gpu*cfgs.BATCH_SIZE, graph)
+            self.log_printer(retinanet, optimizer, global_step, tower_grads, total_loss_dict, num_gpu * cfgs.BATCH_SIZE, graph)
 
 if __name__ == '__main__':
 

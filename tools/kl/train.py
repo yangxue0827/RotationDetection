@@ -4,21 +4,23 @@
 # License: Apache-2.0 license
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import division
+from __future__ import print_function
 
 import os
 import sys
+
+import numpy as np
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
-import numpy as np
+
 sys.path.append("../../")
 
 from tools.train_base import Train
-from libs.configs import cfgs
-from libs.models.detectors.kl import build_whole_network
-from libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
-from dataloader.pretrained_weights.pretrain_zoo import PretrainModelZoo
+from configs import cfgs
+from alpharotate.libs.models.detectors.kl import build_whole_network
+from alpharotate.libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
+from alpharotate.utils.pretrain_zoo import PretrainModelZoo
 
 os.environ["CUDA_VISIBLE_DEVICES"] = cfgs.GPU_GROUP
 
