@@ -20,7 +20,7 @@ from tools.train_base import Train
 from configs import cfgs
 from alpharotate.libs.models.detectors.csl import build_whole_network
 from alpharotate.libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
-from alpharotate.utils import angle_smooth_label
+from alpharotate.utils.smooth_label import angle_smooth_label
 from alpharotate.libs.utils.coordinate_convert import coordinate_present_convert
 from alpharotate.utils.pretrain_zoo import PretrainModelZoo
 

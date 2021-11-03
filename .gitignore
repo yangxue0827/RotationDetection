@@ -146,7 +146,6 @@ __pycache__/
 *double_head*
 *.DS_Store*
 *redet*
-*cfgs.py
 
 tools/*/test_dota/*
 tools/*/test_hrsc/*
