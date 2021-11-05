@@ -1,8 +1,8 @@
 API Reference
 =================
 
-utils
---------------
+alpharotate.utils
+------------------
 
 densely_coded_label
 ^^^^^^^^^^^^^^^^^^^^^^

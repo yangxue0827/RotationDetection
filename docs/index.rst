@@ -17,7 +17,6 @@ This repository is developed for the following purposes:
    guide/introduction
    guide/installation
    guide/experiment
-   guide/models
 
 .. toctree::
    :maxdepth: 3
