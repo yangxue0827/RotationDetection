@@ -19,7 +19,7 @@ from tqdm import tqdm
 sys.path.append('../../..')
 
 from alpharotate.libs.label_name_dict.label_dict import LabelMap
-from alpharotate.utils import makedirs
+from alpharotate.utils.tools import makedirs
 from configs import cfgs
 from alpharotate.utils.order_points import re_order
 

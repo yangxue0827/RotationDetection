@@ -12,7 +12,7 @@ import tensorflow as tf
 
 sys.path.append('../../../')
 
-from alpharotate.utils import makedirs, view_bar
+from alpharotate.utils.tools import makedirs, view_bar
 
 tf.app.flags.DEFINE_string('root_dir', '/data/dataset/SKU110K/', 'Voc dir')
 tf.app.flags.DEFINE_string('json_file', 'SKU110K-R-Json/sku110k-r_train.json', 'xml dir')

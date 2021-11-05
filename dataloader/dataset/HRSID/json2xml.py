@@ -8,7 +8,7 @@ import numpy as np
 
 sys.path.append('../../..')
 
-from alpharotate.utils import makedirs
+from alpharotate.utils.tools import makedirs
 from alpharotate.libs.utils.coordinate_convert import backward_convert, forward_convert
 
 
