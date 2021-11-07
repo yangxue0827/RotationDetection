@@ -47,7 +47,8 @@ REG_LOSS_MODE = None
 VERSION = 'RetinaNet_DIOR_R_2x_20211102'
 
 """
-RetinaNet-H + 180
+RetinaNet-H + 180 + theta=atan(sin(theta)/cos(theta)) + 180, sin^2(theta) + cos^2(theta) = 1
+[-90, 90]   sin in [-1, 1]   cos in [0, 1]
 FLOPs: 661108632;    Trainable params: 32574186
 
 cls : airplane|| Recall: 0.6255479785679493 || Precison: 0.34867304690151363|| AP: 0.5766508522761908

@@ -56,7 +56,7 @@ class LabelMap(object):
 
     def name2label(self):
 
-        if self.cfgs.DATASET_NAME == 'WIDER':
+        if self.cfgs.DATASET_NAME in ['WIDER', 'FDDB']:
             name_label_map = {
                 'back_ground': 0,
                 'face': 1

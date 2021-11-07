@@ -50,7 +50,7 @@ GWD_FUNC = tf.sqrt   # 0: sqrt  1: log
 VERSION = 'RetinaNet_DIOR_R_GWD_2x_20211025'
 
 """
-RetinaNet-H + bcd
+RetinaNet-H + gwd
 FLOPs: 844274473;    Trainable params: 32553441
 
 cls : trainstation|| Recall: 0.5579567779960707 || Precison: 0.05186267348429511|| AP: 0.3790245357146766

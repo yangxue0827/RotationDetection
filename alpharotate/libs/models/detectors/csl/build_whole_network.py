@@ -173,7 +173,7 @@ class DetectionNetworkCSL(DetectionNetworkBase):
             boxes_angle = tf.stop_gradient(boxes_angle)
 
         if self.is_training:
-            return boxes, scores, category, boxes, self.losses_dict
+            return boxes, scores, category, boxes_angle, self.losses_dict
         else:
             return boxes_angle, scores, category
 

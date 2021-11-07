@@ -107,7 +107,7 @@ class ReadTFRecord(object):
         valid_dataset= ['DOTA1.5', 'ICDAR2015', 'pascal', 'coco', 'bdd100k', 'DOTA', 'DOTA800', 'DOTA600', 'MLT',
                         'HRSC2016', 'UCAS-AOD', 'OHD-SJTU', 'OHD-SJTU-600', 'OHD-SJTU-ALL-600', 'DOTATrain', 'SSDD++',
                         'SKU110K-R', 'SKU110K', 'MSRA-TD500', 'DOTA2.0', 'DOTA_1024', 'DOTA1.0', 'Total_Text',
-                        'HRSID', 'DOTA_test', 'DIOR-R']
+                        'HRSID', 'DOTA_test', 'DIOR-R', 'FDDB']
         if dataset_name not in valid_dataset:
             raise ValueError('dataSet name must be in {}'.format(valid_dataset))
 

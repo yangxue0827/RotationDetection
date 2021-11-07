@@ -180,29 +180,35 @@ class ImageAugmentation(object):
         return img_tensor
 
     def rotate_img_np(self, img, gtboxes_and_label, r_theta):
-        h, w, c = img.shape
-        center = (w // 2, h // 2)
 
-        M = cv2.getRotationMatrix2D(center, r_theta, 1.0)
-        cos, sin = np.abs(M[0, 0]), np.abs(M[0, 1])
-        nW, nH = int(h*sin + w*cos), int(h*cos + w*sin)  # new W and new H
-        M[0, 2] += (nW/2) - center[0]
-        M[1, 2] += (nH/2) - center[1]
-        rotated_img = cv2.warpAffine(img, M, (nW, nH))
+        if self.cfgs.DATASET_NAME.startswith('DOTA') and (self.name2label['airport'] in gtboxes_and_label[:, -1] or self.name2label['storage-tank'] in gtboxes_and_label[:, -1] or self.name2label['roundabout'] in gtboxes_and_label[:, -1]):
+            return img, gtboxes_and_label
+        elif self.cfgs.DATASET_NAME.startswith('DIOR') and (self.name2label['chimney'] in gtboxes_and_label[:, -1] or self.name2label['windmill'] in gtboxes_and_label[:, -1] or self.name2label['storagetank'] in gtboxes_and_label[:, -1] or self.name2label['golffield'] in gtboxes_and_label[:, -1]):
+            return img, gtboxes_and_label
+        else:
+            h, w, c = img.shape
+            center = (w // 2, h // 2)
 
-        new_points_list = []
-        obj_num = len(gtboxes_and_label)
-        for st in range(0, 7, 2):
-            points = gtboxes_and_label[:, st:st+2]
-            expand_points = np.concatenate((points, np.ones(shape=(obj_num, 1))), axis=1)
-            new_points = np.dot(M, expand_points.T)
-            new_points = new_points.T
-            new_points_list.append(new_points)
-        gtboxes = np.concatenate(new_points_list, axis=1)
-        gtboxes_and_label = np.concatenate((gtboxes, gtboxes_and_label[:, -1].reshape(-1, 1)), axis=1)
-        gtboxes_and_label = np.asarray(gtboxes_and_label, dtype=np.int32)
+            M = cv2.getRotationMatrix2D(center, r_theta, 1.0)
+            cos, sin = np.abs(M[0, 0]), np.abs(M[0, 1])
+            nW, nH = int(h*sin + w*cos), int(h*cos + w*sin)  # new W and new H
+            M[0, 2] += (nW/2) - center[0]
+            M[1, 2] += (nH/2) - center[1]
+            rotated_img = cv2.warpAffine(img, M, (nW, nH))
 
-        return rotated_img, gtboxes_and_label
+            new_points_list = []
+            obj_num = len(gtboxes_and_label)
+            for st in range(0, 7, 2):
+                points = gtboxes_and_label[:, st:st+2]
+                expand_points = np.concatenate((points, np.ones(shape=(obj_num, 1))), axis=1)
+                new_points = np.dot(M, expand_points.T)
+                new_points = new_points.T
+                new_points_list.append(new_points)
+            gtboxes = np.concatenate(new_points_list, axis=1)
+            gtboxes_and_label = np.concatenate((gtboxes, gtboxes_and_label[:, -1].reshape(-1, 1)), axis=1)
+            gtboxes_and_label = np.asarray(gtboxes_and_label, dtype=np.int32)
+
+            return rotated_img, gtboxes_and_label
 
     def rotate_img(self, img_tensor, gtboxes_and_label):
 

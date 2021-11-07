@@ -1,13 +1,15 @@
 import math, os
 import shutil
-from dataloader.dataset.FDDB.txt2xml import WriterXMLFiles
 import numpy as np
 import cv2
 import random
 from PIL import Image
 import glob
 import sys
+sys.path.append('../../..')
 random.seed(2018)
+
+from dataloader.dataset.FDDB.txt2xml import WriterXMLFiles
 
 
 def convert_coord(coord):
@@ -171,10 +173,10 @@ def aug_data(image_dir,txt_dir,image_save_dir, xml_save_dir,n):
 
 
 if __name__ == '__main__':
-    image_dir = '/data/yangxue/dataset/FDDB/originalPics'
-    txt_dir = '/data/yangxue/dataset/FDDB/FDDB-folds'
-    image_save_dir = '/data/yangxue/dataset/FDDB/images'
-    xml_save_dir = '/data/yangxue/dataset/FDDB/xml'
+    image_dir = '/data/dataset_share/FDDB/originalPics'
+    txt_dir = '/data/dataset_share/FDDB/FDDB-folds'
+    image_save_dir = '/data/dataset_share/FDDB/images'
+    xml_save_dir = '/data/dataset_share/FDDB/xml'
     generateImageAndXml(image_dir, txt_dir, image_save_dir, xml_save_dir)
     # image_save_dir = '/data/yangxue/dataset/FDDB/images_aug'
     # xml_save_dir = '/data/yangxue/dataset/FDDB/xml_aug'

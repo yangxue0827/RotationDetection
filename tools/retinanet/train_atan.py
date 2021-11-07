@@ -17,7 +17,7 @@ import tensorflow.contrib.slim as slim
 sys.path.append("../../")
 
 from tools.train_base import Train
-from configs.import cfgs
+from configs import cfgs
 from alpharotate.libs.models.detectors.retinanet import build_whole_network_atan
 from alpharotate.libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
 from alpharotate.utils.pretrain_zoo import PretrainModelZoo
