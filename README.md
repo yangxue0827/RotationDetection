@@ -1,6 +1,6 @@
 # AlphaRotate: A Rotation Detection Benchmark using TensorFlow
 
-[![Documentation Status](https://readthedocs.org/projects/alpharotate-tutorial/badge/?version=latest)](https://alpharotate-tutorial.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/rotationdetection/badge/?version=latest)](https://rotationdetection.readthedocs.io/en/latest/?badge=latest)
 [![PyPI](https://badge.fury.io/py/alpharotate.svg)](https://badge.fury.io/py/alpharotate)
 [![Downloads](https://pepy.tech/badge/alpharotate)](https://pepy.tech/project/alpharotate)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
