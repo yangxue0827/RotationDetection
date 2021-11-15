@@ -50,6 +50,9 @@ LABEL_TYPE = 0  # {0: gaussian_label, 1: rectangular_label, 2: pulse_label, 3: t
 RADIUS = 1
 OMEGA = 10
 
+# eval
+USE_07_METRIC = False
+
 VERSION = 'RetinaNet_FDDB_CSL_2x_20211106'
 
 """

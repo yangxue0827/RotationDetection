@@ -112,7 +112,7 @@ class ReadTFRecord(object):
             raise ValueError('dataSet name must be in {}'.format(valid_dataset))
 
         if is_training:
-            pattern = os.path.join('../../dataloader/tfrecord', dataset_name + ('_*train*' if 'MLT' not in dataset_name else '_*'))
+            pattern = os.path.join('../../dataloader/tfrecord', dataset_name + ('_train*' if 'MLT' not in dataset_name else '_*'))
         else:
             pattern = os.path.join('../../dataloader/tfrecord', dataset_name + '_test*')
 

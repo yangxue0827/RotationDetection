@@ -48,6 +48,9 @@ ANGLE_WEIGHT = 0.5
 OMEGA = 180 / 64.
 ANGLE_MODE = 0  # {0: BCL, 1: GCL}
 
+# eval
+USE_07_METRIC = False
+
 VERSION = 'RetinaNet_FDDB_DCL_B_2x_20211107'
 
 """
