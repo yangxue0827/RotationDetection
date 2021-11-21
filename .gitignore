@@ -146,6 +146,7 @@ __pycache__/
 *double_head*
 *.DS_Store*
 *redet*
+*ssdd*
 
 tools/*/test_dota/*
 tools/*/test_hrsc/*
@@ -154,5 +155,6 @@ tools/*/test_ucas_aod/*
 tools/*/test_icdar2015/*
 tools/*/test_masra_td500/*
 tools/*/test_ohd_sjtu/*
+tools/*/test_fddb/*
 output/summary/*
 dataloader/tfrecord/*

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
+# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>, <yangxue0827@126.com>
 #         Jirui Yang <yangjirui123@gmail.com>
-#
 # License: Apache-2.0 license
+# Copyright (c) SJTU. ALL rights reserved.
 
 from __future__ import division, print_function, absolute_import
 
@@ -23,13 +23,13 @@ from alpharotate.utils.tools import makedirs
 from configs import cfgs
 from alpharotate.utils.order_points import re_order
 
-tf.app.flags.DEFINE_string('root_dir', '/data/dataset_share/FDDB/trainval', 'root dir')
-tf.app.flags.DEFINE_string('xml_dir', 'xml', 'xml dir')
-tf.app.flags.DEFINE_string('image_dir', 'images', 'image dir')
+tf.app.flags.DEFINE_string('root_dir', '/data/dataset_share/SSDD++/train/', 'root dir')
+tf.app.flags.DEFINE_string('xml_dir', 'Annotations', 'xml dir')
+tf.app.flags.DEFINE_string('image_dir', 'JPEGImages', 'image dir')
 tf.app.flags.DEFINE_string('save_name', 'train', 'save name')
 tf.app.flags.DEFINE_string('save_dir', '../tfrecord/', 'save name')
 tf.app.flags.DEFINE_string('img_format', '.jpg', 'format of image')
-tf.app.flags.DEFINE_string('dataset', 'FDDB', 'dataset')
+tf.app.flags.DEFINE_string('dataset', 'SSDD++', 'dataset')
 FLAGS = tf.app.flags.FLAGS
 
 
@@ -70,7 +70,7 @@ def read_xml_gtbox_and_label(xml_path):
             for child_item in child_of_root:
                 if child_item.tag == 'name':
                     label = label_map.name2label()[child_item.text]
-                if child_item.tag == 'bndbox':
+                if child_item.tag in ['bndbox', 'polygon', 'robndbox']:
                     tmp_box = []
                     for node in child_item:
                         tmp_box.append(float(node.text))

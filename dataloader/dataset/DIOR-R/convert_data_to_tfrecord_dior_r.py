@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
+# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>, <yangxue0827@126.com>
 #         Jirui Yang <yangjirui123@gmail.com>
-#
 # License: Apache-2.0 license
+# Copyright (c) SJTU. ALL Rights Reserved.
 
 from __future__ import division, print_function, absolute_import
 

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # Author:  Wen Qian <qianwen2018@ia.ac.cn>
-#          Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
-#
+#          Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>, <yangxue0827@126.com>
 # License: Apache-2.0 license
+# Copyright (c) SJTU. ALL Rights Reserved.
 
 from __future__ import absolute_import
 from __future__ import division

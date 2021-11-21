@@ -88,7 +88,7 @@ class EVAL(object):
       # obj_struct['difficult'] = int(obj.find('difficult').text)
       obj_struct['difficult'] = 0
       if self.cfgs.DATASET_NAME not in ['DIOR-R']:
-        bbox = obj.find('bndbox')
+        bbox = obj.find('bndbox') if self.cfgs.DATASET_NAME != 'SSDD++' else obj.find('polygon')
         rbox = [eval(bbox.find('x1').text), eval(bbox.find('y1').text),
                 eval(bbox.find('x2').text), eval(bbox.find('y2').text),
                 eval(bbox.find('x3').text), eval(bbox.find('y3').text),

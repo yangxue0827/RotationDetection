@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
-# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
-#
+# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>, <yangxue0827@126.com>
 # License: Apache-2.0 license
+# Copyright (c) SJTU. ALL rights reserved.
 
 from __future__ import absolute_import
 from __future__ import division
@@ -187,7 +187,7 @@ class Train(object):
         summary_op = tf.summary.merge_all()
 
         restorer, restore_ckpt = deter.get_restorer()
-        saver = tf.train.Saver(max_to_keep=15)
+        saver = tf.train.Saver(max_to_keep=2)
 
         init_op = tf.group(
             tf.global_variables_initializer(),

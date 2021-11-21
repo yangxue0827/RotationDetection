@@ -8,7 +8,7 @@
 <!-- Documentation: [https://rotationdetection.readthedocs.io/](https://rotationdetection.readthedocs.io/) -->
 
 ## Abstract
-[AlphaRotate](https://yangxue0827.github.io/files/alpharotate_yx.pdf) is maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
+[AlphaRotate](https://yangxue0827.github.io/files/alpharotate_yx.pdf) is mainly maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
 
 **Papers and codes related to remote sensing/aerial image detection: [DOTA-DOAI](https://github.com/SJTU-Thinklab-Det/DOTA-DOAI) <img src="https://img.shields.io/github/stars/SJTU-Thinklab-Det/DOTA-DOAI?style=social" />.**      
 

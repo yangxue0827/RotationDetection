@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
-# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
-#
+# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>, <yangxue0827@126.com>
 # License: Apache-2.0 license
+# Copyright (c) SJTU. ALL Rights Reserved.
 
 from __future__ import absolute_import
 from __future__ import division
@@ -106,7 +106,7 @@ class TestFDDB(object):
             pbar = tqdm(imgs)
             for a_img_name in pbar:
 
-                # if '1545' not in a_img_name:
+                # if 'P2170' not in a_img_name:
                 #     continue
 
                 a_img_name = a_img_name.split(image_ext)[0]

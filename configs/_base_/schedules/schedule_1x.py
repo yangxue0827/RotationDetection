@@ -6,7 +6,7 @@ GPU_GROUP = "0,1,2,3"
 
 # log print
 SHOW_TRAIN_INFO_INTE = 20
-SMRY_ITER = 200
+SMRY_ITER = 1000
 ADD_BOX_IN_TENSORBOARD = True
 
 # learning policy

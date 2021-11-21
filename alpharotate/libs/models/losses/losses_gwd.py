@@ -1,9 +1,9 @@
 # --------------------------------------------------------
 # gwd tensorflow version
 
-# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>
-#
+# Author: Xue Yang <yangxue-2019-sjtu@sjtu.edu.cn>, <yangxue0827@126.com>
 # License: Apache-2.0 license
+# Copyright (c) SJTU. ALL Rights Reserved.
 # --------------------------------------------------------
 
 # -*- coding: utf-8 -*-
