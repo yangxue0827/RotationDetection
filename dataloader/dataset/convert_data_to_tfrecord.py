@@ -23,13 +23,13 @@ from alpharotate.utils.tools import makedirs
 from configs import cfgs
 from alpharotate.utils.order_points import re_order
 
-tf.app.flags.DEFINE_string('root_dir', '/data/dataset_share/SSDD++/train/', 'root dir')
-tf.app.flags.DEFINE_string('xml_dir', 'Annotations', 'xml dir')
-tf.app.flags.DEFINE_string('image_dir', 'JPEGImages', 'image dir')
+tf.app.flags.DEFINE_string('root_dir', '/data/dataset/DOTA/crop/trainval/', 'root dir')
+tf.app.flags.DEFINE_string('xml_dir', 'labeltxt', 'xml dir')
+tf.app.flags.DEFINE_string('image_dir', 'images', 'image dir')
 tf.app.flags.DEFINE_string('save_name', 'train', 'save name')
 tf.app.flags.DEFINE_string('save_dir', '../tfrecord/', 'save name')
-tf.app.flags.DEFINE_string('img_format', '.jpg', 'format of image')
-tf.app.flags.DEFINE_string('dataset', 'SSDD++', 'dataset')
+tf.app.flags.DEFINE_string('img_format', '.png', 'format of image')
+tf.app.flags.DEFINE_string('dataset', 'DOTA', 'dataset')
 FLAGS = tf.app.flags.FLAGS
 
 
