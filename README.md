@@ -7,7 +7,7 @@
 
 <!-- Documentation: [https://rotationdetection.readthedocs.io/](https://rotationdetection.readthedocs.io/) -->
 
-**MMdetection version is on the way, stay tuned.**
+**News:** MMdetection version is on the way, stay tuned.
 
 ## Abstract
 [AlphaRotate](https://yangxue0827.github.io/files/alpharotate_yx.pdf) is mainly maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
