@@ -4,10 +4,12 @@
 [![PyPI](https://badge.fury.io/py/alpharotate.svg)](https://badge.fury.io/py/alpharotate)
 [![Downloads](https://pepy.tech/badge/alpharotate)](https://pepy.tech/project/alpharotate)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/yangxue0827/RotationDetection.svg)](https://github.com/yangxue0827/RotationDetection/issues)
+[![Percentage of issues still open](https://isitmaintained.com/badge/open/yangxue0827/RotationDetection.svg)](https://github.com/yangxue0827/RotationDetection/issues)
 
 <!-- Documentation: [https://rotationdetection.readthedocs.io/](https://rotationdetection.readthedocs.io/) -->
 
-:rocket::rocket::rocket:	**News:** MMdetection version is on the way, stay tuned.:rocket::rocket::rocket:
+:rocket::rocket::rocket:	**News:** MMDetection version is on the way, stay tuned.:rocket::rocket::rocket:
 
 ## Abstract
 [AlphaRotate](https://yangxue0827.github.io/files/alpharotate_yx.pdf) is mainly maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
