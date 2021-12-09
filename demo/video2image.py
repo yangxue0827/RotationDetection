@@ -9,8 +9,8 @@ output_dir = './images/'
 for filename in os.listdir(input_dir):
     output_path = output_dir+filename
 
-    if '5542' in filename:
-        continue
+    # if '5542' in filename:
+    #     continue
 
     if not osp.exists(output_path):
         os.makedirs(output_path)
