@@ -109,7 +109,7 @@ The above-mentioned rotation detectors are all modified based on the following h
 - Multi-GPU training (**better**): [SAVE_WEIGHTS_INTE](./libs/configs/cfgs.py) = iter_epoch * 2
 
 ## Installation
-### Manual configuration
+### Manual configuration (cuda version < 11)
 ```shell
 pip install -r requirements.txt
 pip install -v -e .  # or "python setup.py develop"
@@ -121,10 +121,24 @@ Or, you can simply install AlphaRotate with the following command:
 pip install alpharotate
 ```
 
-### Docker
+### Docker (cuda version < 11)
 **docker images: yangxue2docker/yx-tf-det:tensorflow1.13.1-cuda10-gpu-py3**        
 
-**Note: For 30xx series graphics cards, I recommend this [blog](https://blog.csdn.net/qq_39543404/article/details/112171851) to install tf1.xx, or download image from [tensorflow-release-notes](https://docs.nvidia.com/deeplearning/frameworks/tensorflow-release-notes/rel_20-11.html#rel_20-11) according to your development environment, e.g. nvcr.io/nvidia/tensorflow:20.11-tf1-py3**
+**Note: For 30xx series graphics cards (cuda version >= 11), I recommend this [blog](https://blog.csdn.net/qq_39543404/article/details/112171851) to install tf1.xx, or download image from [tensorflow-release-notes](https://docs.nvidia.com/deeplearning/frameworks/tensorflow-release-notes/rel_20-11.html#rel_20-11) according to your development environment, e.g. nvcr.io/nvidia/tensorflow:20.11-tf1-py3**
+
+```shell
+cd alpharotate/libs/utils/cython_utils
+rm *.so
+rm *.c
+rm *.cpp
+python setup.py build_ext --inplace (or make)
+
+cd alpharotate/libs/utils/
+rm *.so
+rm *.c
+rm *.cpp
+python setup.py build_ext --inplace
+```
 
 ## Download Model
 ### Pretrain weights
