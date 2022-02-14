@@ -17,6 +17,7 @@ from alpharotate.libs.utils.draw_box_in_img import DrawBox
 from alpharotate.libs.utils.rotate_polygon_nms import rotate_gpu_nms
 from tqdm import tqdm
 
+from alpharotate.libs.utils import nms_rotate
 from alpharotate.libs.label_name_dict.label_dict import LabelMap
 from alpharotate.utils.pretrain_zoo import PretrainModelZoo
 from alpharotate.utils import tools
@@ -40,6 +41,8 @@ def parse_args():
     parser.add_argument('--num_imgs', dest='num_imgs',
                         help='test image number',
                         default=np.inf, type=int)
+    parser.add_argument('--cpu_nms', '-cn', default=False,
+                        action='store_true')
     parser.add_argument('--h_len', dest='h_len',
                         help='image height',
                         default=1200, type=int)
@@ -219,43 +222,63 @@ class TestDOTA(object):
                 label_res_rotate_ = []
                 score_res_rotate_ = []
                 threshold = {'roundabout': 0.1, 'tennis-court': 0.3, 'swimming-pool': 0.1, 'storage-tank': 0.2,
-                             'soccer-ball-field': 0.3, 'small-vehicle': 0.2, 'ship': 0.2, 'plane': 0.3,
-                             'large-vehicle': 0.1, 'helicopter': 0.2, 'harbor': 0.0001, 'ground-track-field': 0.3,
+                             'soccer-ball-field': 0.3, 'small-vehicle': 0.05, 'ship': 0.2, 'plane': 0.3,
+                             'large-vehicle': 0.05, 'helicopter': 0.2, 'harbor': 0.0001, 'ground-track-field': 0.3,
                              'bridge': 0.0001, 'basketball-court': 0.3, 'baseball-diamond': 0.3,
                              'container-crane': 0.05, 'airport': 0.1, 'helipad': 0.1}
 
-                for sub_class in range(1, self.cfgs.CLASS_NUM + 1):
-                    if self.label_name_map[sub_class] not in ['small-vehicle']:
-                        continue
-                    index = np.where(label_res_rotate == sub_class)[0]
-                    if len(index) == 0:
-                        continue
-                    tmp_boxes_r = box_res_rotate[index]
-                    tmp_label_r = label_res_rotate[index]
-                    tmp_score_r = score_res_rotate[index]
+                # for sub_class in range(1, self.cfgs.CLASS_NUM + 1):
+                #     if self.label_name_map[sub_class] not in ['small-vehicle', 'large-vehicle']:
+                #         continue
+                #     index = np.where(label_res_rotate == sub_class)[0]
+                #     if len(index) == 0:
+                #         continue
+                #     tmp_boxes_r = box_res_rotate[index]
+                #     tmp_label_r = label_res_rotate[index]
+                #     tmp_score_r = score_res_rotate[index]
+                #
+                #     tmp_boxes_r_ = backward_convert(tmp_boxes_r, False)
+                index1 = np.where(label_res_rotate == self.name_label_map['small-vehicle'])[0]
+                index2 = np.where(label_res_rotate == self.name_label_map['large-vehicle'])[0]
 
-                    tmp_boxes_r_ = backward_convert(tmp_boxes_r, False)
+                tmp_boxes_r = np.concatenate([box_res_rotate[index1], box_res_rotate[index2]], axis=0)
+                tmp_label_r = np.concatenate([label_res_rotate[index1], label_res_rotate[index2]], axis=0)
+                tmp_score_r = np.concatenate([score_res_rotate[index1], score_res_rotate[index2]], axis=0)
 
-                    # try:
-                    #     inx = nms_rotate.nms_rotate_cpu(boxes=np.array(tmp_boxes_r_),
-                    #                                     scores=np.array(tmp_score_r),
-                    #                                     iou_threshold=threshold[self.label_name_map[sub_class]],
-                    #                                     max_output_size=5000)
-                    #
-                    # except:
+                tmp_boxes_r_ = backward_convert(tmp_boxes_r, False)
+
+                # cpu nms better than gpu nms (default)
+                if self.args.cpu_nms:
+                    try:
+                        inx = nms_rotate.nms_rotate_cpu(boxes=np.array(tmp_boxes_r_),
+                                                        scores=np.array(tmp_score_r),
+                                                        iou_threshold=0.05,
+                                                        max_output_size=5000)
+
+                    except:
+                        tmp_boxes_r_ = np.array(tmp_boxes_r_)
+                        tmp = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
+                        tmp[:, 0:-1] = tmp_boxes_r_
+                        tmp[:, -1] = np.array(tmp_score_r)
+                        # Note: the IoU of two same rectangles is 0
+                        jitter = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
+                        jitter[:, 0] += np.random.rand(tmp_boxes_r_.shape[0], ) / 1000
+                        inx = rotate_gpu_nms(np.array(tmp, np.float32) + np.array(jitter, np.float32),
+                                             0.05, 0)
+                else:
                     tmp_boxes_r_ = np.array(tmp_boxes_r_)
                     tmp = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
                     tmp[:, 0:-1] = tmp_boxes_r_
                     tmp[:, -1] = np.array(tmp_score_r)
-                    # Note: the IoU of two same rectangles is 0, which is calculated by rotate_gpu_nms
+                    # Note: the IoU of two same rectangles is 0
                     jitter = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
                     jitter[:, 0] += np.random.rand(tmp_boxes_r_.shape[0], ) / 1000
                     inx = rotate_gpu_nms(np.array(tmp, np.float32) + np.array(jitter, np.float32),
-                                         float(threshold[self.label_name_map[sub_class]]), 0)
+                                         0.05, 0)
 
-                    box_res_rotate_.extend(np.array(tmp_boxes_r)[inx])
-                    score_res_rotate_.extend(np.array(tmp_score_r)[inx])
-                    label_res_rotate_.extend(np.array(tmp_label_r)[inx])
+                box_res_rotate_.extend(np.array(tmp_boxes_r)[inx])
+                score_res_rotate_.extend(np.array(tmp_score_r)[inx])
+                label_res_rotate_.extend(np.array(tmp_label_r)[inx])
 
                 result_dict = {'boxes': np.array(box_res_rotate_), 'scores': np.array(score_res_rotate_),
                                'labels': np.array(label_res_rotate_), 'image_id': img_path}
@@ -263,7 +286,7 @@ class TestDOTA(object):
 
     def test_dota(self, det_net, real_test_img_list, txt_name):
 
-        save_path = os.path.join('./test_dota', self.cfgs.VERSION)
+        save_path = os.path.join('./demo', self.cfgs.VERSION)
 
         nr_records = len(real_test_img_list)
         pbar = tqdm(total=nr_records)
@@ -314,11 +337,11 @@ class TestDOTA(object):
                 CLASS_DOTA = self.name_label_map.keys()
                 write_handle = {}
 
-                tools.makedirs(os.path.join(save_path, 'dota_res'))
+                tools.makedirs(os.path.join(save_path, 'demo_res'))
                 for sub_class in CLASS_DOTA:
                     if sub_class == 'back_ground':
                         continue
-                    write_handle[sub_class] = open(os.path.join(save_path, 'dota_res', 'Task1_%s.txt' % sub_class), 'a+')
+                    write_handle[sub_class] = open(os.path.join(save_path, 'demo_res', 'Task1_%s.txt' % sub_class), 'a+')
 
                 for i, rbox in enumerate(res['boxes']):
                     command = '%s %.3f %.1f %.1f %.1f %.1f %.1f %.1f %.1f %.1f\n' % (res['image_id'].split('/')[-1].split('.')[0],
@@ -332,9 +355,9 @@ class TestDOTA(object):
                         continue
                     write_handle[sub_class].close()
 
-                fw = open(txt_name, 'a+')
-                fw.write('{}\n'.format(res['image_id'].split('/')[-1]))
-                fw.close()
+            fw = open(txt_name, 'a+')
+            fw.write('{}\n'.format(res['image_id'].split('/')[-1]))
+            fw.close()
 
             pbar.set_description("Test image %s" % res['image_id'].split('/')[-1])
 
@@ -345,24 +368,20 @@ class TestDOTA(object):
 
     def get_test_image(self):
         txt_name = '{}.txt'.format(self.cfgs.VERSION)
-        if not self.args.show_box:
-            if not os.path.exists(txt_name):
-                fw = open(txt_name, 'w')
-                fw.close()
+        if not os.path.exists(txt_name):
+            fw = open(txt_name, 'w')
+            fw.close()
 
-            fr = open(txt_name, 'r')
-            img_filter = fr.readlines()
-            print('****************************' * 3)
-            print('Already tested imgs:', img_filter)
-            print('****************************' * 3)
-            fr.close()
+        fr = open(txt_name, 'r')
+        img_filter = fr.readlines()
+        print('****************************' * 3)
+        print('Already tested imgs:', img_filter)
+        print('****************************' * 3)
+        fr.close()
 
-            test_imgname_list = [os.path.join(self.args.test_dir, img_name) for img_name in os.listdir(self.args.test_dir)
-                                 if img_name.endswith(('.jpg', '.png', '.jpeg', '.tif', '.tiff')) and
-                                 (img_name + '\n' not in img_filter)]
-        else:
-            test_imgname_list = [os.path.join(self.args.test_dir, img_name) for img_name in os.listdir(self.args.test_dir)
-                                 if img_name.endswith(('.jpg', '.png', '.jpeg', '.tif', '.tiff'))]
+        test_imgname_list = [os.path.join(self.args.test_dir, img_name) for img_name in os.listdir(self.args.test_dir)
+                             if img_name.endswith(('.jpg', '.png', '.jpeg', '.tif', '.tiff')) and
+                             (img_name + '\n' not in img_filter)]
 
         assert len(test_imgname_list) != 0, 'test_dir has no imgs there.' \
                                             ' Note that, we only support img format of (.jpg, .png, and .tiff) '

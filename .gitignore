@@ -139,8 +139,8 @@ __pycache__/
 *README_v2.md*
 *arbitrary_shaped*
 *scale_invariance*
-*kf*
 *gwd_norm*
+*refine_retinanet_kf*
 *bcd*
 *double_head*
 *.DS_Store*
@@ -150,6 +150,7 @@ __pycache__/
 tools/*/test_dota/*
 tools/*/test_hrsc/*
 tools/*/test_mlt/*
+tools/*/demo/*
 tools/*/test_ucas_aod/*
 tools/*/test_icdar2015/*
 tools/*/test_masra_td500/*

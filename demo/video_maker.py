@@ -7,8 +7,8 @@ import argparse
 def argsparser():
     parser = argparse.ArgumentParser("Transform images to videos")
     # General Setting
-    parser.add_argument('--input_dir', help='input file dir', type=str, default='')
-    parser.add_argument('--output_dir', help='output file dir', type=str, default='')
+    parser.add_argument('--input_dir', help='input file dir', type=str, default='/data/home/yangxue/code/RotationDetection/tools/kfiou/demo/RetinaNet_DOTA_KF_1x_20210902/')
+    parser.add_argument('--output_dir', help='output file dir', type=str, default='./')
     parser.add_argument('--fps', help='fps', type=int, default=60)
     parser.add_argument('--width', help='width', type=int, default=2880)   # [3840, 2880]
     parser.add_argument('--height', help='height', type=int, default=1620)  # [2160 1620]
@@ -39,13 +39,14 @@ if __name__ == '__main__':
         imgs = os.listdir(osp.join(input_dir, filename))
         imgs.sort(key=lambda x: int(x.split('.')[0]))
 
-        for img in imgs:
+        for i, img in enumerate(imgs):
             assert img is not None
             img_id = int(img.split('.')[0])
             if img_id in range(0, 843) or img_id in range(3453, 4631) or img_id in range(5751, 7174):
                 continue
             img_path = osp.join(osp.join(input_dir, filename), img)
-            print(img_path)
+            if i % 500 == 0:
+                print(img_path)
             read_img = cv2.imread(img_path)[:args.height, :args.width, :]
             # assert read_img is not None
             # assert read_img.shape[0] == size[1]

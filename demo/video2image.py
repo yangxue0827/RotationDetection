@@ -9,8 +9,8 @@ output_dir = './images/'
 for filename in os.listdir(input_dir):
     output_path = output_dir+filename
 
-    # if '5542' in filename:
-    #     continue
+    if '5542' in filename:
+        continue
 
     if not osp.exists(output_path):
         os.makedirs(output_path)
@@ -24,7 +24,8 @@ for filename in os.listdir(input_dir):
         if rval:
             cv2.imwrite(output_path+'/'+str(c) + '.jpg',frame) 
             c += 1
-            print(c)
+            if c % 1000 == 0:
+                print(c)
             cv2.waitKey(1)
         else:
             break
