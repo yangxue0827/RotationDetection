@@ -39,7 +39,7 @@ Techniques:
   - [ ] BCD (comng soon!)
   - [x] [KLD **(NeurIPS21)**](https://arxiv.org/abs/2106.01883): [Pytorch code (YOLOv5-KLD)](https://github.com/zhanggefan/rotmmdet) <img src="https://img.shields.io/github/stars/zhanggefan/rotmmdet?style=social" />
   - [x] [RIDet **(GRSL)**](https://arxiv.org/abs/2103.11636): [Pytorch code](https://github.com/ming71/RIDet) <img src="https://img.shields.io/github/stars/ming71/RIDet?style=social" />
-  - [ ] KFIoU (comng soon!)
+  - [x] [KFIoU](https://arxiv.org/abs/2201.12558)
   - [x] Mixed method: R<sup>3</sup>Det-DCL, R<sup>3</sup>Det-GWD, R<sup>3</sup>Det-BCD, R<sup>3</sup>Det-KLD, FCOS-RSDet, R<sup>2</sup>CNN-BCD, R<sup>2</sup>CNN-KF
 - [x] Loss: CE, [Focal Loss](https://arxiv.org/abs/1708.02002), [Smooth L1 Loss](https://arxiv.org/abs/1504.08083), [IoU-Smooth L1 Loss](https://arxiv.org/abs/1811.07126), [Modulated Loss](https://arxiv.org/abs/1911.08299)
 - [x] [Others](./OTHERS.md): [SWA](https://arxiv.org/pdf/2012.12645.pdf), exportPb, [MMdnn](https://github.com/Microsoft/MMdnn)
