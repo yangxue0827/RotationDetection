@@ -239,9 +239,8 @@ If you find our code useful for your research, please consider cite.
 @article{yang2021alpharotate,
     author  = {Yang, Xue and Zhou, Yue and Yan, Junchi},
     title   = {AlphaRotate: A Rotation Detection Benchmark using TensorFlow},
-    journal={arXiv preprint arXiv:2111.06677},
+    journal = {arXiv preprint arXiv:2111.06677},
     year    = {2021},
-    url     = {https://github.com/yangxue0827/RotationDetection}
 }
 
 ```
