@@ -10,7 +10,7 @@
 <!-- Documentation: [https://rotationdetection.readthedocs.io/](https://rotationdetection.readthedocs.io/) -->
 
  <!-- :rocket::rocket::rocket:	**News:** The MMDetection version cooperating with MMLab will be released soon, stay tuned.:rocket::rocket::rocket: -->
- :rocket::rocket::rocket:	**News:** MMRotate has been released at https://github.com/open-mmlab/mmrotate :rocket::rocket::rocket:
+ :rocket::rocket::rocket:	**News:** MMRotate has been released at https://github.com/open-mmlab/mmrotate <img src="https://img.shields.io/github/stars/open-mmlab/mmrotate?style=social" /> :rocket::rocket::rocket:
 
 ## Abstract
 [AlphaRotate](https://yangxue0827.github.io/files/alpharotate_yx.pdf) is mainly maintained by [Xue Yang](https://yangxue0827.github.io/) with Shanghai Jiao Tong University supervised by [Prof. Junchi Yan](http://thinklab.sjtu.edu.cn/).
@@ -32,14 +32,14 @@ Techniques:
   - [x] [FCOS](https://arxiv.org/abs/1904.01355)
   - [x] [RSDet **(AAAI21)**](https://ojs.aaai.org/index.php/AAAI/article/view/16347): [TF code](https://github.com/Mrqianduoduo/RSDet-8P-4R) <img src="https://img.shields.io/github/stars/Mrqianduoduo/RSDet-8P-4R?style=social" />
   - [x] [RSDet++ **(FCOS-RSDet)**](https://arxiv.org/abs/2109.11906) 
-  - [x] [R<sup>3</sup>Det **(AAAI21)**](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow) <img src="https://img.shields.io/github/stars/Thinklab-SJTU/R3Det_Tensorflow?style=social" />, [Pytorch code1](https://github.com/SJTU-Thinklab-Det/r3det-on-mmdetection) <img src="https://img.shields.io/github/stars/SJTU-Thinklab-Det/r3det-on-mmdetection?style=social" />, [Pytorch code2](https://github.com/SJTU-Thinklab-Det/r3det-pytorch) <img src="https://img.shields.io/github/stars/SJTU-Thinklab-Det/r3det-pytorch?style=social" />
+  - [x] [R<sup>3</sup>Det **(AAAI21)**](https://arxiv.org/abs/1908.05612): [TF code](https://github.com/Thinklab-SJTU/R3Det_Tensorflow) <img src="https://img.shields.io/github/stars/Thinklab-SJTU/R3Det_Tensorflow?style=social" />, [Pytorch code1](https://github.com/SJTU-Thinklab-Det/r3det-on-mmdetection) <img src="https://img.shields.io/github/stars/SJTU-Thinklab-Det/r3det-on-mmdetection?style=social" />, [Pytorch code2](https://github.com/SJTU-Thinklab-Det/r3det-pytorch) <img src="https://img.shields.io/github/stars/SJTU-Thinklab-Det/r3det-pytorch?style=social" />, [Pytorch code3](https://github.com/open-mmlab/mmrotate) <img src="https://img.shields.io/github/stars/open-mmlab/mmrotate?style=social" />
   - [x] [Circular Smooth Label (CSL, **ECCV20**)](https://arxiv.org/abs/2003.05597): [TF code](https://github.com/Thinklab-SJTU/CSL_RetinaNet_Tensorflow) <img src="https://img.shields.io/github/stars/Thinklab-SJTU/CSL_RetinaNet_Tensorflow?style=social" />
   - [x] [Densely Coded Label (DCL, **CVPR21**)](https://arxiv.org/abs/2011.09670): [TF code](https://github.com/Thinklab-SJTU/DCL_RetinaNet_Tensorflow) <img src="https://img.shields.io/github/stars/Thinklab-SJTU/DCL_RetinaNet_Tensorflow?style=social" />
-  - [x] [GWD (**ICML21**)](https://arxiv.org/abs/2101.11952): [Pytorch code (YOLOv5-GWD)](https://github.com/zhanggefan/rotmmdet) <img src="https://img.shields.io/github/stars/zhanggefan/rotmmdet?style=social" />
+  - [x] [GWD (**ICML21**)](https://arxiv.org/abs/2101.11952): [Pytorch code](https://github.com/open-mmlab/mmrotate) <img src="https://img.shields.io/github/stars/open-mmlab/mmrotate?style=social" />
   - [ ] BCD (comng soon!)
-  - [x] [KLD **(NeurIPS21)**](https://arxiv.org/abs/2106.01883): [Pytorch code (YOLOv5-KLD)](https://github.com/zhanggefan/rotmmdet) <img src="https://img.shields.io/github/stars/zhanggefan/rotmmdet?style=social" />
+  - [x] [KLD **(NeurIPS21)**](https://arxiv.org/abs/2106.01883): [Pytorch code](https://github.com/open-mmlab/mmrotate) <img src="https://img.shields.io/github/stars/open-mmlab/mmrotate?style=social" />
   - [x] [RIDet **(GRSL)**](https://arxiv.org/abs/2103.11636): [Pytorch code](https://github.com/ming71/RIDet) <img src="https://img.shields.io/github/stars/ming71/RIDet?style=social" />
-  - [x] [KFIoU](https://arxiv.org/abs/2201.12558)
+  - [x] [KFIoU](https://arxiv.org/abs/2201.12558): [Pytorch code](https://github.com/open-mmlab/mmrotate) <img src="https://img.shields.io/github/stars/open-mmlab/mmrotate?style=social" />
   - [x] Mixed method: R<sup>3</sup>Det-DCL, R<sup>3</sup>Det-GWD, R<sup>3</sup>Det-BCD, R<sup>3</sup>Det-KLD, FCOS-RSDet, R<sup>2</sup>CNN-BCD, R<sup>2</sup>CNN-KF
 - [x] Loss: CE, [Focal Loss](https://arxiv.org/abs/1708.02002), [Smooth L1 Loss](https://arxiv.org/abs/1504.08083), [IoU-Smooth L1 Loss](https://arxiv.org/abs/1811.07126), [Modulated Loss](https://arxiv.org/abs/1911.08299)
 - [x] [Others](./OTHERS.md): [SWA](https://arxiv.org/pdf/2012.12645.pdf), exportPb, [MMdnn](https://github.com/Microsoft/MMdnn)
