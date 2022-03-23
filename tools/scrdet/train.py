@@ -20,7 +20,7 @@ from tools.train_base import Train
 from configs import cfgs
 from alpharotate.libs.models.detectors.scrdet import build_whole_network
 from alpharotate.libs.utils.coordinate_convert import backward_convert, get_horizen_minAreaRectangle
-from alpharotate.utils import get_mask
+from alpharotate.utils.tools import get_mask
 from alpharotate.utils.pretrain_zoo import PretrainModelZoo
 
 os.environ["CUDA_VISIBLE_DEVICES"] = cfgs.GPU_GROUP
