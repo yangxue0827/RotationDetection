@@ -116,10 +116,10 @@ pip install -r requirements.txt
 pip install -v -e .  # or "python setup.py develop"
 ```
 
-Or, you can simply install AlphaRotate with the following command (not suitable for dev.):
+Or, you can simply install AlphaRotate with the following command:
 
 ```shell
-pip install alpharotate
+pip install alpharotate  # Not suitable for dev.
 ```
 
 ### Docker (cuda version < 11)
