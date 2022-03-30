@@ -116,7 +116,7 @@ pip install -r requirements.txt
 pip install -v -e .  # or "python setup.py develop"
 ```
 
-Or, you can simply install AlphaRotate with the following command:
+Or, you can simply install AlphaRotate with the following command (not suitable for dev.):
 
 ```shell
 pip install alpharotate

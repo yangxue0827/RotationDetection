@@ -24,7 +24,7 @@ If docker is not available, we provide detailed steps to install the requirement
 Or, you can simply install AlphaRotate with the following commands (cuda version < 11):
 ::
 
-    pip install alpharotate
+    pip install alpharotate  # Not suitable for dev.
 
 
 .. note::
