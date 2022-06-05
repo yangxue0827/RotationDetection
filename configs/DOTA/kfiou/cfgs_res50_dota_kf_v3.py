@@ -36,57 +36,29 @@ loss = (loss_1.reshape([n, 1]) + loss_2).reshape([n*n,1])
 loss = sum(loss)
 loss /= n
 
-This is your result for task 1:
+This is your evaluation result for task 1:
 
-    mAP: 0.6992391773413088
-    ap of each class:
-    plane:0.892002960041615,
-    baseball-diamond:0.7732858199679905,
-    bridge:0.461488701631356,
-    ground-track-field:0.6568226387825112,
-    small-vehicle:0.7191446514672439,
-    large-vehicle:0.6496180915914522,
-    ship:0.7756721605851568,
-    tennis-court:0.8957877374986684,
-    basketball-court:0.8218284672164252,
-    storage-tank:0.7863219622742004,
-    soccer-ball-field:0.5704904341914929,
-    roundabout:0.6612983503314489,
-    harbor:0.6307078540759418,
-    swimming-pool:0.6814249757638241,
-    helicopter:0.5126928547003046
-
-The submitted information is :
-
-Description: RetinaNet_DOTA_KF_1x_20210902_35.1w
-Username: yangxue
-Institute: DetectionTeamUCAS
-Emailadress: yangxue16@mails.ucas.ac.cn
-TeamMembers: yangxue, yangjirui
-
-This is your result for task 1:
-
-    mAP: 0.7064133708777482
-    ap of each class:
-    plane:0.8949501034578764,
-    baseball-diamond:0.7796459013723996,
-    bridge:0.46303070580719785,
-    ground-track-field:0.6726390727983068,
-    small-vehicle:0.7256290420401867,
-    large-vehicle:0.6561151622340775,
-    ship:0.7815922299808545,
-    tennis-court:0.9077429747421872,
-    basketball-court:0.8301767177490947,
-    storage-tank:0.7914564206644479,
-    soccer-ball-field:0.5844254572326262,
-    roundabout:0.6633575297546964,
-    harbor:0.6368083141217261,
-    swimming-pool:0.6855568710558761,
-    helicopter:0.52307406015467
+    mAP: 0.7068630294977952
+    ap of each class: 
+    plane:0.894332195251659, 
+    baseball-diamond:0.7788464461771812, 
+    bridge:0.4539694438214467, 
+    ground-track-field:0.6706240268477037, 
+    small-vehicle:0.7246726968745004, 
+    large-vehicle:0.6687244421277758, 
+    ship:0.7856459435671667, 
+    tennis-court:0.9080137077942301, 
+    basketball-court:0.8307342665474495, 
+    storage-tank:0.7912333630665858, 
+    soccer-ball-field:0.5858193181559574, 
+    roundabout:0.6591340351162999, 
+    harbor:0.6350698669491817, 
+    swimming-pool:0.6848033517289643, 
+    helicopter:0.5313223384408268
 
 The submitted information is :
 
-Description: RetinaNet_DOTA_KF_1x_20210902_35.1w_cpunms
+Description: RetinaNet_DOTA_KF_1x_20210902
 Username: SJTU-Det
 Institute: SJTU
 Emailadress: yangxue-2019-sjtu@sjtu.edu.cn

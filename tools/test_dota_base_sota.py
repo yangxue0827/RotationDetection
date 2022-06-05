@@ -256,7 +256,7 @@ class TestDOTA(object):
                             tmp[:, -1] = np.array(tmp_score_r)
                             # Note: the IoU of two same rectangles is 0
                             jitter = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
-                            jitter[:, 0] += np.random.rand(tmp_boxes_r_.shape[0], ) / 1000
+                            jitter += np.random.rand(jitter.shape[0], jitter.shape[1]) / 20
                             inx = rotate_gpu_nms(np.array(tmp, np.float32) + np.array(jitter, np.float32),
                                                  float(threshold[self.label_name_map[sub_class]]), 0)
                     else:
@@ -266,7 +266,7 @@ class TestDOTA(object):
                         tmp[:, -1] = np.array(tmp_score_r)
                         # Note: the IoU of two same rectangles is 0
                         jitter = np.zeros([tmp_boxes_r_.shape[0], tmp_boxes_r_.shape[1] + 1])
-                        jitter[:, 0] += np.random.rand(tmp_boxes_r_.shape[0], ) / 1000
+                        jitter += np.random.rand(jitter.shape[0], jitter.shape[1]) / 20
                         inx = rotate_gpu_nms(np.array(tmp, np.float32) + np.array(jitter, np.float32),
                                              float(threshold[self.label_name_map[sub_class]]), 0)
 
