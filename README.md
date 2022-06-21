@@ -109,6 +109,15 @@ The above-mentioned rotation detectors are all modified based on the following h
 - Single GPU training: [SAVE_WEIGHTS_INTE](./configs/cfgs.py) = iter_epoch * 1 (DOTA1.0: iter_epoch=27000, DOTA1.5: iter_epoch=32000, DOTA2.0: iter_epoch=40000)
 - Multi-GPU training (**better**): [SAVE_WEIGHTS_INTE](./configs/cfgs.py) = iter_epoch * 2
 
+## My Development Environment 
+- python3.5 (anaconda recommend)
+- cuda 10.0
+- opencv-python 4.1.1.26 (important)
+- tfplot 0.2.0 (optional)
+- tensorflow-gpu 1.13
+- tqdm 4.54.0
+- Shapely 1.7.1
+
 ## Installation
 ### Manual configuration (cuda version < 11)
 ```shell
