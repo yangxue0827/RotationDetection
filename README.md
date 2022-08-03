@@ -36,7 +36,7 @@ Techniques:
   - [x] [Circular Smooth Label (CSL, **ECCV20**)](https://arxiv.org/abs/2003.05597): [TF code](https://github.com/Thinklab-SJTU/CSL_RetinaNet_Tensorflow) <img src="https://img.shields.io/github/stars/Thinklab-SJTU/CSL_RetinaNet_Tensorflow?style=social" />, [Pytorch code](https://github.com/open-mmlab/mmrotate) <img src="https://img.shields.io/github/stars/open-mmlab/mmrotate?style=social" />
   - [x] [Densely Coded Label (DCL, **CVPR21**)](https://arxiv.org/abs/2011.09670): [TF code](https://github.com/Thinklab-SJTU/DCL_RetinaNet_Tensorflow) <img src="https://img.shields.io/github/stars/Thinklab-SJTU/DCL_RetinaNet_Tensorflow?style=social" />
   - [x] [GWD (**ICML21**)](https://arxiv.org/abs/2101.11952): [Pytorch code](https://github.com/open-mmlab/mmrotate) <img src="https://img.shields.io/github/stars/open-mmlab/mmrotate?style=social" />
-  - [ ] BCD (comng soon!)
+  - [x] BCD (**TPAMI22**)
   - [x] [KLD **(NeurIPS21)**](https://arxiv.org/abs/2106.01883): [Pytorch code](https://github.com/open-mmlab/mmrotate) <img src="https://img.shields.io/github/stars/open-mmlab/mmrotate?style=social" />
   - [x] [RIDet **(GRSL)**](https://arxiv.org/abs/2103.11636): [Pytorch code](https://github.com/ming71/RIDet) <img src="https://img.shields.io/github/stars/ming71/RIDet?style=social" />
   - [x] [KFIoU](https://arxiv.org/abs/2201.12558): [Pytorch code](https://github.com/open-mmlab/mmrotate) <img src="https://img.shields.io/github/stars/open-mmlab/mmrotate?style=social" />
