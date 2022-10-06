@@ -230,6 +230,9 @@ class LossKF(Loss):
 
         sigma1, sigma2, mu1, mu2, mu1_T, mu2_T = self.get_gaussian_param(target_boxes_, boxes_pred)
 
+        # sigma2_square = tf.linalg.matmul(sigma2, sigma2)
+        # regression_loss = tf.linalg.matmul(tf.linalg.matmul(mu2 - mu1, tf.linalg.inv(sigma2_square)), mu2_T - mu1_T)
+
         mu, sigma = self.kalman_filter(mu1_T, mu2_T, sigma1, sigma2)
 
         eig = tf.reshape(tf.linalg.eigvalsh(sigma), [-1, 2])  # 根据卡尔曼滤波的协方差求特征值，也就是w^2/4, h^2/4
@@ -292,8 +295,11 @@ class LossKF(Loss):
 
         sigma1, sigma2, mu1, mu2, mu1_T, mu2_T = self.get_gaussian_param(target_boxes_, boxes_pred)
 
+        # center loss in KLD
         sigma1_square = tf.linalg.matmul(sigma1, sigma1)
         center_loss = tf.linalg.matmul(tf.linalg.matmul(mu2 - mu1, tf.linalg.inv(sigma1_square)), mu2_T - mu1_T)
+        # center_loss = tf.sqrt(tf.maximum(center_loss, 0.))
+        center_loss = tf.log(tf.maximum(center_loss, 0.) + 1.0)
 
         mu, sigma = self.kalman_filter(mu1_T, mu2_T, sigma1, sigma2)
 

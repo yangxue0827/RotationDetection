@@ -61,8 +61,10 @@ class DetectionNetworkKF(DetectionNetworkBase):
                     self.add_anchor_img_smry(input_img_batch, anchors, anchor_states, 1)
 
                 cls_loss = self.losses.focal_loss(labels, rpn_cls_score, anchor_states)
-                reg_loss = self.losses.kalman_filter_iou_xy(target_delta, rpn_box_pred, anchor_states, target_boxes, anchors)
-                # reg_loss = self.losses.kalman_filter_iou_kl(rpn_box_pred, anchor_states, target_boxes, anchors)
+                if self.cfgs.CENTER_LOSS_MODE == 0:
+                    reg_loss = self.losses.kalman_filter_iou_xy(target_delta, rpn_box_pred, anchor_states, target_boxes, anchors)
+                else:
+                    reg_loss = self.losses.kalman_filter_iou_kl(rpn_box_pred, anchor_states, target_boxes, anchors)
                 # reg_sigma = self.losses.kalman_filter_iou(rpn_box_pred, anchor_states, target_boxes, anchors)
                 # target_delta = tf.reshape(target_delta, [-1, 5])
                 # rpn_box_pred = tf.reshape(rpn_box_pred, [-1, 5])
