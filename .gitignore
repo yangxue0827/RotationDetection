@@ -134,7 +134,6 @@ __pycache__/
 *r2cnn_csl*
 *centernet*
 *tensorpack*
-*.DS_Store*
 *configs_v2*
 *README_v2.md*
 *arbitrary_shaped*
