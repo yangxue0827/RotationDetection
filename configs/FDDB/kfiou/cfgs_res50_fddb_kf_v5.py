@@ -40,6 +40,7 @@ ANCHOR_SCALES = [2 ** 0, 2 ** (1.0 / 3.0), 2 ** (2.0 / 3.0)]
 ANCHOR_RATIOS = [1, 1 / 1.5, 1.5]
 
 # loss
+CENTER_LOSS_MODE = 0
 CLS_WEIGHT = 1.0
 REG_WEIGHT = 0.01
 

@@ -37,11 +37,12 @@ PRETRAINED_CKPT = pretrain_zoo.pretrain_weight_path(NET_NAME, ROOT_PATH)
 TRAINED_CKPT = os.path.join(ROOT_PATH, 'output/trained_weights')
 
 # loss
+CENTER_LOSS_MODE = 0
 CLS_WEIGHT = 1.0
 REG_WEIGHT = 0.01
 
 # post-processing
-VIS_SCORE = 0.85
+VIS_SCORE = 0.99
 
 VERSION = 'RetinaNet_MSRA_TD500_KF_2x_20210903'
 

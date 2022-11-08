@@ -172,19 +172,14 @@ class LossGWD(Loss):
 
         wasserstein_distance = tf.maximum(tf.sqrt(wasserstein_distance), 0.0)
         wasserstein_distance /= tf.sqrt(tf.sqrt(tf.reshape(w1 * h1 * w2 * h2, [-1, 1])))
-        # wasserstein_loss = tf.exp(-1 * wasserstein_distance)
-
-        if True:
-            wasserstein_similarity = 1 / (wasserstein_distance + 2.)
-            wasserstein_loss = 1 - wasserstein_similarity
-        else:
-            wasserstein_loss = wasserstein_distance * 0.05   # better
+        wasserstein_loss = tf.log(wasserstein_distance + 1)
 
         normalizer = tf.stop_gradient(tf.where(tf.equal(anchor_state, 1)))
         normalizer = tf.cast(tf.shape(normalizer)[0], tf.float32)
         normalizer = tf.maximum(1.0, normalizer)
 
         return tf.reduce_sum(wasserstein_loss) / normalizer
+
 
     def probiou(self, mode, preds, anchor_state, target_boxes, anchors,
                 is_refine=False):

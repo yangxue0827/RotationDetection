@@ -37,43 +37,45 @@ REFINE_IOU_NEGATIVE_THRESHOLD = [0.5, 0.6]
 # loss
 CLS_WEIGHT = 1.0
 REG_WEIGHT = 2.0
-REG_LOSS_MODE = 0
+REG_LOSS_MODE = 1
 
-GWD_TAU = 2.0
-GWD_FUNC = tf.sqrt
-
-VERSION = 'RetinaNet_DOTA2.0_R3Det_GWD_2x_20210425'
+VERSION = 'RetinaNet_DOTA2.0_R3Det_GWD_NORM_2x_20220630'
 
 """
-r3det+gwd (only refine stage) + sqrt tau=2
-FLOPs: 1037517936;    Trainable params: 37921786
+r3det+gwd norm
+FLOPs: 1037523753;    Trainable params: 37921786
 
-This is your evaluation result for task 1:
+This is your evaluation result for task 1 (VOC metrics):
 
-    mAP: 0.4924996532515483
-    ap of each class:
-    plane:0.7916743819132743,
-    baseball-diamond:0.46747380439844083,
-    bridge:0.39221255369800695,
-    ground-track-field:0.5777379770806235,
-    small-vehicle:0.4324146476590651,
-    large-vehicle:0.5321973121549544,
-    ship:0.5920285626768007,
-    tennis-court:0.7807436606175097,
-    basketball-court:0.5750906630386756,
-    storage-tank:0.6248682974801154,
-    soccer-ball-field:0.43804070336628614,
-    roundabout:0.49820542104992493,
-    harbor:0.42499687106769646,
-    swimming-pool:0.5384411256832793,
-    helicopter:0.506867294923433,
-    container-crane:0.12692138779095302,
-    airport:0.4442338155198331,
-    helipad:0.12084527840899882
+    mAP: 0.5005065504897706
+    ap of each class: 
+    plane:0.7935266075632329, 
+    baseball-diamond:0.45743765692356214, 
+    bridge:0.39991976928601164, 
+    ground-track-field:0.6087009132278249, 
+    small-vehicle:0.4341105115438158, 
+    large-vehicle:0.5435969780132346, 
+    ship:0.599869816100169, 
+    tennis-court:0.7777466234670899, 
+    basketball-court:0.5904280850553387, 
+    storage-tank:0.6162996109241432, 
+    soccer-ball-field:0.44326300269196517, 
+    roundabout:0.4936218734409874, 
+    harbor:0.44348200423726253, 
+    swimming-pool:0.5503975008031091, 
+    helicopter:0.430348192766536, 
+    container-crane:0.13813459618766935, 
+    airport:0.536459848441903, 
+    helipad:0.15177431814201608
 
+COCO style result:
+
+AP50: 0.5005065504897706
+AP75: 0.27539201854009127
+mAP: 0.2821657234328435
 The submitted information is :
 
-Description: RetinaNet_DOTA2.0_R3Det_GWD_2x_20210425_104w
+Description: RetinaNet_DOTA2.0_R3Det_GWD_NORM_2x_20220630_104w
 Username: sjtu-deter
 Institute: SJTU
 Emailadress: yangxue-2019-sjtu@sjtu.edu.cn

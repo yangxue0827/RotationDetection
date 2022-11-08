@@ -333,12 +333,20 @@ class DetectionNetworkR3DetGWD(DetectionNetworkBase):
                 self.add_anchor_img_smry(input_img_batch, refine_boxes, refine_box_states, 1)
 
                 refine_cls_loss = self.losses.focal_loss(refine_labels, refine_cls_score, refine_box_states)
-                refine_reg_loss = self.losses.wasserstein_distance_loss(refine_box_pred,
-                                                                        refine_box_states,
-                                                                        refine_target_boxes,
-                                                                        refine_boxes, is_refine=True,
-                                                                        tau=self.cfgs.GWD_TAU,
-                                                                        func=self.cfgs.GWD_FUNC)
+                if self.cfgs.REG_LOSS_MODE == 0:
+                    refine_reg_loss = self.losses.wasserstein_distance_loss(refine_box_pred,
+                                                                            refine_box_states,
+                                                                            refine_target_boxes,
+                                                                            refine_boxes, is_refine=True,
+                                                                            tau=self.cfgs.GWD_TAU,
+                                                                            func=self.cfgs.GWD_FUNC)
+                elif self.cfgs.REG_LOSS_MODE == 1:
+                    refine_reg_loss = self.losses.wasserstein_distance_norm_loss(refine_box_pred,
+                                                                                 refine_box_states,
+                                                                                 refine_target_boxes,
+                                                                                 refine_boxes, is_refine=True)
+                else:
+                    raise NotImplementedError
 
                 self.losses_dict['refine_cls_loss{}'.format(stage)] = refine_cls_loss * self.cfgs.CLS_WEIGHT
                 self.losses_dict['refine_reg_loss{}'.format(stage)] = refine_reg_loss * self.cfgs.REG_WEIGHT
